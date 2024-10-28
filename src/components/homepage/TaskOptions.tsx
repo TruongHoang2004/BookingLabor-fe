@@ -10,9 +10,6 @@ import { PiFireDuotone } from "react-icons/pi";
 import { IoMdCheckmark } from "react-icons/io";
 const TaskOptions: React.FC = () => {
     const [activeOption, setActiveOption] = useState(1);
-    const handleClickOptions = (divid: number) => {
-      setActiveOption(divid);
-    };
   
     const options_details = [
       {

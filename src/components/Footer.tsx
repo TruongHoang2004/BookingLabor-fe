@@ -1,16 +1,12 @@
 import React from "react";
-import { Lobster } from 'next/font/google'
 import { Kanit } from 'next/font/google'
 import { FaInstagram } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
 import styles from '../styles/footer.module.css'
 import { Divider } from "@nextui-org/react";
-const lobster = Lobster({
-    subsets: ['latin'],
-    weight: ['400'],
-    display: 'swap',
-});
+import Image from "next/image";
+
 const kanit = Kanit({
     subsets: ['latin'],
     weight: ['400', '500', '600', '700','800','900','100', '200', '300'],
@@ -28,7 +24,7 @@ const Footer: React.FC = () => {
                     <a href="https://www.instagram.com/" title="ins"><FaInstagram className="text-white bg-black p-2 rounded-full w-10 h-10"/></a>
                 </div>
                 <div>
-                    <img src="img/footer/logo.png" alt="" className="w-52 ml-10"/>
+                    <Image width={180} height={100} src="/img/footer/logo.png" alt="" className="ml-10"/>
                 </div>
                 <div className="relative h-36">
                     <p className="text-lg font-light">SIGN UP FOR OUR EMAIL NEWSLETTER</p>

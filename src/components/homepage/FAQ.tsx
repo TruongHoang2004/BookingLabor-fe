@@ -2,15 +2,13 @@ import React from 'react';
 import {Accordion, AccordionItem} from '@nextui-org/accordion';
 import { AiOutlinePlus } from "react-icons/ai";
 
-interface FAQProps {
-    question? :string[];
-    answer? : string[];
-}
-
-const FAQ: React.FC<FAQProps> = ({
-    question = [],
-    answer =  [],
-}) => {
+const FAQ: React.FC = () => {
+    const question=['What is DreamLabour','What is DreamLabour','What is DreamLabour'];
+    const answer=[
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    ];
     return (
         <div>
             <div className='w-8/12 m-auto flex justify-center mb-8 mt-20'>

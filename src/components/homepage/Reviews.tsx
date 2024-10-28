@@ -2,6 +2,7 @@ import React from 'react'
 import { FaStar } from "react-icons/fa";
 import { BiSolidLeftArrow } from "react-icons/bi";
 import { BiSolidRightArrow } from "react-icons/bi";
+import Image from 'next/image';
 
 const Reviews = () => {
     return (
@@ -26,7 +27,7 @@ const Reviews = () => {
                 <div className='flex justify-between items-center py-2'>
                     <BiSolidLeftArrow className='w-16 h-16'/>
                     <div className='flex items-center justify-center gap-x-3'>
-                        <img src="/img/home_img/profile.png" alt="" className='w-20 h-20'/>
+                        <Image width={80} height={80} src="/img/home_img/profile.png" alt="avatar"/>
                         <div>
                             <p className= {`text-xl font-semibold`} style={{marginBottom: "-2px"}}>Karla Ray</p>
                             <p className='text-sm font-semibold text-gray-500'>@kayray</p>

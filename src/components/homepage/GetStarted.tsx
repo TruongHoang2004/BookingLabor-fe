@@ -25,7 +25,7 @@ const GetStartedSection: React.FC = () => {
                     <div className='flex flex-wrap gap-x-16 justify-center gap-y-8'>
                         <div className='w-96'>
                             <p className='font-bold text-4xl mb-4'>Become a versatile Home Task Experts</p>
-                            <p className='font-semibold text-gray-400 text-lg mb-4'>Bring expertise, tools, and a can-do attitude to make sure customer's project is completed efficiently.</p>
+                            <p className='font-semibold text-gray-400 text-lg mb-4'>Bring expertise, tools, and a can-do attitude to make sure customer&apos; project is completed efficiently.</p>
                             <button className='mr-4 font-bold px-3 py-1.5 rounded-lg bg-black text-white'>Start working now</button>
                             <button className='font-extrabold bg-gray-300 text-black px-3 py-1.5 rounded-lg'>Learn more</button>
                         </div>

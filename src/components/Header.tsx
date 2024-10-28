@@ -20,7 +20,7 @@ const Header: React.FC = () => {
             <div className="w-10/12 m-auto flex items-center justify-between">
                 <h1 className={`${lobster.className} text-5xl mr-9`} id="header_name">DREAM LABOUR</h1>
                 <div className={`${kanit.className} text-lg  font-normal flex h-5 items-center space-x-4 justify-between gap-x-2`}>
-                    <a href="" className="no-underline hover:underline">Services</a>
+                    <a href="/services" className="no-underline hover:underline">Services</a>
                     <Divider orientation="vertical" className="bg-lime-500"/>
                     <a href="/login" className="no-underline hover:underline">Sign-up / Login</a>
                     <Divider orientation="vertical" className="bg-lime-500"/>
