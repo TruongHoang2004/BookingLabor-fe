@@ -1,8 +1,8 @@
 'use client';
-import { Textarea, Input, Avatar, Button } from "@nextui-org/react";
-import AvatarUpload from "@/components/avatar";
-import Header from "../../components/header";
-import React, { useRef, useState } from "react";
+import { Textarea, Input} from "@nextui-org/react";
+import AvatarUpload from "@/components/profile/avatar";
+import Header from "../../components/profile/header";
+import React, { useState } from "react";
 
 const ProfilePage = () => {
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);

@@ -1,7 +1,13 @@
 import React from 'react';
 import { Button } from "@nextui-org/react";
+import { Kanit } from 'next/font/google'
 import { Navbar, NavbarBrand, NavbarContent } from "@nextui-org/react";
 
+const kanit = Kanit({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+})
 const Header = () => {
   return (
     <Navbar 
@@ -10,8 +16,8 @@ const Header = () => {
       position="sticky"
     >
       <NavbarBrand className="gap-20">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800 font-sans">
+        <div className={`${kanit.className} text-3xl text-green-800  font-bold flex h-5 items-center space-x-4 justify-between gap-x-2`}>
+          <h1>
             MY PROFILE
           </h1>
         </div>
@@ -19,7 +25,7 @@ const Header = () => {
           radius="full" 
           color="success" 
           variant="solid"
-          className="font-medium font-sans"
+          className={`${kanit.className} text-lg text-black font-bold flex items-center space-x-4 justify-between gap-x-2`}
         >
           Change to Tasker Profile
         </Button>
@@ -30,7 +36,7 @@ const Header = () => {
           radius="full"
           color="success"
           variant="solid"
-          className="font-medium font-sans"
+          className={`${kanit.className} text-lg text-black font-bold flex items-center space-x-4 justify-between gap-x-2`}
         >
           Delete profile
         </Button>
@@ -38,7 +44,7 @@ const Header = () => {
           radius="full"
           color="success"
           variant="solid"
-          className="font-medium font-sans"
+          className={`${kanit.className} text-lg text-black font-bold flex items-center space-x-4 justify-between gap-x-2`}
         >
           Save changes
         </Button>
