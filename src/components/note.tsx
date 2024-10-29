@@ -7,7 +7,7 @@ export default function Note() {
                 textAlign: 'center',
                 color: 'black',
                 fontSize: '15px',
-                fontWeight: 300,
+                fontWeight: '300',
                 fontFamily: 'Inter',
                 lineHeight: '36px',
                 borderRadius: '10px',
@@ -24,7 +24,7 @@ export default function Note() {
         >
             <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                 <span><strong>Note:</strong></span>
-                <span>Don't forget to bring your laptop</span>
+                <span>Don&apos;t forget to bring your laptop</span>
             </div>
         </div>
     );

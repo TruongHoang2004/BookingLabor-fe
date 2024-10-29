@@ -1,12 +1,12 @@
 "use client"
-import { withRouter } from 'next/router';
+//import { withRouter } from 'next/router';
 import React, { useState } from 'react';
 
 export default function TaskerReview() {
-    const [review, setReview] = useState<string>(''); // State để lưu đánh giá
+    const [review, setReview] = useState<string>('');
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setReview(event.target.value); // Cập nhật giá trị khi người dùng nhập vào textbox
+        setReview(event.target.value);
     };
 
     return (
@@ -18,7 +18,7 @@ export default function TaskerReview() {
                 boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.1)',
                 textAlign: 'left',
                 width: '605px',
-                height: '180px', // Thay đổi chiều cao thành auto để phù hợp với nội dung
+                height: '180px',
                 margin: '0 auto',
                 marginTop: '15px',
                 marginLeft: '460px',
@@ -58,3 +58,6 @@ export default function TaskerReview() {
         </div>
     );
 }
+
+
+//export default withRouter(TaskerReview);
