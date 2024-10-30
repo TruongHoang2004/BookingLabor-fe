@@ -17,7 +17,7 @@ const ProfilePage = () => {
       {/* Header */}
       <Header 
         buttonLabel="Change to Tasker Profile" 
-        buttonLink="./profiletasker"
+        buttonLink="./profile/tasker"
       />
 
       {/* Main Content */}

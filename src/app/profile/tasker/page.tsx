@@ -1,7 +1,7 @@
 'use client';
 import { Textarea, Input} from "@nextui-org/react";
 import AvatarUpload from "@/components/profile/avatar";
-import Header from "../../components/profile/header";
+import Header from "../../../components/profile/header";
 import React, { useState } from "react";
 
 const ProfilePage = () => {
@@ -17,7 +17,7 @@ const ProfilePage = () => {
       {/* Header */}
       <Header 
         buttonLabel="Change to Customer Profile" 
-        buttonLink="./profile"
+        buttonLink="../profile"
       />
 
       {/* Main Content */}
