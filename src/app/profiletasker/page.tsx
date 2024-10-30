@@ -16,8 +16,8 @@ const ProfilePage = () => {
     <div className="flex flex-col items-center p-4 bg-white min-h-screen">
       {/* Header */}
       <Header 
-        buttonLabel="Change to Tasker Profile" 
-        buttonLink="./profiletasker"
+        buttonLabel="Change to Customer Profile" 
+        buttonLink="./profile"
       />
 
       {/* Main Content */}
@@ -65,12 +65,12 @@ const ProfilePage = () => {
           <Input
             isRequired
             type="text"
-            label="Address"
+            label="Work Area"
           />
           <Input
             isRequired
             type="text"
-            label="Country"
+            label="Schedule"
           />
         </div>
 
@@ -90,14 +90,14 @@ const ProfilePage = () => {
             />
           </div>
           <Input
-            type="link"
-            label="Social Media"
+            type="text"
+            label="Expected fee"
           />
           <Textarea 
-            label="About Me"
+            label="Eligible to do"
           />
           <Textarea 
-            label="Expectations"
+            label="About me"
           />
           <Textarea
             label="Payment Info"
