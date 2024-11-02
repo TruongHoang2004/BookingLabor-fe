@@ -15,7 +15,10 @@ const config: Config = {
         foreground: "var(--foreground)",
       },
       screens: {
-        '3xl': '1600px',
+        '2sm': '320px',
+        'x-sm': '480px',
+        '1100': '1100px',
+        '1200': '1200px',
       }
     },
   },

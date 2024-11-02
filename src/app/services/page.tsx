@@ -21,7 +21,7 @@ export default function Home() {
             <div className="flex justify-center">
                 <Masonry
                     breakpointCols={breakpointColumnsObj}
-                    className="flex w-11/12 3xl:w-10/12"
+                    className="flex w-11/12 2xl:w-10/12"
                     columnClassName="bg-clip-padding space-y-6"
                 >
                     <div className="flex justify-center">
