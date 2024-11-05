@@ -1,0 +1,21 @@
+.footer_bg {
+    background-color: rgb(253,246,238);
+}
+.input_bg_img {
+    background-image: url('../../public/img/footer/2.jpg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat; /* Không lặp lại hình ảnh */
+    margin-right: 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+.textcolor {
+    color: #7a776e;
+}
+.inputph::placeholder {
+    font-weight: 300;
+    font-size: 15px;
+}
+.border_color {
+    background-color: rgb(212, 203, 193);;
+}
