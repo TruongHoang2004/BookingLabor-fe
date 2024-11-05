@@ -22,19 +22,16 @@ const Header: React.FC<HeaderProps> = ({ buttonLabel, buttonLink }) => {
 
   return (
     <Navbar 
-      className="bg-lime-300 shadow-sm"
+      className ="bg-white shadow-sm"
       maxWidth="xl"
-      position="sticky"
+      position="static"
     >
       <NavbarBrand className="gap-20">
-        <div className={`${kanit.className} text-3xl text-green-800  font-bold flex h-5 items-center space-x-4 justify-between gap-x-2`}>
-          <h1>MY PROFILE</h1>
-        </div>
         <Button 
           radius="full" 
           color="success" 
           variant="solid"
-          className={`${kanit.className} text-lg text-black font-bold flex items-center space-x-4 justify-between gap-x-2`}
+          className={`${kanit.className} text-lg text-white font-bold flex items-center space-x-4 justify-between gap-x-2`}
           onClick={handleButtonClick}
         >
           {buttonLabel}
@@ -46,7 +43,7 @@ const Header: React.FC<HeaderProps> = ({ buttonLabel, buttonLink }) => {
           radius="full"
           color="success"
           variant="solid"
-          className={`${kanit.className} text-lg text-black font-bold flex items-center space-x-4 justify-between gap-x-2`}
+          className={`${kanit.className} text-lg text-white font-bold flex items-center space-x-4 justify-between gap-x-2`}
         >
           Delete Profile
         </Button>
@@ -54,7 +51,7 @@ const Header: React.FC<HeaderProps> = ({ buttonLabel, buttonLink }) => {
           radius="full"
           color="success"
           variant="solid"
-          className={`${kanit.className} text-lg text-black font-bold flex items-center space-x-4 justify-between gap-x-2`}
+          className={`${kanit.className} text-lg text-white font-bold flex items-center space-x-4 justify-between gap-x-2`}
           onClick={() => { router.push('./') }}
         >
           Save Changes
