@@ -15,6 +15,12 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      screens: {
+        '2sm': '320px',
+        'x-sm': '480px',
+        '1100': '1100px',
+        '1200': '1200px',
+      }
     },
   },
   darkMode: "class",
