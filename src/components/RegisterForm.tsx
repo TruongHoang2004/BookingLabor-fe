@@ -1,6 +1,5 @@
 // components/RegisterForm.tsx
 'use client';
-import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -32,11 +31,6 @@ const RegisterForm: React.FC = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/auth/register', formData, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
       alert('Registration successful!');
       router.push('/login');
     } catch (error) {

@@ -1,5 +1,4 @@
 'use client';
-import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -9,7 +8,7 @@ const LoginForm: React.FC = () => {
     email: '',
     password: ''
   });
-  const [showPassword, setShowPassword] = useState(false); // State để quản lý trạng thái hiển thị của mật khẩu
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,11 +21,6 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/auth/login', formData, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
       alert('Login successful!');
       router.push('/');
     } catch (error) {
@@ -122,10 +116,9 @@ const LoginForm: React.FC = () => {
             </button>
             <p className="text-gray-800 text-sm text-center mt-6">
               Don't have an account
-              <Link href="/register" className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Register here</Link>
+              <Link legacyBehavior href="/register" className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap">Register here</Link>
             </p>
           </div>
-
           <hr className="my-6 border-gray-400" />
         </form>
       </div >
