@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Button, Chip } from '@nextui-org/react';
-import { Edit3, Save, X } from 'react-feather';
+import { Edit3, Save} from 'react-feather';
 
 interface EditableChipInputProps {
   label: string;
