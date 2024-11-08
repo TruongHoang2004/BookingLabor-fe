@@ -1,29 +1,23 @@
 // app/page.tsx
 import OrderTitle from "@/components/OrderTitle"
-import TaskName from "@/components/taskName"
-import TaskInfor from "@/components/taskinfor"
-import Tasker from "@/components/tasker"
-import TaskerInfor from "@/components/taskerinfor"
-import Payment from "@/components/payment"
-import PaymentMethod from "@/components/paymentMethod"
-import Note from "@/components/note"
-import BookingButton from "@/components/bookingButton"
+import TaskInformation from "@/components/taskInformation"
+import PaymentandBooking from "@/components/PaymentandBooking"
 
 export default function Page() {
     return (
-        <div>
+        <div className="bg-gray-200" >
             <OrderTitle />
-            <TaskName />
-            <TaskInfor />
-            <Tasker />
-            <TaskerInfor />
-            <Payment />
-            <PaymentMethod />
-            <Note />
-            <BookingButton />
+            <TaskInformation />
+            <PaymentandBooking />
+
 
         </div>
 
 
     )
+
 }
+
+
+
+

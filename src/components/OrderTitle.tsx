@@ -2,20 +2,21 @@ export default function OrderTitle() {
     return (
         <div
             style={{
-                marginTop: '120px',
-                marginLeft: '660px',
+                display: 'flex',
+                marginLeft: '60px',
+                marginBottom: '25px'
             }}
         >
             <h1
                 style={{
+                    marginTop: '25px',
                     fontSize: '36px',
                     fontWeight: 'bold',
-                    background: 'linear-gradient(to right, #e0c3fc, #8ec5fc)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
+                    background: 'bg-gray-200',
+                    color: 'rgb(20 90 45)'
                 }}
             >
-                Order Task
+                ORDER
             </h1>
         </div>
     );
