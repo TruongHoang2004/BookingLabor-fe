@@ -23,14 +23,14 @@ const Header: React.FC = () => {
     const handleEvent = (path: string) => {
         router.push(path);
     }
-
+    const backtoHomePage = () => {
+        router.push('/')
+    }
     return (
         <header className="border-slate-300 py-4 border-b text-green-950">
             <div className="flex justify-between items-center m-auto w-10/12">
-                <h1 className={`${lobster.className} sm:text-5xl 2sm:text-2xl mr-9`}>
-                    <Link href="/">
-                        <a>DREAM LABOUR</a>
-                    </Link>
+                <h1 className={`${lobster.className} sm:text-5xl 2sm:text-2xl mr-9 cursor-pointer`} onClick={backtoHomePage}>
+                    DREAM LABOUR
                 </h1>
                 <div className={`1100:block 2sm:hidden`}>
                     <div className={`${kanit.className} lg:text-lg sm:text-sm font-normal flex h-5 items-center space-x-4 justify-between gap-x-2`}>
