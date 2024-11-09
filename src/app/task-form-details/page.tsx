@@ -45,13 +45,24 @@ export default function Home() {
                                 </Select>
                             </div>
                             <div>
-                                <Select labelPlacement="outside" label="Select your city" placeholder="Choose which city the tasked will work."  isRequired variant="faded"> 
+                                <Select labelPlacement="outside" label="Select your street" placeholder="Choose which street the tasked will work."  isRequired variant="faded"> 
                                 {streets.map((street, index) => (
                                     <SelectItem key={index}>
                                         {street}
                                     </SelectItem>
                                 ))}
                                 </Select>
+                            </div>
+                            <div>
+                                <Input
+                                    type="text"
+                                    label="Detailed Address "
+                                    placeholder= "Your specific address."
+                                    labelPlacement="outside" 
+                                    isRequired
+                                    size="md"
+                                    variant= "faded"
+                                />
                             </div>
                             <div>
                                 <DateInput 

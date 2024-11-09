@@ -30,7 +30,7 @@ export default function FormTaskTitle({task, setTask}: TaskTitle) {
                     <ModalContent>
                     {(onClose) => (
                         <>
-                        <ModalHeader className="flex flex-col gap-1">Edit your Task's name here</ModalHeader>
+                        <ModalHeader className="flex flex-col gap-1">Edit your Task&apos;s name here</ModalHeader>
                         <ModalBody>
                         <form action="" onSubmit={(event) => event.preventDefault()}>
                             <input 

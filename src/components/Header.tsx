@@ -4,7 +4,6 @@ import { Lobster } from 'next/font/google'
 import { Kanit } from 'next/font/google'
 import { IoMenu } from "react-icons/io5";
 import { useRouter } from "next/navigation";
-import Link from 'next/link';
 import { Divider, Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem } from "@nextui-org/react";
 
 const lobster = Lobster({
