@@ -28,7 +28,7 @@ const Header: React.FC = () => {
         <header className="border-slate-300 py-4 border-b text-green-950">
             <div className="flex justify-between items-center m-auto w-10/12">
                 <h1 className={`${lobster.className} sm:text-5xl 2sm:text-2xl mr-9`}>
-                    <Link href="/">
+                    <Link legacyBehavior href="/">
                         <a>DREAM LABOUR</a>
                     </Link>
                 </h1>
