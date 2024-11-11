@@ -17,9 +17,9 @@ export const CustomRadio = (props: CustomRadioProps) => {
                 base: cn(
                     "inline-flex m-0 bg-content1 hover:bg-content2 items-center justify-between",
                     "flex-row-reverse max-w-[300px] cursor-pointer rounded-lg gap-4 p-4 border-2 border-transparent",
-                    "bg-gray-700", // Default background color
-                    "hover:bg-gray-600", // Background on hover
-                    "data-[selected=true]:bg-green-800", // Background color when selected
+                    "bg-gray-200", // Default background color
+                    "hover:bg-gray-300", // Background on hover
+                    "data-[selected=true]:bg-blue-300", // Background color when selected
                     "data-[selected=true]:border-black-800" // Border color when selected
                 ),
             }}

@@ -1,6 +1,6 @@
 import React, { CSSProperties } from 'react';
 import { Input, Textarea } from "@nextui-org/react";
-import { Card, CardBody, Image, Button, Slider } from "@nextui-org/react";
+import { Card, CardBody, Image } from "@nextui-org/react";
 import { Link } from "@nextui-org/link";
 
 export default function TaskInformation() {

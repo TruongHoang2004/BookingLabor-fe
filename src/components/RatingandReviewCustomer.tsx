@@ -1,9 +1,7 @@
 // PaymentandBooking.tsx
 "use client";
 import React, { CSSProperties, useState } from 'react';
-import { RadioGroup, Radio, cn, RadioProps } from "@nextui-org/react";
-import { Input, Textarea } from "@nextui-org/react";
-import { Card, CardBody, Image, Button, Slider } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { Link } from "@nextui-org/link";
 
 

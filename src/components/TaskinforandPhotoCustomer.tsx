@@ -1,7 +1,7 @@
 "use client"
 import React, { CSSProperties, useState, useRef } from 'react';
 import { Input, Textarea } from "@nextui-org/react";
-import { Card, CardBody, Image, Button, Slider } from "@nextui-org/react";
+import { Image } from "@nextui-org/react";
 
 const TaskInforAndPhotoCustomer: React.FC = () => {
     const [images, setImages] = useState<string[]>([
