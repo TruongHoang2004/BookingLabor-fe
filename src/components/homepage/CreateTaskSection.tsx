@@ -9,7 +9,7 @@ const CreatTaskSection: React.FC = () => {
     const handleTaskSubmit = (e:React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if(task_content) {
-        router.push(`/task-form-details?task=${encodeURIComponent(task_content)}`);
+        router.push(`/create-task?task=${encodeURIComponent(task_content)}`);
       }
     }
 
