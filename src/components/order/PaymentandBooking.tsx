@@ -31,28 +31,30 @@ export const CustomRadio = (props: CustomRadioProps) => {
 
 export default function PaymentandBooking() {
     return (
-        <div style={sidebarStyles}>
-            <h2 style={headerStyles}>Payment Method</h2>
+        <div style={rightStyles}>
+            <div style={sidebarStyles}>
+                <h2 style={headerStyles}>Payment Method</h2>
 
-            {/* Payment method options */}
-            <RadioGroup label="Please choose your payment method" description="Selected plan can be changed at any time.">
-                <CustomRadio description="Online banking" value="paying-in-advanced">
-                    Paying in advanced
-                </CustomRadio>
-                <CustomRadio description="On cash" value="pay-later">
-                    Pay later
-                </CustomRadio>
-                <CustomRadio description="Online banking" value="deposit">
-                    Deposit
-                </CustomRadio>
-            </RadioGroup>
+                {/* Payment method options */}
+                <RadioGroup label="Please choose your payment method" description="Selected plan can be changed at any time.">
+                    <CustomRadio description="Online banking" value="paying-in-advanced">
+                        Paying in advanced
+                    </CustomRadio>
+                    <CustomRadio description="On cash" value="pay-later">
+                        Pay later
+                    </CustomRadio>
+                    <CustomRadio description="Online banking" value="deposit">
+                        Deposit
+                    </CustomRadio>
+                </RadioGroup>
 
-            <div className="flex flex-wrap gap-4 items-center">
+                <div className="flex flex-wrap gap-4 items-center">
 
-                <Button color="primary" variant="ghost">
-                    Booking
-                </Button>
+                    <Button color="primary" variant="ghost">
+                        Booking
+                    </Button>
 
+                </div>
             </div>
         </div>
 
@@ -60,8 +62,22 @@ export default function PaymentandBooking() {
     );
 }
 
+
+const rightStyles: CSSProperties = {
+    width: '100%',
+    maxWidth: '820px',
+    marginRight: '0px',
+    display: 'flex',
+    flexDirection: 'column',
+    //alignItems: 'center',
+    justifyContent: 'flex-start',
+    gap: '20px',
+    color: 'black',
+
+}
 const sidebarStyles: CSSProperties = {
-    width: '400px',
+    width: '100%',
+    maxWidth: '400px',
     height: 'auto',
     backgroundColor: '#f0f0f0',
     borderRadius: '12px',

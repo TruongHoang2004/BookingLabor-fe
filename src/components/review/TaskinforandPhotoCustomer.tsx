@@ -3,11 +3,11 @@ import React, { CSSProperties, useState, useRef } from 'react';
 import { Input, Textarea } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
 
-const TaskInforAndPhotoTasker: React.FC = () => {
+const TaskInforAndPhotoCustomer: React.FC = () => {
     const [images, setImages] = useState<string[]>([
-        "https://app.requestly.io/delay/5000/https://nextui.org/images/hero-card-complete.jpeg",
-        "https://app.requestly.io/delay/5000/https://nextui.org/images/hero-card-complete.jpeg",
-        "https://app.requestly.io/delay/5000/https://nextui.org/images/hero-card-complete.jpeg",
+        "https://app.requestly.io/delay/5000/https://cdn.techmadeplain.com/img/2014/300x200.png",
+        "https://app.requestly.io/delay/5000/https://cdn.techmadeplain.com/img/2014/300x200.png",
+        "https://app.requestly.io/delay/5000/https://cdn.techmadeplain.com/img/2014/300x200.png",
 
 
     ]);
@@ -155,7 +155,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                     <Textarea
 
                         variant="bordered"
-                        placeholder="Write your review about task and tasker here."
+                        placeholder="Write your review about task and customer here."
                         disableAnimation
                         disableAutosize
                         classNames={{
@@ -170,7 +170,8 @@ const TaskInforAndPhotoTasker: React.FC = () => {
 }
 
 const containerStyles: CSSProperties = {
-    width: '980px',
+    width: '100%',
+    maxWidth: '980px',
     height: 'auto',
     backgroundColor: '#f0f0f0',
     borderRadius: '12px',
@@ -223,4 +224,4 @@ const imageContainerStyles: CSSProperties = {
 
 
 
-export default TaskInforAndPhotoTasker;
+export default TaskInforAndPhotoCustomer;

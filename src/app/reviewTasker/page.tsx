@@ -1,6 +1,6 @@
-import TaskCompleted from "@/components/TaskCompleted";
-import RatingandReviewTasker from "@/components/RatingandReviewTasker";
-import TaskInforAndPhotoTasker from "@/components/TaskInforAndPhotoTasker";
+import TaskCompleted from "@/components/review/TaskCompleted";
+import RatingandReviewTasker from "@/components/review/RatingandReviewTasker";
+import TaskInforAndPhotoTasker from "@/components/review/TaskInforAndPhotoTasker";
 
 export default function Page() {
     return (

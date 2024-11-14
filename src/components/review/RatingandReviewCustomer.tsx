@@ -133,7 +133,8 @@ export default function RatingandReviewCustomer() {
 }
 
 const sidebarStyles: CSSProperties = {
-    width: '400px',
+    width: '100%',
+    maxWidth: '400px',
     height: 'auto',
     backgroundColor: '#f0f0f0',
     borderRadius: '12px',
