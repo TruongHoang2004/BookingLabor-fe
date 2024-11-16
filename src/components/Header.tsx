@@ -28,6 +28,7 @@ const Header: React.FC = () => {
             <div className="flex justify-between items-center m-auto w-10/12">
                 <h1 className={`${lobster.className} sm:text-5xl 2sm:text-2xl h-full flex items-center cursor-pointer `} onClick={() => router.push('/')}>
                     <p>DREAM LABOUR</p>
+
                 </h1>
                 <div className={`1100:block 2sm:hidden`}>
                     <div className={`${kanit.className} lg:text-lg sm:text-sm font-normal flex h-5 items-center space-x-4 justify-between gap-x-2`}>
