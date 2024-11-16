@@ -2,12 +2,6 @@
 import TaskSearchBar from "@/components/tasks/SearchBar";
 import TasksList from "@/components/tasks/TasksList";
 
-interface Task {
-    id: number;
-    title: string;
-    description: string;
-}
-
 export default function TasksView() {
     const handleSearch = (taskId: string) => {
         console.log('Searching for task:', taskId);
