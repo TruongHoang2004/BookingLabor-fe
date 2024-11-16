@@ -15,10 +15,30 @@ const config: Config = {
         foreground: "var(--foreground)",
       },
       screens: {
-        "2sm": "320px",
-        "x-sm": "480px",
-        "1100": "1100px",
-        "1200": "1200px",
+        mobile: {
+          min: "100px",
+          max: "550px",
+        },
+        tablet: {
+          min: "550px",
+          max: "750px",
+        },
+        "mini-laptop": {
+          min: "750px",
+          max: "874px",
+        },
+        laptop: {
+          min: "874px",
+          max: "1280px",
+        },
+        desktop: {
+          min: "1280px",
+        },
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1536px",
       },
     },
   },
