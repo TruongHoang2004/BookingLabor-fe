@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   title: "DreamLabour",
   description: "Tinh ban dieu ki",
   icons: {
-    icon: '/img/favicon/favicon1.png',
+    icon: '/favicon.png',
   },
 };
 
