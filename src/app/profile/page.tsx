@@ -1,11 +1,13 @@
 'use client';
-import { Textarea, Input, Button} from "@nextui-org/react";
+import {Button} from "@nextui-org/react";
 import AvatarUpload from "@/components/profile/avatar";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Select, SelectItem } from "@nextui-org/react";
 import Reviews from "@/components/profile/review";
 import { Kanit } from 'next/font/google'
+import EditableField from "@/components/profile/editable";
+import EditableSelect from "@/components/profile/editableselect";
+import EditableTextarea from "@/components/profile/editabletext";
 
 const kanit = Kanit({
   subsets: ['latin'],
@@ -21,6 +23,12 @@ const ProfilePage = () => {
       const imageUrl = URL.createObjectURL(file);
       setAvatarUrl(imageUrl);
     };
+const paymentOptions = [ 
+  { value: 'credit_card', label: 'Credit Card' },
+  { value: 'pay_pal', label: 'PayPal' },
+  { value: 'bank_transfer', label: 'Bank Transfer' },
+  { value: 'cash', label: 'Cash' },
+];
     
   return (
     <div className="flex flex-col items-center p-4 min-h-screen bg-gray-100">
@@ -29,12 +37,12 @@ const ProfilePage = () => {
         {/* Left Column */}
         <div className="space-y-6">
           <div className="flex justify-between items-center mb-6">
-              <h1 className={`${kanit.className} text-4xl text-green-500 font-bold`}>MY PROFILE</h1>
+              <h1 className={`${kanit.className} text-4xl text-green-500 font-semibold`}>MY PROFILE</h1>
               <Button
-                radius="full"
+                radius="md"
                 color="success"
                 variant="solid"
-                className={`${kanit.className} text-lg text-white font-bold flex items-center space-x-4 justify-between gap-x-2`}
+                className={`${kanit.className} text-lg text-white flex items-center space-x-4 justify-between gap-x-2`}
                 onClick={() => router.push('./profile/tasker')}
               >
                 Change to Tasker Profile
@@ -47,43 +55,31 @@ const ProfilePage = () => {
             </div>
           </div>
           {/* Personal Info */}
-        <div className="grid grid-cols-2 gap-4">
-        <Input
+        <EditableField
           type="text"
-          label="First Name"
-          defaultValue="Jeremy"
-          className="mr-24"
+          label="Name"
+          defaultValue="Jeremy Truong"
         />
-        <Input
-          type="text"
-          label="Last Name"
-          defaultValue="Truong"
-        />
-          </div>
-
           {/* Contact Info */}
-        <Input
+        <EditableField
           type="email"
           label="Email"
           defaultValue="jeremytruong0204@gmail.com"
         />
-        <Input
+        <EditableField
           type="password"
           label="Password"
           defaultValue="mypassword"
         />
-        <Input
-          isRequired
-          type="number"
+        <EditableField
+          type="mobile"
           label="Phone"
         />
-        <Input
-          isRequired
+        <EditableField
           type="text"
           label="Address"
         />
-        <Input
-          isRequired
+        <EditableField
           type="text"
           label="Country"
         />
@@ -94,61 +90,56 @@ const ProfilePage = () => {
           {/* Button Container */}
           <div className="flex items-center justify-end mb-6 space-x-4">
             <Button
-              radius="full"
+              radius="md"
               color="danger"
               variant="bordered"
-              className={`${kanit.className} text-lg text-red-600 font-bold flex items-center space-x-4 justify-between gap-x-2`}
+              className={`${kanit.className} text-lg text-red-600 flex items-center space-x-4 justify-between gap-x-2`}
             >
               Delete Profile
             </Button>
             <Button
-              radius="full"
+              radius="md"
               color="success"
               variant="solid"
-              className={`${kanit.className} text-lg text-white font-bold flex items-center space-x-4 justify-between gap-x-2`}
+              className={`${kanit.className} text-lg text-white flex items-center space-x-4 justify-between gap-x-2`}
               onClick={() => { router.push('./') }}
             >
               Save Changes
             </Button>
           </div>
-        <Input
-          isRequired
+        <EditableField
           type="text"
           label="Gender"
         />
 
           {/* Date of birth*/}
           <div className="grid grid-cols-1 gap-4">
-        <Input
-          type="date"
-          label="Date"
-        />
+          <EditableField
+            type="date"
+            label="Date"
+          />
           </div>
-        <Input
-          type="link"
-          label="Social Media"
-        />
-        <Textarea 
-          label="Description"
-        />
-        <Textarea 
-          label="Requirements"
-        />
-        <Input
-          type="money"
-          label="Expected Fee"
-        />
-        <Select
-          selectionMode="multiple"
-          label="Payment Info"
-          placeholder="Select payment methods"
-          >
-            <SelectItem key="credit_card" className="text-black">Credit Card</SelectItem>
-            <SelectItem key="pay_pal" className="text-black">PayPal</SelectItem>
-            <SelectItem key="bank_transfer" className="text-black">Bank Transfer</SelectItem>
-            <SelectItem key="cas" className="text-black">Cash</SelectItem>
-        </Select>
-
+          <EditableField
+            type="link"
+            label="Social Media"
+          />
+          <EditableTextarea
+            type='text'
+            label="Description"
+          />
+          <EditableTextarea
+            type='text'
+            label="Requirements"
+          />
+          <EditableField
+            type="money"
+            label="Expected Fee"
+          />
+          <EditableSelect
+            label="Payment method"
+            options={paymentOptions}
+            defaultValue=""
+          />
         </div>
       </div>
       <div className="mt-12 w-full mx-auto bg-white p-6 rounded-lg shadow-md">
