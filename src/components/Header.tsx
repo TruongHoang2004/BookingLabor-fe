@@ -4,7 +4,6 @@ import { Lobster } from 'next/font/google'
 import { Kanit } from 'next/font/google'
 import { IoMenu } from "react-icons/io5";
 import { useRouter } from "next/navigation";
-import Link from 'next/link';
 import { Divider, Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem } from "@nextui-org/react";
 import {Popover, PopoverTrigger, PopoverContent} from "@nextui-org/react";
 import Image from "next/image";
@@ -39,12 +38,10 @@ const Header: React.FC = () => {
     ]
     const isLoggedIn = true;
     return (
-        <header className="border-slate-300 py-4 border-b text-green-950">
+        <header className="border-slate-300 py-4 border-b text-green-950 caret-transparent">
             <div className="flex justify-between items-center m-auto w-10/12">
-                <h1 className={`${lobster.className} sm:text-5xl 2sm:text-2xl mr-9`}>
-                    <Link href="/">
-                        DREAM LABOUR
-                    </Link>
+                <h1 className={`${lobster.className} sm:text-5xl 2sm:text-2xl h-full flex items-center cursor-pointer `} onClick={() => router.push('/')}>
+                    <p>DREAM LABOUR</p>
                 </h1>
                 {/* Nếu chưa login thì hiển thị div này ~ màn hình to*/}
                 <div className={`${isLoggedIn ? 'hidden' : '1100:block 2sm:hidden'}`}>
