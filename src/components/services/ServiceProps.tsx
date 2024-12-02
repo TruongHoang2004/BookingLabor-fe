@@ -18,7 +18,7 @@ interface ServiceCardProps {
 const ServiceProps = ({ imageSrc, title, description, services }: ServiceCardProps) => {
     return (
         <div>
-            <div className="h-60 relative w-[400px]">
+            <div className="h-60 relative x-sm:w-[400px] 2sm:w-[300px]">
                 <Image 
                     src={imageSrc} 
                     className="object-cover rounded-t-lg object-top" 
@@ -30,7 +30,7 @@ const ServiceProps = ({ imageSrc, title, description, services }: ServiceCardPro
                     <p className="text-sm font-medium">{description}</p>
                 </div>
             </div>
-            <div className="text-green-800 rounded-b-lg w-[400px] bg-zinc-50 border border-t-0 px-4 py-3">
+            <div className="text-green-800 rounded-b-lg x-sm:w-[400px] 2sm:w-[300px] bg-zinc-50 border border-t-0 px-4 py-3">
                 <p className="font-medium text-lg mb-2 underline">Service Details:</p>
                 <ul className="space-y-1 text-base">
                     {services.map((service, index) => {
