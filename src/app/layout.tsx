@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import "../styles/globals.css";
 import { Montserrat } from 'next/font/google';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Provider from "@/components/nextuiProvider";
+import React from "react";
+import "./globals.css";
 
 const layout_font = Montserrat({
   weight: ['400', '500', '700', '600', '800', '900'],
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
   title: "DreamLabour",
   description: "Tinh ban dieu ki",
   icons: {
-    icon: '/img/favicon/favicon1.png',
+    icon: '/favicon.png',
   },
 };
 
@@ -26,13 +27,13 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-        <body className={`${layout_font.className} antialiased`}>
-          <Provider>
-            <Header/>
-            {children}
-            <Footer/>
-          </Provider>
-          
+      <body className={`${layout_font.className} antialiased`}>
+        <Provider>
+          <Header />
+          {children}
+          <Footer />
+        </Provider>
+
       </body>
     </html>
   );
