@@ -48,9 +48,9 @@ const Header: React.FC = () => {
                     <div className={`${kanit.className} lg:text-lg sm:text-sm font-normal flex h-5 items-center space-x-4 justify-between gap-x-2`}>
                         <a href="/services" className="hover:underline no-underline">Services</a>
                         <Divider orientation="vertical" className="bg-lime-500" />
-                        <a href="/login" className="hover:underline no-underline">Sign-up / Login</a>
+                        <a href="/login" className="hover:underline no-underline">Register / Login</a>
                         <Divider orientation="vertical" className="bg-lime-500" />
-                        <a href="" className="hover:bg-emerald-100 px-3 py-1 border border-lime-500 rounded-xl font-medium hover:underline no-underline">Register as a Tasker</a>
+                        <a href="" className="hover:bg-emerald-100 px-3 py-1 border border-lime-500 rounded-xl font-medium hover:underline no-underline">Become a Tasker</a>
                     </div>
                 </div>
                  {/* Nếu chưa login thì hiển thị div này ~ màn hình nhỏ*/}
@@ -69,9 +69,9 @@ const Header: React.FC = () => {
                         >
                             <DropdownItem key="services">Services</DropdownItem>
                             <DropdownItem key="login">Login</DropdownItem>
-                            <DropdownItem key="register">Sign-up</DropdownItem>
+                            <DropdownItem key="register">Register</DropdownItem>
                             <DropdownItem key="tasker_login">
-                                Register as a Tasker
+                                Become a Tasker
                             </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
