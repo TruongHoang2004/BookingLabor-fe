@@ -159,7 +159,11 @@ const Header: React.FC = () => {
                         </Popover>
                         <Dropdown>
                             <DropdownTrigger>
-                                <IoMenu className="text-3xl text-emerald-700 cursor-pointer" />
+                                <Button
+                                    className="bg-white font-semibold"
+                                >
+                                    <IoMenu className="text-3xl text-emerald-700" />
+                                </Button>
                             </DropdownTrigger>
                             <DropdownMenu
                                 aria-label="Action event example"
@@ -168,7 +172,9 @@ const Header: React.FC = () => {
                                 <DropdownItem key="services">Services</DropdownItem>
                                 <DropdownItem key="task-manage">Task Manage</DropdownItem>
                                 <DropdownItem key="profile">My Profile</DropdownItem>
-                                <DropdownItem key="logout">Log Out </DropdownItem>
+                                <DropdownItem key="logout">
+                                    Log Out
+                                </DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </div>
