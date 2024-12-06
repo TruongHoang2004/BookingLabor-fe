@@ -4,6 +4,9 @@ import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Input, Button } from "@nextui-org/react";
 import { Eye, EyeOff } from 'lucide-react';
 import Background from '../layout-background';
+import axiosInstance from '@/api/axiosInstance';
+import ENDPOINTS from '@/api/endpoint';
+
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState({
     email: '',

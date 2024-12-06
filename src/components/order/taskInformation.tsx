@@ -17,7 +17,7 @@ export default function TaskInformation() {
                             color: 'black',
                             fontSize: '15px',
                             fontWeight: 300,
-                            fontFamily: 'Inter',
+                            // fontFamily: 'Inter',
                             lineHeight: '36px',
                             borderRadius: '10px',
                             border: '1px solid #ccc',
@@ -106,7 +106,7 @@ export default function TaskInformation() {
                             color: 'black',
                             fontSize: '15px',
                             fontWeight: 300,
-                            fontFamily: 'Inter',
+                            // fontFamily: 'Inter',
                             lineHeight: '24px',
                             borderRadius: '10px',
 

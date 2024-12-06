@@ -9,8 +9,6 @@ export default function Page() {
             <OrderTitle />
             <TaskInformation />
             <PaymentandBooking />
-
-
         </div>
 
 

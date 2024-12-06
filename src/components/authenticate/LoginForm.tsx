@@ -4,8 +4,14 @@ import { useRouter } from 'next/navigation';
 import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Input, Button} from "@nextui-org/react";
 import { Eye, EyeOff } from 'lucide-react';
 import Background from '../layout-background';
+import axiosInstance from '@/api/axiosInstance';
+import ENDPOINTS from '@/api/endpoint';
+import { useAppDispatch } from '@/redux/store';
+import { setCredentials } from '@/redux/slices/authSlice';
+
 
 const LoginForm: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -17,8 +23,25 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      alert('Login successful!');
-      router.push('/');
+       // Dispatch login action with email and password
+      const email = formData.email;
+      const password = formData.password;
+      console.log(email + "-" + password)
+      const response = await axiosInstance.post(ENDPOINTS.AUTH_LOGIN, { email, password });
+      const { user, token } = response.data;
+      const userInfo = {
+        id: user.id,
+        email: user.email,
+        fullname: user.fullname
+      };
+      dispatch(setCredentials({
+        user: userInfo,
+        accessToken: token.access_token,
+        refreshToken: token.refresh_token
+      }));
+      alert("Đăng nhập thành công")
+      // Redirect to home page after successful login
+       router.push('/');
     } catch (error) {
       console.error('Error logging in:', error);
     }
