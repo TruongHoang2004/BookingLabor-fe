@@ -2,18 +2,24 @@
 
 import { Provider } from 'react-redux';
 import { store } from '@/redux/store';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { initializeAuth } from '@/redux/slices/authSlice';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export function ReduxProvider({ children }: { children: React.ReactNode }) {
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    // Initialize auth from localStorage when app starts
-    store.dispatch(initializeAuth());
+    const initAuth = async () => {
+      await store.dispatch(initializeAuth());
+      setIsLoading(false);
+    };
+    initAuth();
   }, []);
 
   return (
     <Provider store={store}>
-      {children}
+      {isLoading ? <LoadingSpinner /> : children}
     </Provider>
   );
 }
