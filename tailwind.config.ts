@@ -16,6 +16,7 @@ const config: Config = {
         foreground: "var(--foreground)",
       },
       screens: {
+        /*
         mobile: {
           min: "100px",
           max: "550px",
@@ -35,11 +36,11 @@ const config: Config = {
         desktop: {
           min: "1280px",
         },
-        sm: "640px",
-        md: "768px",
-        lg: "1024px",
-        xl: "1280px",
-        "2xl": "1536px",
+        */
+        "2sm": "320px",
+        "x-sm": "480px",
+        "1200": "1200px",
+        "1100": "1100px"
       },
     },
   },
