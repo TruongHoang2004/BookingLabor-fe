@@ -69,9 +69,9 @@ const Header: React.FC = () => {
                         >
                             <DropdownItem key="services">Services</DropdownItem>
                             <DropdownItem key="login">Login</DropdownItem>
-                            <DropdownItem key="register">Register</DropdownItem>
-                            <DropdownItem key="tasker_login">
-                                Become a Tasker
+                            <DropdownItem key="register">Sign-up</DropdownItem>
+                            <DropdownItem key="becometasker">
+                                Register as a Tasker
                             </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
