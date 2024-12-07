@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Input, Button} from "@nextui-org/react";
+import {Card, CardHeader, CardBody, CardFooter, Divider, Input, Button} from "@nextui-org/react";
 import { Eye, EyeOff } from 'lucide-react';
 import Background from '../layout-background';
 import axiosInstance from '@/api/axiosInstance';
@@ -26,7 +26,7 @@ const LoginForm: React.FC = () => {
        // Dispatch login action with email and password
       const email = formData.email;
       const password = formData.password;
-      console.log(email + "-" + password)
+      // console.log(email + "-" + password)
       const response = await axiosInstance.post(ENDPOINTS.AUTH_LOGIN, { email, password });
       const { user, token } = response.data;
       const userInfo = {
@@ -100,10 +100,10 @@ const LoginForm: React.FC = () => {
           />
           <span className="text-sm">Remember me</span>
         </label>
-        <Link href="#" size="sm" color="primary">
-          Forgot password?
-        </Link>
-          </div>
+        <p onClick={() => router.push('/forgotpassword')} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+            Forgot password?
+          </p>
+        </div>
         </CardBody>
 
         <CardFooter className="flex flex-col gap-4">
@@ -117,7 +117,7 @@ const LoginForm: React.FC = () => {
         Login
           </Button>
 
-          <Link href="/" className="flex items-center gap-2 text-sm text-gray-600">
+          <p onClick={() => router.push('/')} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
           fill="none" 
@@ -133,14 +133,14 @@ const LoginForm: React.FC = () => {
           />
         </svg>
         Back to Home
-          </Link>
+          </p>
 
           <p className="text-center text-sm text-gray-600">
-        Don't have an account?{" "}
-        <Link href="/register" color="primary" size="sm">
-          Register here
-        </Link>
-          </p>
+          Don't have an account?{" "}
+            <span onClick={() => router.push('/register')} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+              Register here
+            </span>
+          </p>  
         </CardFooter>
       </form>
         </Card>

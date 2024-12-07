@@ -3,6 +3,7 @@
 import { useAppSelector } from '@/redux/store';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import LoadingSpinner from './LoadingSpinner';
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAppSelector((state) => state.auth);

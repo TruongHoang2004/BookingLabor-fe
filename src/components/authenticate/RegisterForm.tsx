@@ -137,7 +137,7 @@ const RegisterForm: React.FC = () => {
               Register
             </Button>
 
-            <Link href="/" className="flex items-center gap-2 text-sm text-gray-600">
+            <p onClick={() => router.push('/')} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 fill="none" 
@@ -153,14 +153,14 @@ const RegisterForm: React.FC = () => {
                 />
               </svg>
               Back to Home
-            </Link>
+            </p>
 
             <p className="text-center text-sm text-gray-600">
               Already have an account?{" "}
-              <Link href="/login" color="primary" size="sm">
-                Login here
-              </Link>
-            </p>
+            <span onClick={() => router.push('/login')} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+              Login here
+            </span>
+          </p>
           </CardFooter>
         </form>
       </Card>
