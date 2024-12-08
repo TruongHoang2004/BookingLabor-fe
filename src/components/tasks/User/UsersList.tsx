@@ -33,7 +33,7 @@ const usersList: User[] = [
 
 export default function UsersList() {
     const [currentPage, setCurrentPage] = useState(1);
-    const usersPerPage = 24;
+    const usersPerPage = 12;
     const router = useRouter();
 
     // Calculate users for current page

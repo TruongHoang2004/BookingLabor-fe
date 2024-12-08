@@ -10,15 +10,11 @@ export default function TasksView() {
         console.log('Searching for task:', taskId);
     }
 
-    const navigateToUserTasks = () => {
-        router.push('/User');
-    }
-
     return (
         <div className="flex flex-col p-4 w-full">
             <div className="flex justify-start mx-auto mt-4 w-5/6">
                 <button
-                    onClick={navigateToUserTasks}
+                    onClick={() => router.push('/User')}
                     className="bg-blue-500 text-white px-4 py-2 rounded"
                 >
                     Go to User Tasks
