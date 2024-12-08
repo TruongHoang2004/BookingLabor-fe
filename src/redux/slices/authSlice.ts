@@ -48,16 +48,24 @@ const authSlice = createSlice({
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
     },
+    
     initializeAuth: (state) => {
-      const storedUser = localStorage.getItem('user');
-      const accessToken = localStorage.getItem('accessToken');
-      const refreshToken = localStorage.getItem('refreshToken');
-
-      if (storedUser && accessToken && refreshToken) {
-        state.user = JSON.parse(storedUser);
-        state.accessToken = accessToken;
-        state.refreshToken = refreshToken;
-        state.isAuthenticated = true;
+      try {
+        const storedUser = localStorage.getItem('user');
+        const accessToken = localStorage.getItem('accessToken');
+        const refreshToken = localStorage.getItem('refreshToken');
+    
+        if (storedUser && accessToken && refreshToken) {
+          state.user = JSON.parse(storedUser);
+          state.accessToken = accessToken;
+          state.refreshToken = refreshToken;
+          state.isAuthenticated = true;
+        } else {
+          state.isAuthenticated = false;
+        }
+      } catch (error) {
+        console.error('Error initializing auth from localStorage:', error);
+        state.isAuthenticated = false; // Xử lý trường hợp dữ liệu không hợp lệ
       }
     }
   }
