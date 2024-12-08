@@ -16,7 +16,7 @@ export default function TaskDetail({
             >
                 Back
             </button>
-            <h1 className="font-bold text-xl">Task ID: {taskId}</h1>
+            <h1 className="font-bold text-xl">Task ID: </h1>
         </div>
     );
 }

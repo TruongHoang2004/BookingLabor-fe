@@ -1,6 +1,7 @@
 import { Task } from "@/types/Task";
 import TaskCard from "./TaskCard";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import TaskFilter from "./Filter";
 
 const tasksList: Task[] = [
@@ -35,6 +36,7 @@ export default function TasksList() {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState('all');
     const tasksPerPage = 24;
+    const router = useRouter();
 
     // Filter tasks theo category
     const filteredTasks = selectedCategory === 'all'
@@ -56,6 +58,7 @@ export default function TasksList() {
         setCurrentPage(1);
     };
 
+
     return (
         <div className="flex flex-col items-center w-full">
             <TaskFilter
@@ -64,7 +67,6 @@ export default function TasksList() {
                 tasks={tasksList}
             />
 
-            {/* Tasks Grid */}
             <div className="flex justify-center items-center my-8 w-full">
                 <div className="gap-4 grid grid-cols-6 laptop:grid-cols-4 mini-laptop:grid-cols-4 mobile:grid-cols-1 tablet:grid-cols-2 w-full">
                     {currentTasks.map(task => (
@@ -73,7 +75,6 @@ export default function TasksList() {
                 </div>
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
                 <div className="flex items-center gap-2 my-4">
                     <button
