@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect } from "react";
+import React from "react";
 import { Lobster } from 'next/font/google'
 import { Kanit } from 'next/font/google'
 import { IoMenu } from "react-icons/io5";
