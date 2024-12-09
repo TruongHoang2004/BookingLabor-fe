@@ -24,7 +24,7 @@ export default function TaskCard({ task }: { task: Task }) {
 
     return (
         <>
-            <div className="flex flex-col gap-4 bg-zinc-100 shadow-xl hover:shadow-lg p-4 rounded-xl h-64 transition-shadow cursor-pointer" onClick={onOpen}>
+            <div className="flex flex-col gap-4 bg-zinc-100 shadow-xl hover:shadow-lg p-4 rounded-xl h-80 transition-shadow cursor-pointer" onClick={onOpen}>
                 <div className="flex items-center gap-2">
                     <h2 className="font-bold text-gray-700">{taskId}</h2>
                     <span className={`px-2 py-1 rounded-full text-sm font-semibold ${status === "In Progress"
@@ -37,7 +37,7 @@ export default function TaskCard({ task }: { task: Task }) {
                     </span>
                 </div>
                 <div className="overflow-hidden">
-                    <p className="mb-2 truncate">{task.title}</p>
+                    <p className="mb-2 truncate font-semibold">{task.title}</p>
                     <p className="truncate">{task.description}</p>
                     <p className="truncate">{task.location}</p>
                     <p className="truncate">{task.category}</p>
@@ -46,7 +46,7 @@ export default function TaskCard({ task }: { task: Task }) {
                     <div className="mt-auto">
                         <Button
                             color="success"
-                            className="w-full"
+                            className="w-full font-semibold"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setStatus("Completed");

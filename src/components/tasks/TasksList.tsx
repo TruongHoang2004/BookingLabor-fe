@@ -35,7 +35,7 @@ const tasksList: Task[] = [
 export default function TasksList() {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState('all');
-    const tasksPerPage = 24;
+    const tasksPerPage = 15;
     const router = useRouter();
 
     // Filter tasks theo category

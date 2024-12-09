@@ -6,6 +6,14 @@ export interface UserCard {
     location: string;
 }
 
+interface Tasker {
+    id: number;
+    name: string;
+    expected_fee: number;
+    skill: string[];
+    experience: string;
+}
+
 export interface User {
     id: number;
     title: string;
@@ -13,3 +21,4 @@ export interface User {
     category: string;
     location: string;
 }
+

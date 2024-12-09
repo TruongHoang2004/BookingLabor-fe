@@ -17,7 +17,7 @@ export default function TaskFilter({
 
     return (
         <div className="flex justify-end mb-6 w-full">
-            <select
+            <select title="abc"
                 value={selectedCategory}
                 onChange={(e) => onCategoryChange(e.target.value)}
                 className="bg-white shadow-md hover:shadow-lg px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 transition-shadow focus:outline-none"
