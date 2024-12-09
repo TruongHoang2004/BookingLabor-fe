@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import ServiceProps from "./ServiceProps";
 import { GiTreeDoor } from "react-icons/gi";

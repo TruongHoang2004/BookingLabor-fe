@@ -9,6 +9,7 @@ import EditableField from "@/components/profile/editable";
 import EditableSelect from "@/components/profile/editableselect";
 import EditableTextarea from "@/components/profile/editabletext";
 import EditableChipInput from "@/components/profile/editablechip";
+import { ProtectedRoute } from "@/components/protectedRoute";
 
 const kanit = Kanit({
   subsets: ['latin'],
@@ -33,6 +34,7 @@ const TaskerProfilePage = () => {
     };
   
   return (
+    <ProtectedRoute>
     <div className="flex flex-col items-center p-4 min-h-screen bg-gray-100">
       {/* Main Content */}
       <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-8 rounded-md p-12 w-full bg-white shadow-sm">
@@ -45,7 +47,7 @@ const TaskerProfilePage = () => {
                 color="success"
                 variant="solid"
                 className={`${kanit.className} text-lg text-white flex items-center space-x-4 justify-between gap-x-2`}
-                onClick={() => router.push('../profile')}
+                onClick={() => router.push('/profile')}
               >
                 Change to Customer Profile
               </Button>
@@ -105,7 +107,7 @@ const TaskerProfilePage = () => {
               color="success"
               variant="solid"
               className={`${kanit.className} text-lg text-white flex items-center space-x-4 justify-between gap-x-2`}
-              onClick={() => { router.push('./') }}
+              onClick={() => { router.push('/') }}
             >
               Save Changes
             </Button>
@@ -152,6 +154,7 @@ const TaskerProfilePage = () => {
         <Reviews />
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

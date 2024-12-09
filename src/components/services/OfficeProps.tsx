@@ -1,3 +1,4 @@
+'use client'
 import { HiMiniBuildingOffice } from "react-icons/hi2";
 import React from 'react'
 import ServiceProps from './ServiceProps';

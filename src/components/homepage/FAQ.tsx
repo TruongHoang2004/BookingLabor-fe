@@ -1,13 +1,22 @@
+'use client';
 import React from 'react';
 import { Accordion, AccordionItem } from '@nextui-org/react';
 import { AiOutlinePlus } from "react-icons/ai";
 
 const FAQ: React.FC = () => {
-    const question = ['What is DreamLabour', 'What is DreamLabour', 'What is DreamLabour'];
+    const question = [
+        'What is DreamLabour?',
+        'How does DreamLabour work?',
+        'What services does DreamLabour offer?',
+        'How can I contact DreamLabour?',
+        'What are the benefits of using DreamLabour?'
+    ];
     const answer = [
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        "DreamLabour is a platform that connects skilled laborers with clients who need their services. It aims to streamline the process of finding and hiring reliable workers.",
+        "DreamLabour works by allowing clients to post job listings and laborers to apply for those jobs. The platform facilitates communication and payment between both parties.",
+        "DreamLabour offers a variety of services including plumbing, electrical work, carpentry, cleaning, and more. It aims to provide a one-stop solution for all labor needs.",
+        "You can contact DreamLabour through their website's contact form, by email at support@dreamlabour.com, or by calling their customer service hotline.",
+        "Using DreamLabour ensures that you get access to a pool of vetted and skilled laborers, secure payment methods, and reliable customer support."
     ];
     return (
         <div>

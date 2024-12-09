@@ -1,3 +1,4 @@
+'use client'
 import TaskCompleted from "@/components/review/TaskCompleted";
 import RatingandReviewTasker from "@/components/review/RatingandReviewTasker";
 import TaskInforAndPhotoTasker from "@/components/review/TaskInforAndPhotoTasker";

@@ -1,3 +1,4 @@
+'use client'
 import { Navbar, NavbarBrand, Button, NavbarContent } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { Kanit } from 'next/font/google'
@@ -52,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({ buttonLabel, buttonLink }) => {
           color="success"
           variant="solid"
           className={`${kanit.className} text-lg text-white font-bold flex items-center space-x-4 justify-between gap-x-2`}
-          onClick={() => { router.push('./') }}
+          onClick={() => { router.push('/') }}
         >
           Save Changes
         </Button>

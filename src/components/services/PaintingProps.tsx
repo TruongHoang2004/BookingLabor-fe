@@ -1,3 +1,4 @@
+'use client'
 import { FaPaintRoller } from "react-icons/fa";
 import React from "react";
 import ServiceProps from "./ServiceProps";

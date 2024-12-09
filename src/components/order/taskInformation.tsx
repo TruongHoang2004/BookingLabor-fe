@@ -1,3 +1,4 @@
+'use client'
 import React, { CSSProperties } from 'react';
 import { Input, Textarea } from "@nextui-org/react";
 import { Card, CardBody, Image } from "@nextui-org/react";
@@ -17,7 +18,7 @@ export default function TaskInformation() {
                             color: 'black',
                             fontSize: '15px',
                             fontWeight: 300,
-                            fontFamily: 'Inter',
+                            // fontFamily: 'Inter',
                             lineHeight: '36px',
                             borderRadius: '10px',
                             border: '1px solid #ccc',
@@ -106,7 +107,7 @@ export default function TaskInformation() {
                             color: 'black',
                             fontSize: '15px',
                             fontWeight: 300,
-                            fontFamily: 'Inter',
+                            // fontFamily: 'Inter',
                             lineHeight: '24px',
                             borderRadius: '10px',
 
