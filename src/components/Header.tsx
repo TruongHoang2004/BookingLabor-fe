@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useEffect } from "react";
 import { Lobster } from 'next/font/google'
 import { Kanit } from 'next/font/google'
 import { IoMenu } from "react-icons/io5";
@@ -26,27 +26,12 @@ const kanit = Kanit({
 // lg: 1024 -> 
 const Header: React.FC = () => {
     const { isAuthenticated, user } = useAppSelector((state) => state.auth);
-    /*
-     const [isLoading, setIsLoading] = useState(true);
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-   
-    useEffect(() => {
-        // Khi có thông tin từ Redux, dừng loading
-        if (isAuthenticated !== undefined) {
-            setIsLoggedIn(isAuthenticated);
-            setIsLoading(false);
-        }
-    }, [isAuthenticated]);
-
-    if (isLoading) {
-        return <div>Loading...</div>; // Hoặc spinner tùy ý
-    }
-    */
     let isLoggedIn = false;
+    //const user = {fullname: "jqnwd", email: "aodwnmoiamdio"}
     if(isAuthenticated && user) {
-        isLoggedIn = true;
+       isLoggedIn = true;
     }
-
+   
     const router = useRouter();
     const handleEvent = (path: string) => {
         if(path === "logout") {
