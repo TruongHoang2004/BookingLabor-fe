@@ -20,7 +20,7 @@ export default function UserCard({ user }: { user: User }) {
         const number = ((id - 1) % 9999) + 1;
         return `${letter}${String(number).padStart(4, '0')}`;
     }
-    const userId = formatUserId(user.id);
+    const userId = formatUserId(user.id);   
 
 
     return (
@@ -38,7 +38,7 @@ export default function UserCard({ user }: { user: User }) {
                     </span>
                 </div>
                 <div className="overflow-hidden">
-                    <p className="mb-2 truncate">{user.title}</p>
+                    <p className="mb-2 truncate font-semibold">{user.title}</p>
                     <p className="truncate">{user.description}</p>
                     <p className="truncate">{user.location}</p>
                     <p className="truncate">{user.category}</p>

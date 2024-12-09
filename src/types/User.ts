@@ -6,7 +6,7 @@ export interface UserCard {
     location: string;
 }
 
-interface Tasker {
+export interface Tasker {
     id: number;
     name: string;
     expected_fee: number;
@@ -20,5 +20,7 @@ export interface User {
     description: string;
     category: string;
     location: string;
+    applied_tasker_id: number[];
+    chosen_tasker_id: number;
 }
 

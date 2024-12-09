@@ -1,7 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation';
-import UserSearchBar from "@/components/tasks/user/SearchBar";
-import UsersList from "@/components/tasks/user/UsersList";
+import UserSearchBar from "@/components/tasks/User/SearchBar";
+import UsersList from "@/components/tasks/User/UsersList";
 // import TaskerList from "@/components/tasks/user/TaskerList";
 import { Button } from '@nextui-org/react';
 
