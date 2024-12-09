@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from 'react';
 import { Button, Select, SelectItem } from '@nextui-org/react';
 import { Edit3, Save } from 'react-feather';

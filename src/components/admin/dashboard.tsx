@@ -38,7 +38,7 @@ const Dashboard: React.FC = () => {
                             radius="full"
                             color="success"
                             variant="solid"
-                            onClick={() => { router.push('./admin/users') }}
+                            onClick={() => { router.push('/admin/users') }}
                             className="bg-primary text-white px-3 py-1 rounded-md text-sm">
                             User Accounts
                         </Button>
@@ -46,7 +46,7 @@ const Dashboard: React.FC = () => {
                             radius="full"
                             color="success"
                             variant="solid"
-                            onClick={() => { router.push('./admin/tasks') }}
+                            onClick={() => { router.push('/admin/tasks') }}
                             className="bg-primary text-white px-3 py-1 rounded-md text-sm">
                             Task Data
                         </Button>
@@ -54,7 +54,7 @@ const Dashboard: React.FC = () => {
                             radius="full"
                             color="success"
                             variant="solid"
-                            onClick={() => { router.push('./admin/monitor') }}
+                            onClick={() => { router.push('/admin/monitor') }}
                             className="bg-primary text-white px-3 py-1 rounded-md text-sm">
                             Monitoring
                         </Button>

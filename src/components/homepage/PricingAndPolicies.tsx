@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import PricingAndPoliciesProps from './PricingAndPoliciesProps';
 
@@ -9,8 +10,17 @@ const PricingAndPolicies: React.FC = () => {
             </div>
             <div className='w-10/12 m-auto flex flex-wrap gap-x-10 justify-center gap-y-10'>
                 <PricingAndPoliciesProps
+                    title="Basic"
+                    price="$5"
+                    unit="p/month"
+                    features={[
+                    "Basic support",
+                    "Access to standard features",
+                    "Email consultation"
+                ]}/>
+                <PricingAndPoliciesProps
                     title="Professional"
-                    price="$10"
+                    price="$15"
                     unit="p/month"
                     features={[
                     "Guarantee completion",
@@ -19,24 +29,14 @@ const PricingAndPolicies: React.FC = () => {
                     "Premium features"
                 ]}/>
                 <PricingAndPoliciesProps
-                    title="Professional"
-                    price="$10"
+                    title="Enterprise"
+                    price="$30"
                     unit="p/month"
                     features={[
-                    "Guarantee completion",
-                    "24/7 support",
-                    "Free consultation",
-                    "Premium features"
-                ]}/>
-                <PricingAndPoliciesProps
-                    title="Professional"
-                    price="$10"
-                    unit="p/month"
-                    features={[
-                    "Guarantee completion",
-                    "24/7 support",
-                    "Free consultation",
-                    "Premium features"
+                    "Dedicated manager",
+                    "Priority support",
+                    "Custom solutions",
+                    "All premium features"
                 ]}/>
             </div>
         </div>

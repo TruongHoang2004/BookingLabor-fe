@@ -5,6 +5,8 @@ export interface User {
   id: number;
   email: string;
   fullname: string;
+  gender: string;
+  date_of_birth: string;
 }
 
 export interface AuthState {

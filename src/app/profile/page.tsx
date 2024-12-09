@@ -8,6 +8,8 @@ import { Kanit } from 'next/font/google'
 import EditableField from "@/components/profile/editable";
 import EditableSelect from "@/components/profile/editableselect";
 import EditableTextarea from "@/components/profile/editabletext";
+import { useAppSelector } from '@/redux/store';
+import { ProtectedRoute } from "@/components/protectedRoute";
 
 const kanit = Kanit({
   subsets: ['latin'],
@@ -18,6 +20,7 @@ const kanit = Kanit({
 const ProfilePage = () => {
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const router = useRouter();
+    const { user } = useAppSelector((state) => state.auth);
 
     const handleFileSelect = (file: File) => {
       const imageUrl = URL.createObjectURL(file);
@@ -31,6 +34,7 @@ const paymentOptions = [
 ];
     
   return (
+    <ProtectedRoute>
     <div className="flex flex-col items-center p-4 min-h-screen bg-gray-100">
       {/* Main Content */}
       <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-8 rounded-md p-12 w-full bg-white shadow-sm">
@@ -43,7 +47,7 @@ const paymentOptions = [
                 color="success"
                 variant="solid"
                 className={`${kanit.className} text-lg text-white flex items-center space-x-4 justify-between gap-x-2`}
-                onClick={() => router.push('./profile/tasker')}
+                onClick={() => router.push('/profile/tasker')}
               >
                 Change to Tasker Profile
               </Button>
@@ -58,18 +62,18 @@ const paymentOptions = [
         <EditableField
           type="text"
           label="Name"
-          defaultValue="Jeremy Truong"
+          defaultValue={user?.fullname || ''}
         />
           {/* Contact Info */}
         <EditableField
           type="email"
           label="Email"
-          defaultValue="jeremytruong0204@gmail.com"
+          defaultValue={user?.email || ''}
         />
         <EditableField
           type="password"
           label="Password"
-          defaultValue="mypassword"
+          defaultValue={''}
         />
         <EditableField
           type="mobile"
@@ -102,7 +106,7 @@ const paymentOptions = [
               color="success"
               variant="solid"
               className={`${kanit.className} text-lg text-white flex items-center space-x-4 justify-between gap-x-2`}
-              onClick={() => { router.push('./') }}
+              onClick={() => { router.push('/') }}
             >
               Save Changes
             </Button>
@@ -110,13 +114,15 @@ const paymentOptions = [
         <EditableField
           type="text"
           label="Gender"
+          defaultValue={user?.gender || ''}
         />
 
           {/* Date of birth*/}
           <div className="grid grid-cols-1 gap-4">
           <EditableField
             type="date"
-            label="Date"
+            label="Date of Birth"
+            defaultValue={user?.date_of_birth || ''}
           />
           </div>
           <EditableField
@@ -147,6 +153,7 @@ const paymentOptions = [
         <Reviews />
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

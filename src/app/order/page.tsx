@@ -1,4 +1,5 @@
 // app/page.tsx
+'use client'
 import OrderTitle from "@/components/order/OrderTitle"
 import TaskInformation from "@/components/order/taskInformation"
 import PaymentandBooking from "@/components/order/PaymentandBooking"

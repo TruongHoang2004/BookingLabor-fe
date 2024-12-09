@@ -1,3 +1,4 @@
+'use client'
 import React, { CSSProperties } from 'react';
 import { Input, Textarea } from "@nextui-org/react";
 import { Card, CardBody, Image } from "@nextui-org/react";

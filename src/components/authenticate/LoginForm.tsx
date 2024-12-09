@@ -29,10 +29,13 @@ const LoginForm: React.FC = () => {
       // console.log(email + "-" + password)
       const response = await axiosInstance.post(ENDPOINTS.AUTH_LOGIN, { email, password });
       const { user, token } = response.data;
+      console.log(response.data);
       const userInfo = {
         id: user.id,
         email: user.email,
-        fullname: user.fullname
+        fullname: user.fullname,
+        gender: user.gender,
+        date_of_birth: user.date_of_birth,
       };
       dispatch(setCredentials({
         user: userInfo,

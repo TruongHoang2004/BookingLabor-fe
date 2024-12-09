@@ -1,3 +1,4 @@
+'use client'
 // MovingProps.tsx
 import React from 'react'
 import { FaBoxOpen } from "react-icons/fa6";

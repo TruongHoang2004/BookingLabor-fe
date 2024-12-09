@@ -3,7 +3,7 @@ import { useSearchParams } from "next/navigation";
 import { useState} from "react";
 import FormTaskTitle from "./FormTaskTitle";
 import {Card, CardHeader, CardBody, CardFooter} from "@nextui-org/react";
-import {Link} from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import { Input } from "@nextui-org/react";
 import {Select, SelectItem} from "@nextui-org/react";
 import {DateInput} from "@nextui-org/react";
@@ -11,6 +11,7 @@ import { Button } from "@nextui-org/react";
 import {Textarea} from "@nextui-org/react";
 
 export default function TaskFormPage() {
+    const router = useRouter();
     const searchParams = useSearchParams();
     const [task, setTask] = useState(searchParams.get('task') ?? "");
     const districts = ["Cầu Giấy", "Đống Đa", "Thanh Trì", "Hoàng Mai", "Hòa Lạc"]
@@ -117,10 +118,10 @@ export default function TaskFormPage() {
                             </div>
                         </CardBody>
                         <CardFooter className="flex flex-col items-end gap-y-4 mt-5">
-                            <Button className="w-full" color="success" type="submit">POST YOUR TASK</Button>
-                            <Link href="/services" color="success" className="underline md:text-base x-sm:text-xs 2sm:text-[8px]">
+                            <Button onClick={() => router.push('/tasks')} className="w-full" color="success" type="submit">POST YOUR TASK</Button>
+                            <p onClick={() => router.push('/services')} className="underline md:text-base x-sm:text-xs 2sm:text-[8px] cursor-pointer text-green-500">
                                 Looking for more services? Goes here.
-                            </Link>   
+                            </p>   
                         </CardFooter>
                     </Card>
                 </form>

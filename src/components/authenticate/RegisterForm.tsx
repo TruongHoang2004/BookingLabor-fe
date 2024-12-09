@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Input, Button, Select, SelectItem } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Button, Select, SelectItem } from "@nextui-org/react";
 import { Eye, EyeOff } from 'lucide-react';
 import Background from '../layout-background';
 import axiosInstance from '@/api/axiosInstance';
@@ -48,7 +48,7 @@ const RegisterForm: React.FC = () => {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <Background imageUrl='/img/register.jpg'/>
-      <Card className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl p-8 z-10 mt-16">
+      <Card className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl p-8 z-10 mt-20">
         <CardHeader className="flex flex-col gap-3 pb-2 pt-2">
           <h1 className="text-4xl font-extrabold">Register</h1>
           <p className="text-sm text-gray-600">Create an account to get started.</p>
@@ -57,6 +57,7 @@ const RegisterForm: React.FC = () => {
         <form onSubmit={handleSubmit}>
           <CardBody className="gap-6">
             <Input
+              size="sm"
               label="Full Name"
               type="text"
               value={formData.fullname}
@@ -65,6 +66,7 @@ const RegisterForm: React.FC = () => {
             />
 
             <Input
+              size="sm"
               label="Email"
               type="email"
               value={formData.email}
@@ -73,6 +75,7 @@ const RegisterForm: React.FC = () => {
             />
 
             <Select
+              size="sm"
               label="Gender"
               value={formData.gender}
               onChange={(e) => setFormData({...formData, gender: e.target.value})}
@@ -84,6 +87,7 @@ const RegisterForm: React.FC = () => {
             </Select>
 
             <Input
+              size="sm"
               label="Date of Birth"
               type="date"
               value={formData.date_of_birth}
@@ -92,6 +96,7 @@ const RegisterForm: React.FC = () => {
             />
 
             <Input
+              size="sm"
               label="Password"
               type={showPassword ? "text" : "password"}
               endContent={
@@ -109,6 +114,7 @@ const RegisterForm: React.FC = () => {
             />
 
             <Input
+              size="sm"
               label="Confirm Password"
               type={showConfirmPassword ? "text" : "password"}
               endContent={

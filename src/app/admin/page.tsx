@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import PricingAndPolicies from '@/components/homepage/PricingAndPolicies';
 import Reviews from '@/components/homepage/Reviews';
