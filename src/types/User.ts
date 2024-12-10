@@ -4,6 +4,8 @@ export interface UserCard {
     description: string;
     category: string;
     location: string;
+    applied_tasker_id: number[];
+    chosen_tasker_id: number;
 }
 
 export interface Tasker {
