@@ -52,9 +52,11 @@ export default function RatingandReviewTasker() {
                     border: '2px solid #ccc',
 
                 }}>
-                    <Image 
+                    <Image
                         src="https://b.fssta.com/uploads/application/soccer/headshots/885.vresize.350.350.medium.19.png"
                         alt="Tasker"
+                        width={80}
+                        height={80}
                         style={{
                             width: '100%',
                             height: 'auto',
