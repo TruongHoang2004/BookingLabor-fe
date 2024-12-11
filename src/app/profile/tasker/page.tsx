@@ -1,24 +1,15 @@
 'use client';
-import {Button} from "@nextui-org/react";
 import AvatarUpload from "@/components/profile/avatar";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import Reviews from "@/components/profile/review";
-import { Kanit } from 'next/font/google'
 import EditableField from "@/components/profile/editable";
 import EditableTextarea from "@/components/profile/editabletext";
 import EditableChipInput from "@/components/profile/editablechip";
 import HeaderProfile from "@/components/profile/headerprofile";
-const kanit = Kanit({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-})
 
 
 const TaskerProfilePage = () => {
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-    const router = useRouter();
 
     const handleFileSelect = (file: File) => {
       const imageUrl = URL.createObjectURL(file);

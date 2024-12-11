@@ -1,15 +1,20 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Button, Select, SelectItem, Textarea } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Button, Select, SelectItem, Textarea } from "@nextui-org/react";
 import Background from '../layout-background';
-import axiosInstance from '@/api/axiosInstance';
-import ENDPOINTS from '@/api/endpoint';
 
 interface FormData {
     skill: number[];
     work_area: string[];
     experience: string;
+}
+
+interface District {
+    name: string;
+    code: string;
+    division_type: string;
+    codename: string;
 }
 
 const BecomeTaskerForm: React.FC = () => {
@@ -28,22 +33,45 @@ const BecomeTaskerForm: React.FC = () => {
         }));
     };
 
-    const validateForm = (): boolean => {
-        if (!formData.skill || !formData.work_area || !formData.experience) {
-            alert('Please fill in all fields');
-            return false;
-        }
-        return true;
-    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!validateForm()) return;
         try {
             router.push('/tasks/tasker');
         } catch (error) {
             console.error('Error becoming a tasker:', error);
             alert('Registration failed. Please try again.');
+        }
+    };
+
+    const skills = [
+        { key: 1, value: "1", label: "Cleaning" },
+        { key: 2, value: "2", label: "Delivery" },
+        { key: 3, value: "3", label: "Handyman" },
+        { key: 4, value: "4", label: "Moving" },
+        { key: 5, value: "5", label: "Packing" },
+        { key: 6, value: "6", label: "Pet Sitting" },
+        { key: 7, value: "7", label: "Plumbing" },
+        { key: 8, value: "8", label: "Electrical" },
+        { key: 9, value: "9", label: "Gardening" },
+        { key: 10, value: "10", label: "Painting" }
+    ];
+
+    const [districts, setDistricts] = useState<District[]>([]); 
+    const [isLoading, setIsLoading] = useState(false);
+    useEffect(() => {
+        fetchDistricts();
+    }, []);
+    const fetchDistricts = async () => {
+        setIsLoading(true);
+        try {
+            const response = await fetch('https://provinces.open-api.vn/api/p/01?depth=2');
+            const data = await response.json();
+            setDistricts(data.districts);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -63,40 +91,33 @@ const BecomeTaskerForm: React.FC = () => {
                             label="Choose your job"
                             placeholder="Select your skill"
                             value={formData.skill.toString()}
+                            isRequired
                             selectionMode='multiple'
                             onChange={(e) => handleInputChange('skill', parseInt(e.target.value))}
                             className="text-lg"
                         >
-                            <SelectItem key={1} value="1">Cleaning</SelectItem>
-                            <SelectItem key={2} value="2">Delivery</SelectItem>
-                            <SelectItem key={3} value="3">Handyman</SelectItem>
-                            <SelectItem key={4} value="4">Moving</SelectItem>
-                            <SelectItem key={5} value="5">Packing</SelectItem>
-                            <SelectItem key={6} value="6">Pet Sitting</SelectItem>
-                            <SelectItem key={7} value="7">Plumbing</SelectItem>
-                            <SelectItem key={8} value="8">Electrical</SelectItem>
-                            <SelectItem key={9} value="9">Gardening</SelectItem>
-                            <SelectItem key={10} value="10">Painting</SelectItem>
+
+                            {skills.map(skill => (
+                                <SelectItem key={skill.key} value={skill.value}>{skill.label}</SelectItem>
+                            ))}
                         </Select>
                         
-                        <Select
-                            label="Work Area"
+                        <Select 
+                            label="Choose your work area"
+                            placeholder="Choose district"
                             value={formData.work_area.toString()}
+                            isRequired 
                             selectionMode='multiple'
-                            onChange={(e) => handleInputChange('skill', parseInt(e.target.value))}
-                            className="text-lg"
-                        >
-                            <SelectItem key={1} value="1">Cầu Giấy</SelectItem>
-                            <SelectItem key={2} value="2">Hà Đông</SelectItem>
-                            <SelectItem key={3} value="3">Đống Đa</SelectItem>
-                            <SelectItem key={4} value="4">Ba Đình</SelectItem>
-                            <SelectItem key={5} value="5">Nam Từ Liêm</SelectItem>
-                            <SelectItem key={6} value="6">Bắc Từ Liêm</SelectItem>
-                            <SelectItem key={7} value="7">Hoàn Kiếm</SelectItem>
-                            <SelectItem key={8} value="8">Thanh Xuân</SelectItem>
-                            <SelectItem key={9} value="9">Hai Bà Trưng</SelectItem>
-                            <SelectItem key={10} value="10">Hoàng Mai</SelectItem>
-                        </Select>
+                            variant="faded"
+                            isLoading={isLoading}
+                            onChange={(e) => handleInputChange('work_area', e.target.value)}
+                            > 
+                                {districts.map((district) => (
+                                    <SelectItem key={district.code} value={district.code}>
+                                        {district.name}
+                                    </SelectItem>
+                                ))}
+                            </Select>
                         
                         <Textarea
                             label="Experience"
