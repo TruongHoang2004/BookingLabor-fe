@@ -1,3 +1,4 @@
+'use client'
 // CleaningProps.tsx
 import React from 'react'
 import { LiaBroomSolid } from "react-icons/lia";

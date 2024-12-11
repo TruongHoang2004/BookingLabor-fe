@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import React, { CSSProperties, useState, useRef } from 'react';
 import { Input, Textarea } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";

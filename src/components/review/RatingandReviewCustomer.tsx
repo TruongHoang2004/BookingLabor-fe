@@ -1,9 +1,9 @@
 // PaymentandBooking.tsx
-"use client";
+'use client'
 import React, { CSSProperties, useState } from 'react';
 import { Button } from "@nextui-org/react";
 import { Link } from "@nextui-org/link";
-
+import Image from 'next/image';
 
 
 export default function RatingandReviewCustomer() {
@@ -51,7 +51,7 @@ export default function RatingandReviewCustomer() {
                     border: '2px solid #ccc',
 
                 }}>
-                    <img
+                    <Image 
                         src="https://b.fssta.com/uploads/application/soccer/headshots/885.vresize.350.350.medium.19.png"
                         alt="Tasker"
                         style={{

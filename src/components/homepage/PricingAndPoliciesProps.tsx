@@ -1,5 +1,7 @@
+'use client'
 import React from 'react'
 import { BiSolidCheckCircle } from "react-icons/bi";
+import { useRouter } from 'next/navigation';
 
 interface props {
   title?: string;  // cho phép tùy chỉnh tiêu đề "Personal"
@@ -8,12 +10,16 @@ interface props {
   features: string[];  // mảng chứa các feature muốn hiển thị
 }
 
+
 const PricingAndPoliciesProps: React.FC<props> = ({
+  
   title = "Personal",
   price = "$5",
   unit = "p/transaction",
   features = []
 }) => {
+  const router = useRouter();
+
   return (
     <div>
       <div className='bg-slate-50 p-10 rounded-xl w-80 text-slate-900'>
@@ -25,7 +31,7 @@ const PricingAndPoliciesProps: React.FC<props> = ({
             <p className='font-semibold text-base'>{feature}</p>
           </div>
         ))}
-        <button className='bg-black hover:bg-zinc-600 mt-10 px-3 py-1.5 rounded-lg font-medium text-lg text-white'>Get started</button>
+        <button onClick={() => router.push('/becometasker')} className='bg-black hover:bg-zinc-600 mt-10 px-3 py-1.5 rounded-lg font-medium text-lg text-white'>Get started</button>
       </div>
     </div>
   )

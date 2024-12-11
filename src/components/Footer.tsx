@@ -1,3 +1,4 @@
+'use client';
 import React from "react";
 import { Kanit } from 'next/font/google'
 import { FaInstagram } from "react-icons/fa";

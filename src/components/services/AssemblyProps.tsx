@@ -1,3 +1,4 @@
+'use client'
 // AssemblyProps.tsx
 import { FaHammer } from "react-icons/fa";
 import React from "react";

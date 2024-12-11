@@ -1,11 +1,17 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Input, Button} from "@nextui-org/react";
+import {Card, CardHeader, CardBody, CardFooter, Divider, Input, Button} from "@nextui-org/react";
 import { Eye, EyeOff } from 'lucide-react';
 import Background from '../layout-background';
+import axiosInstance from '@/api/axiosInstance';
+import ENDPOINTS from '@/api/endpoint';
+import { useAppDispatch } from '@/redux/store';
+import { setCredentials } from '@/redux/slices/authSlice';
+
 
 const LoginForm: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -17,8 +23,28 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      alert('Login successful!');
-      router.push('/');
+       // Dispatch login action with email and password
+      const email = formData.email;
+      const password = formData.password;
+      // console.log(email + "-" + password)
+      const response = await axiosInstance.post(ENDPOINTS.AUTH_LOGIN, { email, password });
+      const { user, token } = response.data;
+      console.log(response.data);
+      const userInfo = {
+        id: user.id,
+        email: user.email,
+        fullname: user.fullname,
+        gender: user.gender,
+        date_of_birth: user.date_of_birth,
+      };
+      dispatch(setCredentials({
+        user: userInfo,
+        accessToken: token.access_token,
+        refreshToken: token.refresh_token
+      }));
+      alert("Đăng nhập thành công")
+      // Redirect to home page after successful login
+       router.push('/');
     } catch (error) {
       console.error('Error logging in:', error);
     }
@@ -77,10 +103,10 @@ const LoginForm: React.FC = () => {
           />
           <span className="text-sm">Remember me</span>
         </label>
-        <Link href="#" size="sm" color="primary">
-          Forgot password?
-        </Link>
-          </div>
+        <p onClick={() => router.push('/forgotpassword')} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+            Forgot password?
+          </p>
+        </div>
         </CardBody>
 
         <CardFooter className="flex flex-col gap-4">
@@ -94,7 +120,7 @@ const LoginForm: React.FC = () => {
         Login
           </Button>
 
-          <Link href="/" className="flex items-center gap-2 text-sm text-gray-600">
+          <p onClick={() => router.push('/')} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
         <svg 
           xmlns="http://www.w3.org/2000/svg" 
           fill="none" 
@@ -110,14 +136,14 @@ const LoginForm: React.FC = () => {
           />
         </svg>
         Back to Home
-          </Link>
+          </p>
 
           <p className="text-center text-sm text-gray-600">
-        Don't have an account?{" "}
-        <Link href="/register" color="primary" size="sm">
-          Register here
-        </Link>
-          </p>
+          Don't have an account?{" "}
+            <span onClick={() => router.push('/register')} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+              Register here
+            </span>
+          </p>  
         </CardFooter>
       </form>
         </Card>

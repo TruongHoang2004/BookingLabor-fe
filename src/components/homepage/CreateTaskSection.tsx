@@ -28,7 +28,12 @@ const CreatTaskSection: React.FC = () => {
                 required
                 maxLength={50}
                 className='focus:outline-none rounded-xl md:text-base x-sm:text-xs 2sm:text-[8px] font-semibold rounded-r-none inline w-4/5 border-green-900 border-2 py-4 px-4'/>
-              <button type='submit' className='rounded-xl rounded-l-none border-green-900 border-2 border-l-0 bg-lime-600 w-1/5 md:text-lg x-sm:text-sm 2sm:text-[8px] font-bold'>Create Task</button>
+                <button 
+                type='submit' 
+                className='rounded-xl rounded-l-none border-green-900 border-2 border-l-0 bg-lime-600 w-1/5 md:text-lg x-sm:text-sm 2sm:text-[8px] font-bold hover:bg-lime-300'
+                >
+                Create Task
+                </button>
           </form>
         </div>
       </div>

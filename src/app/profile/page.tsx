@@ -6,13 +6,16 @@ import EditableSelect from "@/components/profile/editableselect";
 import EditableTextarea from "@/components/profile/editabletext";
 import ChangePassword from "@/components/profile/changepassword";
 import HeaderProfile from "@/components/profile/headerprofile";
+import { useAppSelector } from '@/redux/store';
+import { ProtectedRoute } from "@/components/protectedRoute";
 
 import AvatarUpload from "@/components/profile/avatar";
 
 const ProfilePage = () => {
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-
-  const handleFileSelect = (file: File) => {
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+    const { user } = useAppSelector((state) => state.auth);
+    
+    const handleFileSelect = (file: File) => {
     if (file) {
       const imageUrl = URL.createObjectURL(file);
       setAvatarUrl(imageUrl);
@@ -26,6 +29,7 @@ const ProfilePage = () => {
     ];
     
   return (
+    <ProtectedRoute>
     <div className="flex flex-col items-center p-4 min-h-screen bg-gray-100">
       <div className="mt-2 rounded-md p-10 w-full bg-white shadow-sm">
       <HeaderProfile />
@@ -39,17 +43,17 @@ const ProfilePage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 rounded-md p-12 bg-white shadow-sm">
         {/* Left Column */}
         <div className="space-y-6">
-        {/* Personal Info */}
+          {/* Personal Info */}
         <EditableField
           type="text"
           label="Name"
-          defaultValue="Jeremy Truong"
+          defaultValue={user?.fullname || ''}
         />
           {/* Contact Info */}
         <EditableField
           type="email"
           label="Email"
-          defaultValue="jeremytruong0204@gmail.com"
+          defaultValue={user?.email || ''}
         />
         <ChangePassword/>
         <EditableField
@@ -69,17 +73,18 @@ const ProfilePage = () => {
         {/* Right Column */}
         <div className="space-y-6">
           {/* Button Container */}
-          
         <EditableField
           type="text"
           label="Gender"
+          defaultValue={user?.gender || ''}
         />
 
           {/* Date of birth*/}
           <div className="grid grid-cols-1 gap-4">
           <EditableField
             type="date"
-            label="Date"
+            label="Date of Birth"
+            defaultValue={user?.date_of_birth || ''}
           />
           </div>
           <EditableField
@@ -103,6 +108,7 @@ const ProfilePage = () => {
         <Reviews />
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 

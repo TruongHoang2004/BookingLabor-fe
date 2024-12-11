@@ -1,14 +1,21 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Input, Button } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Button, Select, SelectItem } from "@nextui-org/react";
 import { Eye, EyeOff } from 'lucide-react';
 import Background from '../layout-background';
+import axiosInstance from '@/api/axiosInstance';
+import ENDPOINTS from '@/api/endpoint';
+
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState({
+    fullname: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    gender: 'MALE',
+    date_of_birth: '',
+    role: 'USER'
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -17,34 +24,79 @@ const RegisterForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const { email, password, confirmPassword, fullname, gender, date_of_birth } = formData;
+      if (password !== confirmPassword) {
+        alert("Passwords don't match!");
+        return;
+      }
+      await axiosInstance.post(ENDPOINTS.AUTH_REGISTER, { 
+        email,
+        password,
+        fullname,
+        gender,
+        date_of_birth,
+        role: 'USER'
+      });
       alert('Registration successful!');
       router.push('/login');
     } catch (error) {
       console.error('Error registering:', error);
+      alert('Registration failed. Please try again.');
     }
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center">
       <Background imageUrl='/img/register.jpg'/>
-      <Card className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl p-8 z-10">
+      <Card className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl p-8 z-10 mt-20">
         <CardHeader className="flex flex-col gap-3 pb-2 pt-2">
           <h1 className="text-4xl font-extrabold">Register</h1>
           <p className="text-sm text-gray-600">Create an account to get started.</p>
           <Divider orientation='horizontal' className="rounded-t-lg" />
         </CardHeader>
-
         <form onSubmit={handleSubmit}>
           <CardBody className="gap-6">
             <Input
+              size="sm"
+              label="Full Name"
+              type="text"
+              value={formData.fullname}
+              onChange={(e) => setFormData({...formData, fullname: e.target.value})}
+              required
+            />
+
+            <Input
+              size="sm"
               label="Email"
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
               required
             />
-            
+
+            <Select
+              size="sm"
+              label="Gender"
+              value={formData.gender}
+              onChange={(e) => setFormData({...formData, gender: e.target.value})}
+              required
+            >
+              <SelectItem key="MALE" value="MALE">Male</SelectItem>
+              <SelectItem key="FEMALE" value="FEMALE">Female</SelectItem>
+              <SelectItem key="OTHER" value="OTHER">Other</SelectItem>
+            </Select>
+
             <Input
+              size="sm"
+              label="Date of Birth"
+              type="date"
+              value={formData.date_of_birth}
+              onChange={(e) => setFormData({...formData, date_of_birth: e.target.value})}
+              required
+            />
+
+            <Input
+              size="sm"
               label="Password"
               type={showPassword ? "text" : "password"}
               endContent={
@@ -62,6 +114,7 @@ const RegisterForm: React.FC = () => {
             />
 
             <Input
+              size="sm"
               label="Confirm Password"
               type={showConfirmPassword ? "text" : "password"}
               endContent={
@@ -90,7 +143,7 @@ const RegisterForm: React.FC = () => {
               Register
             </Button>
 
-            <Link href="/" className="flex items-center gap-2 text-sm text-gray-600">
+            <p onClick={() => router.push('/')} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 fill="none" 
@@ -106,14 +159,14 @@ const RegisterForm: React.FC = () => {
                 />
               </svg>
               Back to Home
-            </Link>
+            </p>
 
             <p className="text-center text-sm text-gray-600">
               Already have an account?{" "}
-              <Link href="/login" color="primary" size="sm">
-                Login here
-              </Link>
-            </p>
+            <span onClick={() => router.push('/login')} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+              Login here
+            </span>
+          </p>
           </CardFooter>
         </form>
       </Card>

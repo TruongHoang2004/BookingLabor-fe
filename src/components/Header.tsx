@@ -9,6 +9,9 @@ import {Popover, PopoverTrigger, PopoverContent} from "@nextui-org/react";
 import Image from "next/image";
 import { FaBell } from "react-icons/fa6";
 import {Badge} from "@nextui-org/react";
+import { useAppSelector } from '@/redux/store';
+import { useAppDispatch } from '../redux/store';
+import { logout } from '@/redux/slices/authSlice';
 
 const lobster = Lobster({
     subsets: ['latin'],
@@ -22,10 +25,27 @@ const kanit = Kanit({
 })
 // lg: 1024 -> 
 const Header: React.FC = () => {
+    const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+    let isLoggedIn = false;
+    //const user = {fullname: "jqnwd", email: "aodwnmoiamdio"}
+    if(isAuthenticated && user) {
+       isLoggedIn = true;
+    }
+   
     const router = useRouter();
     const handleEvent = (path: string) => {
-        router.push(path);
+        if(path === "logout") {
+            handleLogOut()
+        } else {
+            router.push(path);
+        }
+        
     }
+    const dispatch = useAppDispatch();
+    const handleLogOut = () => {
+        dispatch(logout());
+    }
+    
     const notis = [
         {text: 'Random Text 12345678910', date: "2 hours"},
         {text: 'Random Text 12345678sadadas dadsdadsdas dasdadsasd ádasdasdawdas dasdawdawdd asdwd910sss', date: "1 days"},
@@ -36,7 +56,7 @@ const Header: React.FC = () => {
         {text: 'Random Text 12345678910', date: "10 days"},
         {text: 'Random Text 12345678910', date: "10 days"},
     ]
-    const isLoggedIn = true;
+    
     return (
         <header className="border-slate-300 py-4 border-b text-green-950 caret-transparent">
             <div className="flex justify-between items-center m-auto w-10/12">
@@ -46,11 +66,11 @@ const Header: React.FC = () => {
                 {/* Nếu chưa login thì hiển thị div này ~ màn hình to*/}
                 <div className={`${isLoggedIn ? 'hidden' : '1100:block 2sm:hidden'}`}>
                     <div className={`${kanit.className} lg:text-lg sm:text-sm font-normal flex h-5 items-center space-x-4 justify-between gap-x-2`}>
-                        <a href="/services" className="hover:underline no-underline">Services</a>
+                        <p onClick={() => router.push('/services')} className="hover:underline no-underline cursor-pointer">Services</p>
                         <Divider orientation="vertical" className="bg-lime-500" />
-                        <a href="/login" className="hover:underline no-underline">Register / Login</a>
+                        <p onClick={() => router.push('/login')} className="hover:underline no-underline cursor-pointer">Login / Register</p>
                         <Divider orientation="vertical" className="bg-lime-500" />
-                        <a href="" className="hover:bg-emerald-100 px-3 py-1 border border-lime-500 rounded-xl font-medium hover:underline no-underline">Become a Tasker</a>
+                        <p onClick={() => router.push('/becometasker')} className="hover:bg-emerald-100 px-3 py-1 border border-lime-500 rounded-xl font-medium hover:underline no-underline cursor-pointer">Become a Tasker</p>
                     </div>
                 </div>
                  {/* Nếu chưa login thì hiển thị div này ~ màn hình nhỏ*/}
@@ -79,9 +99,9 @@ const Header: React.FC = () => {
                  {/* Nếu login vào rồi thì hiển thị giao diện khi này và không hiển thị giao diện mặc định nữa ~ Giao diện khi màn còn to*/}
                  <div className={`${isLoggedIn ? '1100:block 2sm:hidden' : 'hidden'}`}>
                     <div className={`${kanit.className} lg:text-lg sm:text-sm font-normal flex h-5 items-center space-x-4 justify-between gap-x-2`}>
-                        <a href="/services" className="hover:underline no-underline">Services</a>
+                        <p onClick={() => router.push('/services')} className="hover:underline no-underline cursor-pointer">Services</p>
                         <Divider orientation="vertical" className="bg-lime-500" />
-                        <a href="/task-manage" className="hover:underline no-underline">Task Manage</a>
+                        <p onClick={() => router.push('/tasks')} className="hover:underline no-underline cursor-pointer">Task Manage</p>
                         <Divider orientation="vertical" className="bg-lime-500" />
                         <Popover placement="bottom">
                                 <PopoverTrigger>
@@ -92,14 +112,14 @@ const Header: React.FC = () => {
                                         <div className="flex gap-x-3">
                                             <Image src="/img/header/cool-ava.jpg" width={60} height={30} className="rounded" alt="ava"/>
                                             <div>
-                                                <p className="font-semibold text-lg">Jeremy Truong</p>
-                                                <p className="font-medium text-emerald-600 t">x0ber143n@gmail.com</p>
+                                                <p className="font-semibold text-lg">{user?.fullname}</p>
+                                                <p className="font-medium text-emerald-600 t">{user?.email}</p>
                                             </div>
                                         </div>
                                         <div className="flex items-center h-5 space-x-2 justify-center">
-                                            <a href="/becometasker" className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold  hover:underline no-underline">Register as a Tasker</a>
+                                            <p onClick={() => router.push('/becometasker')} className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold  hover:underline no-underline cursor-pointer">Register as a Tasker</p>
                                             <Divider orientation="vertical" className="bg-emerald-800" />
-                                            <a href="/profile" className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold  hover:underline no-underline ml-2">Edit Your Profile</a>
+                                            <p onClick={() => router.push('/profile')} className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold  hover:underline no-underline ml-2 cursor-pointer">Edit Your Profile</p>
                                         </div>
                                     </div>
                                 </PopoverContent>
@@ -129,7 +149,7 @@ const Header: React.FC = () => {
                                 </PopoverContent>
                         </Popover>
                         <Divider orientation="vertical" className="bg-lime-500" />
-                        <a href="/logout" className="hover:underline no-underline">Log Out</a>
+                        <p  onClick={handleLogOut} className="hover:underline no-underline cursor-pointer">Log Out</p>
                     </div>
                 </div>
                  {/* Nếu login vào rồi thì hiển thị giao diện này và không hiển thị giao diện mặc định nữa ~ Giao diện khi màn nhỏ đi*/}
@@ -170,8 +190,9 @@ const Header: React.FC = () => {
                                 onAction={(key) => handleEvent(key.toString())}
                             >
                                 <DropdownItem key="services">Services</DropdownItem>
-                                <DropdownItem key="task-manage">Task Manage</DropdownItem>
+                                <DropdownItem key="tasks">Task Manage</DropdownItem>
                                 <DropdownItem key="profile">My Profile</DropdownItem>
+                                <DropdownItem key="become-tasker">Become Tasker</DropdownItem>
                                 <DropdownItem key="logout">
                                     Log Out
                                 </DropdownItem>

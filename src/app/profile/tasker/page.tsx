@@ -6,17 +6,19 @@ import EditableField from "@/components/profile/editable";
 import EditableTextarea from "@/components/profile/editabletext";
 import EditableChipInput from "@/components/profile/editablechip";
 import HeaderProfile from "@/components/profile/headerprofile";
-
+import { ProtectedRoute } from "@/components/protectedRoute";
+import { useAppSelector } from '@/redux/store';
 
 const TaskerProfilePage = () => {
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-
+    const { user } = useAppSelector((state) => state.auth);
     const handleFileSelect = (file: File) => {
       const imageUrl = URL.createObjectURL(file);
       setAvatarUrl(imageUrl);
     };
   
   return (
+    <ProtectedRoute>
     <div className="flex flex-col items-center p-4 min-h-screen bg-gray-100">
       <div className="mt-2 rounded-md p-10 w-full bg-white shadow-sm">
       <HeaderProfile />
@@ -29,18 +31,18 @@ const TaskerProfilePage = () => {
       {/* Main Content */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 rounded-md p-12 bg-white shadow-sm">
         {/* Left Column */}
-        <div className="space-y-6">
+        <div className="space-y-6"> 
           {/* Personal Info */}
           <EditableField
             type="text"
             label="Name"
-            defaultValue="Jeremy Truong"
+            defaultValue={user?.fullname || ''}
           />
           {/* Contact Info */}
         <EditableField
           type="email"
           label="Email"
-          defaultValue="jeremytruong0204@gmail.com"
+          defaultValue={user?.email || ''}
         />
         <EditableField
           type="text"
@@ -68,7 +70,8 @@ const TaskerProfilePage = () => {
         <Reviews />
       </div>
     </div>
+    </ProtectedRoute>
   );
 };
 
-export default TaskerProfilePage;
+export default TaskerProfilePage; 
