@@ -1,61 +1,49 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Button, Chip, Textarea } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Button, Select, SelectItem, Textarea } from "@nextui-org/react";
 import Background from '../layout-background';
+import axiosInstance from '@/api/axiosInstance';
+import ENDPOINTS from '@/api/endpoint';
+
+interface FormData {
+    skill: number[];
+    work_area: string[];
+    experience: string;
+}
 
 const BecomeTaskerForm: React.FC = () => {
-    const [formData, setFormData] = useState({
-        job: '',
-        area: '',
-        time: '',
-        exp: '',
-        fee: ''
+    const [formData, setFormData] = useState<FormData>({
+        skill: [],
+        work_area: [],
+        experience: ''
     });
-    const [chipData, setChipData] = useState<{ [key: string]: string[] }>({
-        job: [],
-        area: [],
-        time: [],
-    });
+    
     const router = useRouter();
 
-    const handleInputChange = (field: string, value: string) => {
-        setFormData({ ...formData, [field]: value });
-    };
-
-    type FormFields = 'job' | 'area' | 'time' | 'exp' | 'fee';
-
-    const handleAddChip = (field: FormFields, value: string) => {
-        if (value.trim() === '') return;
-        setChipData((prevData) => ({
-            ...prevData,
-            [field]: [...prevData[field], value]
+    const handleInputChange = (field: keyof FormData, value: string | number) => {
+        setFormData(prev => ({
+            ...prev,
+            [field]: value
         }));
-        setFormData({ ...formData, [field]: value });
     };
 
-    const handleKeyDown = (e: React.KeyboardEvent, field: FormFields) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            handleAddChip(field, formData[field]);
+    const validateForm = (): boolean => {
+        if (!formData.skill || !formData.work_area || !formData.experience) {
+            alert('Please fill in all fields');
+            return false;
         }
-    };
-
-    const handleChipClick = (field: FormFields, value: string) => {
-        setFormData({ ...formData, [field]: value });
-    };
-
-    const handleChipClose = (field: string, value: string) => {
-        setChipData({ ...chipData, [field]: chipData[field].filter((chip) => chip !== value) });
+        return true;
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!validateForm()) return;
         try {
-            alert('Form submitted!');
-            router.push('/');
+            router.push('/tasks/tasker');
         } catch (error) {
-            console.error('Error submitting form:', error);
+            console.error('Error becoming a tasker:', error);
+            alert('Registration failed. Please try again.');
         }
     };
 
@@ -71,78 +59,51 @@ const BecomeTaskerForm: React.FC = () => {
 
                 <form onSubmit={handleSubmit}>
                     <CardBody className="gap-4">
-                        <Input
+                        <Select 
                             label="Choose your job"
-                            value={formData.job}
-                            onChange={(e) => handleInputChange('job', e.target.value)}
-                            onKeyDown={(e) => handleKeyDown(e, 'job')}
-                            required
-                        />
-                        <div className="flex flex-wrap gap-2">
-                            {chipData.job.map((job, index) => (
-                                <Chip
-                                    color='primary'
-                                    key={index}
-                                    onClick={() => handleChipClick('job', job)}
-                                    onClose={() => handleChipClose('job', job)}
-                                >
-                                    {job}
-                                </Chip>
-                            ))}
-                        </div>
-
-                        <Input
-                            label="Select your area"
-                            value={formData.area}
-                            onChange={(e) => handleInputChange('area', e.target.value)}
-                            onKeyDown={(e) => handleKeyDown(e, 'area')}
-                            required
-                        />
-                        <div className="flex flex-wrap gap-2">
-                            {chipData.area.map((area, index) => (
-                                <Chip
-                                    key={index}
-                                    color="primary"
-                                    onClick={() => handleChipClick('area', area)}
-                                    onClose={() => handleChipClose('area', area)}
-                                >
-                                    {area}
-                                </Chip>
-                            ))}
-                        </div>
-
-                        <Input
-                            label="Pick a time"
-                            value={formData.time}
-                            onChange={(e) => handleInputChange('time', e.target.value)}
-                            onKeyDown={(e) => handleKeyDown(e, 'time')}
-                            required
-                        />
-                        <div className="flex flex-wrap gap-2">
-                            {chipData.time.map((time, index) => (
-                                <Chip
-                                    key={index}
-                                    color="primary"
-                                    onClick={() => handleChipClick('time', time)}
-                                    onClose={() => handleChipClose('time', time)}
-                                >
-                                    {time}
-                                </Chip>
-                            ))}
-                        </div>
+                            placeholder="Select your skill"
+                            value={formData.skill.toString()}
+                            selectionMode='multiple'
+                            onChange={(e) => handleInputChange('skill', parseInt(e.target.value))}
+                            className="text-lg"
+                        >
+                            <SelectItem key={1} value="1">Cleaning</SelectItem>
+                            <SelectItem key={2} value="2">Delivery</SelectItem>
+                            <SelectItem key={3} value="3">Handyman</SelectItem>
+                            <SelectItem key={4} value="4">Moving</SelectItem>
+                            <SelectItem key={5} value="5">Packing</SelectItem>
+                            <SelectItem key={6} value="6">Pet Sitting</SelectItem>
+                            <SelectItem key={7} value="7">Plumbing</SelectItem>
+                            <SelectItem key={8} value="8">Electrical</SelectItem>
+                            <SelectItem key={9} value="9">Gardening</SelectItem>
+                            <SelectItem key={10} value="10">Painting</SelectItem>
+                        </Select>
+                        
+                        <Select
+                            label="Work Area"
+                            value={formData.work_area.toString()}
+                            selectionMode='multiple'
+                            onChange={(e) => handleInputChange('skill', parseInt(e.target.value))}
+                            className="text-lg"
+                        >
+                            <SelectItem key={1} value="1">Cầu Giấy</SelectItem>
+                            <SelectItem key={2} value="2">Hà Đông</SelectItem>
+                            <SelectItem key={3} value="3">Đống Đa</SelectItem>
+                            <SelectItem key={4} value="4">Ba Đình</SelectItem>
+                            <SelectItem key={5} value="5">Nam Từ Liêm</SelectItem>
+                            <SelectItem key={6} value="6">Bắc Từ Liêm</SelectItem>
+                            <SelectItem key={7} value="7">Hoàn Kiếm</SelectItem>
+                            <SelectItem key={8} value="8">Thanh Xuân</SelectItem>
+                            <SelectItem key={9} value="9">Hai Bà Trưng</SelectItem>
+                            <SelectItem key={10} value="10">Hoàng Mai</SelectItem>
+                        </Select>
+                        
                         <Textarea
-                            label="Work Experience"
-                            value={formData.exp}
-                            onChange={(e) => handleInputChange('exp', e.target.value)}
-                            required
-                        />
-                        <div className="flex flex-wrap gap-2"></div>
-                        <Input
-                            label="Expected fee"
-                            value={formData.fee}
-                            onChange={(e) => handleInputChange('fee', e.target.value)}
-                            onKeyDown={(e) => handleKeyDown(e, 'fee')}
-                            required
+                            label="Experience"
+                            placeholder="Describe your experience"
+                            value={formData.experience}
+                            onChange={(e) => handleInputChange('experience', e.target.value)}
+                            className="text-lg"
                         />
                     </CardBody>
 

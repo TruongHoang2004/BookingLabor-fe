@@ -97,7 +97,7 @@ const Header: React.FC = () => {
                                             </div>
                                         </div>
                                         <div className="flex items-center h-5 space-x-2 justify-center">
-                                            <a href="" className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold  hover:underline no-underline">Register as a Tasker</a>
+                                            <a href="/becometasker" className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold  hover:underline no-underline">Register as a Tasker</a>
                                             <Divider orientation="vertical" className="bg-emerald-800" />
                                             <a href="/profile" className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold  hover:underline no-underline ml-2">Edit Your Profile</a>
                                         </div>
