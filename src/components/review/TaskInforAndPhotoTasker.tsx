@@ -2,7 +2,7 @@
 import React, { CSSProperties, useState, useRef } from 'react';
 import { Input, Textarea, Button } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
-import { Link } from "@nextui-org/link";
+
 
 const TaskInforAndPhotoTasker: React.FC = () => {
 
