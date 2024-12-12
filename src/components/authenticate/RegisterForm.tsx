@@ -4,19 +4,23 @@ import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Button, Select, SelectItem } from "@nextui-org/react";
 import { Eye, EyeOff } from 'lucide-react';
 import Background from '../layout-background';
-import axiosInstance from '@/api/axiosInstance';
-import ENDPOINTS from '@/api/endpoint';
+import { authService } from '@/service/auth/auth-service';
+import { RegisterRequest } from '@/interface/auth';
+import { Gender } from '@/enum/gender';
+import toast from 'react-hot-toast';
 
 const RegisterForm: React.FC = () => {
-  const [formData, setFormData] = useState({
-    fullname: '',
+  const [formData, setFormData] = useState<RegisterRequest & { confirmPassword: string }>({
+    first_name: '',
+    last_name: '',
     email: '',
+    phone_number: '', // Thêm trường phone_number
     password: '',
-    confirmPassword: '',
-    gender: 'MALE',
-    date_of_birth: '',
-    role: 'USER'
+    confirmPassword: '', // Thêm trường xác nhận mật khẩu
+    gender: Gender.UNKNOWN,
+    date_of_birth: ''
   });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
@@ -24,66 +28,84 @@ const RegisterForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { email, password, confirmPassword, fullname, gender, date_of_birth } = formData;
+      const { password, confirmPassword, ...registerData } = formData;
+
       if (password !== confirmPassword) {
-        alert("Passwords don't match!");
+        toast.error('Passwords do not match');
         return;
       }
-      await axiosInstance.post(ENDPOINTS.AUTH_REGISTER, { 
-        email,
-        password,
-        fullname,
-        gender,
-        date_of_birth,
-        role: 'USER'
+
+      await authService.register({
+        ...registerData,
+        password
       });
-      alert('Registration successful!');
+
       router.push('/login');
     } catch (error) {
       console.error('Error registering:', error);
-      alert('Registration failed. Please try again.');
     }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <Background imageUrl='/img/register.jpg'/>
-      <Card className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl p-8 z-10 mt-20">
-        <CardHeader className="flex flex-col gap-3 pb-2 pt-2">
-          <h1 className="text-4xl font-extrabold">Register</h1>
-          <p className="text-sm text-gray-600">Create an account to get started.</p>
+    <div className="flex justify-center items-center min-h-screen">
+      <Background imageUrl='/img/register.jpg' />
+      <Card className="top-1/2 left-1/2 z-10 absolute mt-20 p-8 w-full max-w-2xl transform -translate-x-1/2 -translate-y-1/2">
+        <CardHeader className="flex flex-col gap-3 pt-2 pb-2">
+          <h1 className="font-extrabold text-4xl">Register</h1>
+          <p className="text-gray-600 text-sm">Create an account to get started.</p>
           <Divider orientation='horizontal' className="rounded-t-lg" />
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardBody className="gap-6">
-            <Input
-              size="sm"
-              label="Full Name"
-              type="text"
-              value={formData.fullname}
-              onChange={(e) => setFormData({...formData, fullname: e.target.value})}
-              required
-            />
+            <div className="flex gap-4">
+              <Input
+                size="sm"
+                label="First Name"
+                type="text"
+                value={formData.first_name}
+                onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                required
+              />
+              <Input
+                size="sm"
+                label="Last Name"
+                type="text"
+                value={formData.last_name}
+                onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                required
+              />
+            </div>
 
             <Input
               size="sm"
               label="Email"
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              required
+            />
+
+            <Input
+              size="sm"
+              label="Phone Number"
+              type="tel"
+              value={formData.phone_number}
+              onChange={(e) => setFormData({ ...formData, phone_number: e.target.value })}
               required
             />
 
             <Select
               size="sm"
               label="Gender"
-              value={formData.gender}
-              onChange={(e) => setFormData({...formData, gender: e.target.value})}
+              selectedKeys={[formData.gender]}
+              onChange={(e) => setFormData({ ...formData, gender: e.target.value as Gender })}
               required
             >
-              <SelectItem key="MALE" value="MALE">Male</SelectItem>
-              <SelectItem key="FEMALE" value="FEMALE">Female</SelectItem>
-              <SelectItem key="OTHER" value="OTHER">Other</SelectItem>
+              {Object.values(Gender).map((gender) => (
+                <SelectItem key={gender} value={gender}>
+                  {gender}
+                </SelectItem>
+              ))}
             </Select>
 
             <Input
@@ -91,7 +113,7 @@ const RegisterForm: React.FC = () => {
               label="Date of Birth"
               type="date"
               value={formData.date_of_birth}
-              onChange={(e) => setFormData({...formData, date_of_birth: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, date_of_birth: e.target.value })}
               required
             />
 
@@ -109,7 +131,7 @@ const RegisterForm: React.FC = () => {
                 </button>
               }
               value={formData.password}
-              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
             />
 
@@ -127,9 +149,23 @@ const RegisterForm: React.FC = () => {
                 </button>
               }
               value={formData.confirmPassword}
-              onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
               required
             />
+
+            {/* Optional: Role selection if needed */}
+            {/* <Select
+              size="sm"
+              label="Role"
+              selectedKeys={[formData.role]}
+              onChange={(e) => setFormData({ ...formData, role: e.target.value as Role })}
+            >
+              {Object.values(Role).map((role) => (
+                <SelectItem key={role} value={role}>
+                  {role}
+                </SelectItem>
+              ))}
+            </Select> */}
           </CardBody>
 
           <CardFooter className="flex flex-col gap-4">
@@ -143,30 +179,30 @@ const RegisterForm: React.FC = () => {
               Register
             </Button>
 
-            <p onClick={() => router.push('/')} className="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                strokeWidth={1.5} 
-                stroke="currentColor" 
+            <p onClick={() => router.push('/')} className="flex items-center gap-2 text-gray-600 text-sm cursor-pointer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
                 className="w-4 h-4"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                 />
               </svg>
               Back to Home
             </p>
 
-            <p className="text-center text-sm text-gray-600">
+            <p className="text-center text-gray-600 text-sm">
               Already have an account?{" "}
-            <span onClick={() => router.push('/login')} className="text-blue-500 hover:text-blue-700 cursor-pointer">
-              Login here
-            </span>
-          </p>
+              <span onClick={() => router.push('/login')} className="text-blue-500 hover:text-blue-700 cursor-pointer">
+                Login here
+              </span>
+            </p>
           </CardFooter>
         </form>
       </Card>

@@ -1,4 +1,9 @@
-import { TokenResponse, LoginRequest, LoginResponse } from "@/interface/auth";
+import {
+  TokenResponse,
+  LoginRequest,
+  LoginResponse,
+  RegisterRequest,
+} from "@/interface/auth";
 import { setCredentials, logout, loginFailure } from "@/redux/slices/authSlice";
 import { store } from "@/redux/store";
 import axios from "axios";
@@ -8,6 +13,23 @@ import { User } from "@/interface/user";
 
 class AuthService {
   private refreshPromise: Promise<TokenResponse> | null = null;
+
+  async register(registerData: RegisterRequest): Promise<User> {
+    try {
+      const response = await api.post<User>(
+        "/auth/register",
+        JSON.stringify(registerData)
+      );
+      // const user = response.data;
+      toast.success("Đăng ký thành công");
+
+      return response.data;
+    } catch (error) {
+      toast.error("Đăng ký thất bại");
+      console.log(error);
+      throw error;
+    }
+  }
 
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
@@ -26,7 +48,7 @@ class AuthService {
       return response.data;
     } catch (error) {
       console.log(error);
-      this.handleAuthError(error);
+      this.handleAuthError(credentials);
       throw error;
     }
   }
@@ -68,7 +90,7 @@ class AuthService {
     store.dispatch(logout());
   }
 
-  private handleAuthError(error: any): void {
+  private handleAuthError(error: LoginRequest): void {
     if (axios.isAxiosError(error)) {
       const errorMessage =
         error.response?.data?.message || "Authentication failed";

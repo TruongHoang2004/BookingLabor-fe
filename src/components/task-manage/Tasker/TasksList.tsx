@@ -1,4 +1,4 @@
-import { Task } from "@/types/Task";
+import { Task } from "@/types/Tasks";
 import TaskCard from "./TaskCard";
 import { useState } from "react";
 import TaskFilter from "./Filter";

@@ -1,6 +1,6 @@
 'use client'
 import { useState } from "react";
-import { Task } from "@/types/Task";
+import { Task } from "@/types/Tasks";
 import { Customer } from "@/types/User";
 import {
     Modal,
@@ -43,7 +43,7 @@ export default function TaskCard({ task, customerList }: { task: Task; customerL
     return (
         <>
             <div className="flex flex-col gap-4 bg-zinc-100 shadow-xl hover:shadow-lg p-4 rounded-xl h-64 transition-shadow cursor-pointer" onClick={onOpen}>
-                <div className="flex items-center justify-between">
+                <div className="flex justify-between items-center">
                     <div className="flex items-center gap-2">
                         <h2 className="font-bold text-gray-700">{taskId}</h2>
                         <span className={`px-2 py-1 rounded-full text-sm font-semibold ${status === "Pending"
@@ -67,9 +67,9 @@ export default function TaskCard({ task, customerList }: { task: Task; customerL
                     )}
                 </div>
 
-                <div className="overflow-hidden space-y-3">
+                <div className="space-y-3 overflow-hidden">
                     <div className="space-y-2">
-                        <p className="truncate font-semibold">{task.title}</p>
+                        <p className="font-semibold truncate">{task.title}</p>
                         <p className="truncate">{task.description}</p>
                         <p className="truncate">{task.location}</p>
                         <p className="truncate">{task.category}</p>
@@ -87,7 +87,7 @@ export default function TaskCard({ task, customerList }: { task: Task; customerL
                                 {status === "In Progress" && (
                                     <Button
                                         color="success"
-                                        className="w-full mt-2"
+                                        className="mt-2 w-full"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             setStatus("Completed");
@@ -106,7 +106,7 @@ export default function TaskCard({ task, customerList }: { task: Task; customerL
                     {(onClose) => (
                         <>
                             <ModalHeader>{taskId}</ModalHeader>
-                            <ModalBody className="overflow-y-auto py-4">
+                            <ModalBody className="py-4 overflow-y-auto">
                                 <div className="space-y-6">
                                     <div className="space-y-3">
                                         <p className="font-semibold">{task.title}</p>

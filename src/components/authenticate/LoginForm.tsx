@@ -4,13 +4,10 @@ import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Button } from "@nextui-org/react";
 import { Eye, EyeOff } from 'lucide-react';
 import Background from '../layout-background';
-import { useAppDispatch } from '@/redux/store';
-import { setCredentials } from '@/redux/slices/authSlice';
 import { authService } from '@/service/auth/auth-service';
 
 
 const LoginForm: React.FC = () => {
-  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -26,7 +23,7 @@ const LoginForm: React.FC = () => {
       const email = formData.email;
       const password = formData.password;
       // console.log(email + "-" + password)
-      const response = await authService.login({ email, password });
+      await authService.login({ email, password });
       // const { user, token } = response.data;
       // console.log(response.data);
       // const userInfo = {

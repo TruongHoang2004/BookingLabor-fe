@@ -1,5 +1,5 @@
 // components/tasks/TaskFilter.tsx
-import { Task } from "@/types/Task";
+import { Task } from "@/types/Tasks";
 
 interface TaskFilterProps {
     selectedCategory: string;

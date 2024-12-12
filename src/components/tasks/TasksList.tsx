@@ -1,9 +1,8 @@
-import { Task } from "@/types/Tasks";
 import TaskCard from "./TaskCard";
 import { useState, useEffect } from "react";
 import TaskFilter from "./Filter";
-import axiosInstance from "@/api/axiosInstance";
-import { ENDPOINTS } from "@/api/endpoint";
+import { taskService } from "@/service/task/task";
+import { Task } from "@/interface/task";
 
 export default function TasksList() {
     const [tasksList, setTasksList] = useState<Task[]>([]);
@@ -16,12 +15,12 @@ export default function TasksList() {
     useEffect(() => {
         const fetchTasks = async () => {
             try {
-                const response = await axiosInstance.get(ENDPOINTS.TASKS);// SUA DONG NAY
-                console.log(response.data);
-                if (!response.data) {
+                const response = await taskService.getMe();
+                console.log(response);
+                if (!response) {
                     throw new Error('No data received');
                 }
-                setTasksList(Array.isArray(response.data) ? response.data : [response.data]);
+                setTasksList(Array.isArray(response) ? response : [response]);
                 setIsLoading(false);
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'Failed to fetch tasks');
