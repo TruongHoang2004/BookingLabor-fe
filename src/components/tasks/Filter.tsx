@@ -1,5 +1,5 @@
 // components/tasks/TaskFilter.tsx
-import { Task } from "@/types/Task";
+import { Task } from "@/types/Tasks";
 
 interface TaskFilterProps {
     selectedCategory: string;
@@ -13,7 +13,7 @@ export default function TaskFilter({
     tasks
 }: TaskFilterProps) {
     // Lấy danh sách categories duy nhất
-    const categories = ['all', ...new Set(tasks.map(task => task.category))];
+    const categories = ['all', ...new Set(tasks.map(task => task.task_status))];
 
     return (
         <div className="flex justify-end mb-6 w-full">
