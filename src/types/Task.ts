@@ -12,4 +12,5 @@ export interface Task {
   description: string;
   category: string;
   location: string;
+  assigned_customer_id: number | number[];
 }
