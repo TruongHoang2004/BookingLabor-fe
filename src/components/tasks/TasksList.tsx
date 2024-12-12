@@ -1,45 +1,43 @@
-import { Task } from "@/types/Task";
+import { Task } from "@/types/Tasks";
 import TaskCard from "./TaskCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TaskFilter from "./Filter";
-
-const tasksList: Task[] = [
-    { "id": 1, "title": "Task 1", "description": "Description 1", "category": "Category 1", "location": "Location 1" },
-    { "id": 2, "title": "Task 2", "description": "Description 2", "category": "Category 3", "location": "Location 2" },
-    { "id": 3, "title": "Task 3", "description": "Description 3", "category": "Category 2", "location": "Location 3" },
-    { "id": 4, "title": "Task 4", "description": "Description 4", "category": "Category 4", "location": "Location 4" },
-    { "id": 5, "title": "Task 5", "description": "Description 5", "category": "Category 1", "location": "Location 5" },
-    { "id": 6, "title": "Task 6", "description": "Description 6", "category": "Category 5", "location": "Location 6" },
-    { "id": 7, "title": "Task 7", "description": "Description 7", "category": "Category 3", "location": "Location 7" },
-    { "id": 8, "title": "Task 8", "description": "Description 8", "category": "Category 6", "location": "Location 8" },
-    { "id": 9, "title": "Task 9", "description": "Description 9", "category": "Category 2", "location": "Location 9" },
-    { "id": 10, "title": "Task 10", "description": "Description 10", "category": "Category 4", "location": "Location 10" },
-    { "id": 11, "title": "Task 11", "description": "Description 11", "category": "Category 5", "location": "Location 11" },
-    { "id": 12, "title": "Task 12", "description": "Description 12", "category": "Category 1", "location": "Location 12" },
-    { "id": 13, "title": "Task 13", "description": "Description 13", "category": "Category 6", "location": "Location 13" },
-    { "id": 14, "title": "Task 14", "description": "Description 14", "category": "Category 3", "location": "Location 14" },
-    { "id": 15, "title": "Task 15", "description": "Description 15", "category": "Category 2", "location": "Location 15" },
-    { "id": 16, "title": "Task 16", "description": "Description 16", "category": "Category 6", "location": "Location 16" },
-    { "id": 17, "title": "Task 17", "description": "Description 17", "category": "Category 4", "location": "Location 17" },
-    { "id": 18, "title": "Task 18", "description": "Description 18", "category": "Category 1", "location": "Location 18" },
-    { "id": 19, "title": "Task 19", "description": "Description 19", "category": "Category 5", "location": "Location 19" },
-    { "id": 20, "title": "Task 20", "description": "Description 20", "category": "Category 3", "location": "Location 20" },
-    { "id": 21, "title": "Task 21", "description": "Description 21", "category": "Category 2", "location": "Location 21" },
-    { "id": 22, "title": "Task 22", "description": "Description 22", "category": "Category 4", "location": "Location 22" },
-    { "id": 23, "title": "Task 23", "description": "Description 23", "category": "Category 6", "location": "Location 23" },
-    { "id": 24, "title": "Task 24", "description": "Description 24", "category": "Category 1", "location": "Location 24" },
-    { "id": 25, "title": "Task 25", "description": "Description 25", "category": "Category 5", "location": "Location 25" }
-];
+import axiosInstance from "@/api/axiosInstance";
+import { ENDPOINTS } from "@/api/endpoint";
 
 export default function TasksList() {
+    const [tasksList, setTasksList] = useState<Task[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState('all');
     const tasksPerPage = 24;
 
+    useEffect(() => {
+        const fetchTasks = async () => {
+            try {
+                const response = await axiosInstance.get(ENDPOINTS.TASKS);// SUA DONG NAY
+                console.log(response.data);
+                if (!response.data) {
+                    throw new Error('No data received');
+                }
+                setTasksList(Array.isArray(response.data) ? response.data : [response.data]);
+                setIsLoading(false);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'Failed to fetch tasks');
+                setIsLoading(false);
+            }
+        };
+
+        fetchTasks();
+    }, []);
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
     // Filter tasks theo category
     const filteredTasks = selectedCategory === 'all'
         ? tasksList
-        : tasksList.filter(task => task.category === selectedCategory);
+        : tasksList.filter(task => task.task_status === selectedCategory);
 
     // Tính toán tasks cho trang hiện tại
     const indexOfLastTask = currentPage * tasksPerPage;
