@@ -1,4 +1,4 @@
-import { Task } from "@/types/Tasks";
+import { Task } from "@/interface/task";
 import { useRouter } from "next/navigation";
 
 export default function TaskCard({ task }: { task: Task }) {
@@ -14,7 +14,7 @@ export default function TaskCard({ task }: { task: Task }) {
 
     return (
         <div className="flex flex-col gap-4 bg-zinc-100 shadow-xl hover:shadow-lg p-4 rounded-xl h-64 transition-shadow cursor-pointer" onClick={() => { router.push("/tasks/" + taskId) }}>
-            <div className="bg-gray-200 p-2 rounded-lg w-full flex justify-between">
+            <div className="flex justify-between bg-gray-200 p-2 rounded-lg w-full">
                 <div className="flex items-center gap-10">
                     <h2 className="font-bold text-gray-700">{taskId}</h2>
                     <span className={`px-2 py-1 rounded-full text-sm font-semibold ${status === "Pending"

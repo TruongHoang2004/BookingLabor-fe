@@ -112,7 +112,7 @@ const Header: React.FC = () => {
                                     <div className="flex gap-x-3">
                                         <Image src="/img/header/cool-ava.jpg" width={60} height={30} className="rounded" alt="ava" />
                                         <div>
-                                            <p className="font-semibold text-lg">{user?.profile.last_name}</p>
+                                            <p className="font-semibold text-lg">{user?.profile?.last_name || ""}</p>
                                             <p className="font-medium text-emerald-600 t">{user?.email}</p>
                                         </div>
                                     </div>
