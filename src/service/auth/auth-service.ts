@@ -4,6 +4,7 @@ import { store } from "@/redux/store";
 import axios from "axios";
 import api from "../config";
 import toast from "react-hot-toast";
+import { User } from "@/interface/user";
 
 class AuthService {
   private refreshPromise: Promise<TokenResponse> | null = null;
@@ -14,16 +15,13 @@ class AuthService {
         "/auth/login",
         JSON.stringify(credentials)
       );
-      const { access_token, refresh_token, user } = response.data;
+      const LoginResponse = response.data;
       toast.success("Đăng nhập thành công");
       // this.setTokens(access_token, refresh_token);
-      store.dispatch(
-        setCredentials({
-          user,
-          access_token,
-          refresh_token,
-        })
-      );
+      store.dispatch(setCredentials(LoginResponse));
+
+      console.log(store.getState().auth.accessToken);
+      //   const user = api.get<User>("/users/me");
 
       return response.data;
     } catch (error) {
@@ -50,8 +48,7 @@ class AuthService {
         store.dispatch(
           setCredentials({
             user: store.getState().auth.user!,
-            access_token,
-            refresh_token: refresh_token || refreshToken,
+            token: { access_token, refresh_token },
           })
         );
         return response.data;

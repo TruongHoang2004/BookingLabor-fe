@@ -14,16 +14,16 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action: PayloadAction<LoginResponse>) => {
-      const { user, access_token, refresh_token } = action.payload;
+      const { user, token } = action.payload;
       state.user = user;
-      state.accessToken = access_token;
-      state.refreshToken = refresh_token;
+      state.accessToken = token.access_token;
+      state.refreshToken = token.refresh_token;
       state.isAuthenticated = true;
 
       // Save to localStorage
       localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("accessToken", access_token);
-      localStorage.setItem("refreshToken", refresh_token);
+      localStorage.setItem("accessToken", token.access_token);
+      localStorage.setItem("refreshToken", token.refresh_token);
     },
     logout: (state) => {
       state.user = null;
