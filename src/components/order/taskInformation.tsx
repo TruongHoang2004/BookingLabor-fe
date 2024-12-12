@@ -61,7 +61,7 @@ export default function TaskInformation() {
                             isReadOnly
                             type='text'
                             //key="outside-left"
-                            label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Phuong</span>}
+                            label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Ward</span>}
                             variant="bordered"
                             labelPlacement='outside'
                             defaultValue="Mai Dich"
