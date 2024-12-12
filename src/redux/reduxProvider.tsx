@@ -48,7 +48,7 @@ export function ReduxProvider({ children }: { children: React.ReactNode }) {
   return (
     <Provider store={store}>
       {isLoading ? (
-        <div className="flex items-center justify-center min-h-screen">
+        <div className="flex justify-center items-center min-h-screen">
           <LoadingSpinner />
         </div>
       ) : (
