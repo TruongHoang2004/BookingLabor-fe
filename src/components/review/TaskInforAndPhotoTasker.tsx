@@ -217,8 +217,10 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                         color: 'black',
                         fontSize: '15px',
                         fontWeight: 300,
-                        fontFamily: 'Inter',
-                        lineHeight: '24px',
+
+                       
+                        lineHeight: '36px',
+
                         borderRadius: '10px',
                         border: '1px solid #ccc',
                         background: '#CAE5E8',

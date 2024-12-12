@@ -24,7 +24,7 @@ const AvatarUpload: React.FC<AvatarProps> = ({ avatarUrl, onFileSelect }) => {
   };
 
   return (
-    <div className="relative group">
+    <div className="relative group ">
       <NextAvatar 
         className="w-32 h-32"
         showFallback
