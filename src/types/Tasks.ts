@@ -19,4 +19,6 @@ export interface Task {
   created_at: string;
   updated_at: string;
   category: string;
+  location: string;
+  assigned_customer_id: number | number[];
 }
