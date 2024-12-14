@@ -1,7 +1,6 @@
 import { TaskCardforUser } from "@/interface/task";
 import UserCard from "./UserCard";
 import { useState } from "react";
-import TaskFilter from "./Filter";
 
 const tasksList: TaskCardforUser[] = [
   { id: 1, title: "Task 1", description: "Description 1", task_status: "Pending", district: "District 1", street: "Street 1", estimated_duration: 2, fee_per_hour: "45", start_date: "2023-01-01", end_date: "2023-01-02", created_at: "2023-01-01", updated_at: "2023-01-01", apply_tasker: [{ id: 1, name: "Nguyen Van A", skill: ["Cleaning", "Moving"], experience: "5 years of cleaning experience" }, { id: 2, name: "Tran Thi B", skill: ["Washing Dishes"], experience: "Expert in painting houses for 7 years" }], chosen_tasker: null },
@@ -34,7 +33,6 @@ export default function UsersList() {
     });
     
     const [currentPage, setCurrentPage] = useState(1);
-    const [selectedCategory, setSelectedCategory] = useState('all');
     const usersPerPage = 12;
 
     // Calculate users for current page
@@ -46,13 +44,6 @@ export default function UsersList() {
     const totalPages = Math.ceil(tasksList.length / usersPerPage);
     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
-
-
-    // Reset về trang 1 khi thay đổi filter
-    const handleCategoryChange = (category: string) => {
-        setSelectedCategory(category);
-        setCurrentPage(1);
-    };
     return (
         <div className="flex flex-col items-center w-full">
             {/* Users Grid */}

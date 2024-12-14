@@ -1,6 +1,5 @@
 import { TaskCardforTasker } from "@/interface/task";
 import TaskCard from "./TaskCard";
-import TaskFilter from "./Filter";
 import { useState } from "react";
 
 const tasksList: TaskCardforTasker[] = [
@@ -33,7 +32,7 @@ const tasksList: TaskCardforTasker[] = [
 
 export default function TasksList() {
     const [currentPage, setCurrentPage] = useState(1);
-    const [selectedCategory, setSelectedCategory] = useState('all');
+    const selectedCategory ='all';
     const tasksPerPage = 12;
 
     // Filter tasks theo category
@@ -49,13 +48,6 @@ export default function TasksList() {
     // Tính tổng số trang sau khi filter
     const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-
-    // Reset về trang 1 khi thay đổi filter
-    const handleCategoryChange = (category: string) => {
-        setSelectedCategory(category);
-        setCurrentPage(1);
-    };
-
 
     return (
         <div className="flex flex-col items-center w-full">

@@ -74,7 +74,7 @@ export default function UserCard({ userCard }: { userCard: TaskCardforUser}) {
             return (
                 <ScrollShadow className="flex flex-col gap-y-5 max-h-[400px] p-4">
                     {userCard.apply_tasker.map((tasker) => (
-                       <div>
+                       <div key={tasker.id}>
                             <div className="flex items-center gap-x-3">
                                 <Avatar isBordered name={`Ta${tasker.id.toString()}`} size='sm' />
                                 <p className="font-semibold">{tasker.name}</p>

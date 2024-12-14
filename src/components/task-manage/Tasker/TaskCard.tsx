@@ -1,5 +1,5 @@
-import { TaskCardforTasker, TaskCardforUser } from "@/interface/task";
-import { Card, CardBody, CardHeader, CardFooter, Tooltip, Button, Avatar, Divider, ScrollShadow } from "@nextui-org/react";
+import { TaskCardforTasker } from "@/interface/task";
+import { Card, CardBody, CardHeader, CardFooter, Tooltip, Button } from "@nextui-org/react";
 import { Modal,
     ModalContent,
     ModalHeader,
@@ -7,7 +7,6 @@ import { Modal,
     ModalFooter, useDisclosure } from "@nextui-org/react";
 import Image from "next/image";
 import { FaList } from "react-icons/fa";
-import { useState } from "react";
 import { TbChecklist } from "react-icons/tb";
 import { BiSolidCheckCircle } from "react-icons/bi";
 

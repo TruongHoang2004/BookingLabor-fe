@@ -1,15 +1,10 @@
 'use client'
 import { useRouter } from 'next/navigation';
-import UserSearchBar from "@/components/task-manage/User/SearchBar";
 import UsersList from "@/components/task-manage/User/UsersList";
 import { Button } from '@nextui-org/react';
 
 export default function UsersView() {
     const router = useRouter();
-
-    const handleSearch = (userId: string) => {
-        console.log('Searching for task:', userId);
-    }
 
     return (
         <div className="flex flex-col p-4 w-full">
