@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import React, { CSSProperties, useState, useRef } from 'react';
 import { Input, Textarea } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
@@ -40,7 +40,6 @@ const TaskInforAndPhotoCustomer: React.FC = () => {
                         color: 'black',
                         fontSize: '15px',
                         fontWeight: 300,
-                        fontFamily: 'Inter',
                         lineHeight: '36px',
                         borderRadius: '10px',
                         border: '1px solid #ccc',

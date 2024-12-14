@@ -1,9 +1,9 @@
 // PaymentandBooking.tsx
-"use client";
+'use client'
 import React, { CSSProperties, useState } from 'react';
 import { Button } from "@nextui-org/react";
 import { Link } from "@nextui-org/link";
-
+import Image from 'next/image';
 
 
 export default function RatingandReviewTasker() {
@@ -25,7 +25,6 @@ export default function RatingandReviewTasker() {
                     color: 'black',
                     fontSize: '15px',
                     fontWeight: 300,
-                    fontFamily: 'Inter',
                     lineHeight: '24px',
                     borderRadius: '10px',
                     border: '1px solid #ccc',
@@ -52,9 +51,11 @@ export default function RatingandReviewTasker() {
                     border: '2px solid #ccc',
 
                 }}>
-                    <img
+                    <Image
                         src="https://b.fssta.com/uploads/application/soccer/headshots/885.vresize.350.350.medium.19.png"
                         alt="Tasker"
+                        width={80}
+                        height={80}
                         style={{
                             width: '100%',
                             height: 'auto',
@@ -78,7 +79,6 @@ export default function RatingandReviewTasker() {
                     borderRadius: '10px',
                     boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
                     textAlign: 'center',
-                    fontFamily: 'Arial, sans-serif',
                     marginRight: '30px',
                     color: 'black',
 
@@ -89,7 +89,6 @@ export default function RatingandReviewTasker() {
                     color: 'black',
                     fontSize: '15px',
                     fontWeight: 300,
-                    fontFamily: 'Inter',
                     lineHeight: '24px'
                 }}>Rate the Tasker</h3>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -112,7 +111,6 @@ export default function RatingandReviewTasker() {
                     color: 'black',
                     fontSize: '15px',
                     fontWeight: 300,
-                    fontFamily: 'Inter',
                     lineHeight: '24px'
                 }}>Your rating: {rating} {rating > 0 ? 'star' : ''}</p>
 

@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import { Card, Spacer, CardBody } from '@nextui-org/react';
 import { FaStar } from 'react-icons/fa';

@@ -1,13 +1,15 @@
+'use client'
 import React, { CSSProperties } from 'react';
 import { Input, Textarea } from "@nextui-org/react";
-import { Card, CardBody, Image } from "@nextui-org/react";
-import { Link } from "@nextui-org/link";
+import { Image } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
+
 
 export default function TaskInformation() {
     return (
-        <div style={leftStyles}>
+        <div className="container" style={containerStyles}>
 
-            <div style={containerStyles}>
+            <div className="left" style={leftStyles} >
                 <h2 style={headerStyles}>Task Information</h2>
                 <div style={contentStyles}>
                     <div
@@ -17,11 +19,11 @@ export default function TaskInformation() {
                             color: 'black',
                             fontSize: '15px',
                             fontWeight: 300,
-                            fontFamily: 'Inter',
+
                             lineHeight: '36px',
                             borderRadius: '10px',
                             border: '1px solid #ccc',
-                            background: '#CAE5E8',/* Light gray, soft and neutral */
+                            background: '#CAE5E8',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
@@ -37,10 +39,10 @@ export default function TaskInformation() {
                             isReadOnly
                             type='text'
                             //key="outside-left"
-                            label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Category</span>}
+                            label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Title</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="Education"
+                            defaultValue="Cleaning"
                             fullWidth
                             className='text-black label-text-color-100'
 
@@ -49,20 +51,50 @@ export default function TaskInformation() {
                             isReadOnly
                             type='text'
                             //key="outside-left"
-                            label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Address</span>}
+                            label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>District</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="New York"
+                            defaultValue="Cau Giay"
                             fullWidth
                         />
                         <Input
                             isReadOnly
                             type='text'
                             //key="outside-left"
-                            label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Time</span>}
+                            label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Ward</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="10:00 AM - 12:00 PM"
+                            defaultValue="Mai Dich"
+                            fullWidth
+                        />
+                        <Input
+                            isReadOnly
+                            type='text'
+                            //key="outside-left"
+                            label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Specific Address</span>}
+                            variant="bordered"
+                            labelPlacement='outside'
+                            defaultValue="32 Ngo 59 Pham Van Dong"
+                            fullWidth
+                        />
+                        <Input
+                            isReadOnly
+                            type='text'
+                            //key="outside-left"
+                            label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Start Date</span>}
+                            variant="bordered"
+                            labelPlacement='outside'
+                            defaultValue="12/12/2024"
+                            fullWidth
+                        />
+                        <Input
+                            isReadOnly
+                            type='text'
+                            //key="outside-left"
+                            label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>End Date</span>}
+                            variant="bordered"
+                            labelPlacement='outside'
+                            defaultValue="14/12/2024"
                             fullWidth
                         />
                         <Input
@@ -72,7 +104,7 @@ export default function TaskInformation() {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Duration</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="30 minutes"
+                            defaultValue="3 hours"
                             fullWidth
                         />
                         <Input
@@ -93,121 +125,112 @@ export default function TaskInformation() {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Description</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="em co phan hoi gi khong"
+                            defaultValue="Clean all the house"
                             fullWidth
                         />
                     </div>
 
-                    <div
-                        style={{
-                            width: '80%',
-                            height: 'auto',
-                            textAlign: 'center',
-                            color: 'black',
-                            fontSize: '15px',
-                            fontWeight: 300,
-                            fontFamily: 'Inter',
-                            lineHeight: '24px',
-                            borderRadius: '10px',
 
-                            //background: 'linear-gradient(to right, #c1dfc4,#deecdd)',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            //marginTop: '15px',
-                            //marginLeft: '630px',
-                            padding: '10px',
-                        }}
-                    >
-                        <Card
-                            isBlurred
-                            className="border-none bg-background/60 dark:bg-default-100/50 max-w-[610px]"
-                            shadow="sm"
-                        >
-                            <CardBody>
-                                <div className="grid grid-cols-6 md:grid-cols-12 gap-6 md:gap-4 items-center justify-center">
-                                    <div className="relative col-span-6 md:col-span-4">
-                                        <Image
-                                            alt="Album cover"
-                                            className="object-cover"
-                                            height={200}
-                                            shadow="md"
-                                            src="https://b.fssta.com/uploads/application/soccer/headshots/885.vresize.350.350.medium.19.png"
-                                            width="100%"
-                                        />
-                                    </div>
+                </div>
+            </div>
 
-                                    <div className="flex flex-col col-span-6 md:col-span-8">
-                                        <div className="flex justify-between items-start">
-                                            <div className="flex flex-col gap-0">
+            <div className="sidebar" style={sidebarStyles}>
+                <h2 style={headerStyles}>Tasker Information</h2>
 
-                                                <h1 className="text-large font-medium mt-2">Lê Văn Bảy</h1>
-                                                <h1 className="text-large font-medium mt-2"><strong>Email:</strong> baychobochay@example.com</h1>
-                                                <h1 className="text-large font-medium mt-2"><strong>Phone:</strong> (+000) 782 321 589</h1>
-                                                <h1 className="text-large font-medium mt-2"><strong>Social media:   </strong>
-
-                                                    <Link href="https://www.facebook.com/hunglecarat17" color="foreground">Facebook</Link>
-
-                                                </h1>
-
-                                            </div>
-
-                                        </div>
-
-
-
-
-                                    </div>
-                                </div>
-                            </CardBody>
-                        </Card>
-                    </div>
+                {/* Tasker Information */}
+                <div
+                    style={{
+                        width: '80%',
+                        height: '250px',
+                        textAlign: 'center',
+                        color: 'black',
+                        fontSize: '15px',
+                        fontWeight: 300,
+                        fontFamily: 'Inter',
+                        lineHeight: '24px',
+                        borderRadius: '10px',
+                        border: '1px solid #ccc',
+                        background: '#CAE5E8',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginTop: '0px',
+                        marginRight: '2px',
+                        padding: '10px',
+                    }}
+                >
 
                     <div style={{
-                        width: "80%",
-                        color: 'black',
-                    }} >
+                        width: '80px',
+                        height: '80px',
+                        borderRadius: '50%',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginBottom: '10px',
+                        border: '2px solid #ccc',
 
-                        <Textarea
-                            label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Note</span>}
-                            variant="bordered"
-                            placeholder="Enter your Note"
-                            disableAnimation
-                            disableAutosize
-                            classNames={{
-                                base: "80%",
-                                input: "resize-y min-h-[40px]",
+                    }}>
+                        <Image
+                            src="https://b.fssta.com/uploads/application/soccer/headshots/885.vresize.350.350.medium.19.png"
+                            alt="Tasker"
+                            width={80}
+                            height={80}
+                            style={{
+                                width: '100%',
+                                height: 'auto',
+                                objectFit: 'contain'
                             }}
                         />
                     </div>
+                    <h2 style={{ margin: '5px 0', color: 'black', }}>Lê Văn Bảy</h2>
+                    <p style={{ margin: '5px 0', color: 'black', }}><strong>Email:</strong> baychobochay@example.com</p>
+                    <p style={{ margin: '5px 0', color: 'black', }} ><strong>Phone:</strong> (+000) 782 321 589</p>
+                    <p style={{ margin: '5px 0', color: 'black', }}><strong>Gender:  </strong>
+                        Male</p>
+                </div>
+
+
+
+
+
+                <div className="flex flex-wrap gap-4 items-center">
+
+                    <Button color="primary" variant="ghost">
+                        Booking
+                    </Button>
+
                 </div>
             </div>
+
+
         </div>
+
+
+
     );
 }
 
-const leftStyles: CSSProperties = {
-    width: '100%',
-
-    maxWidth: '1100px',
-    marginLeft: '0px',
+const containerStyles: CSSProperties = {
+    maxWidth: '100%',
     display: 'flex',
-    flexDirection: 'column',
-    //alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: 'row', // Mặc định xếp ngang
+    justifyContent: 'center', // Canh giữa theo chiều ngang
+    flexWrap: 'wrap', // Đảm bảo các phần tử sẽ xuống dòng nếu không đủ không gian
+    //alignItems: 'center', // Canh trên đầu theo chiều dọc
     gap: '20px',
-    color: 'black',
+
 }
 
 
-const containerStyles: CSSProperties = {
-    width: '100%',
-    maxWidth: '980px',
+const leftStyles: CSSProperties = {
+
+    flex: '1 1 980px',
     height: 'auto',
     backgroundColor: '#f0f0f0',
     borderRadius: '12px',
-    marginLeft: '30px',
     padding: '20px',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
     display: 'flex',
@@ -215,6 +238,29 @@ const containerStyles: CSSProperties = {
     gap: '15px',
     alignItems: 'center',
     color: 'black',
+    marginBottom: '20px',
+
+};
+
+const sidebarStyles: CSSProperties = {
+
+    flex: '1 1 400px',
+    height: '410px',
+    marginBottom: '20px',
+
+    backgroundColor: '#f0f0f0',
+    borderRadius: '12px',
+
+    padding: '20px',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '15px',
+    alignItems: 'center',
+    color: 'black',
+    marginTop: '0px',
+
+
 };
 
 const headerStyles: CSSProperties = {
@@ -230,9 +276,11 @@ const contentStyles: CSSProperties = {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    gap: '20px', // Space between each child component
+    gap: '20px',
     width: '100%',
     height: '100%',
     color: 'black',
 };
+
+
 

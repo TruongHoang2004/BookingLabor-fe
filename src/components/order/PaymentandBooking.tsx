@@ -1,4 +1,5 @@
 // PaymentandBooking.tsx
+'use client'
 import React, { CSSProperties } from 'react';
 import { RadioGroup, Radio, cn, RadioProps } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";

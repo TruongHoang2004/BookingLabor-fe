@@ -9,13 +9,13 @@ import FAQ from "@/components/homepage/FAQ";
 export default function Home() {
   return (
     <div>
-      <CreatTaskSection/> 
-      <TaskOptions/>
-      <GetStartedSection/>
-      <div className='bg-gradient-to-b from-emerald-800 via-emerald-900 to-zinc-950 text-white w-full mt-24 py-12'>
-        <PricingAndPolicies/>
-        <Reviews/>
-        <FAQ/>
+      <CreatTaskSection />
+      <TaskOptions />
+      <GetStartedSection />
+      <div className='bg-gradient-to-b from-emerald-800 via-emerald-900 to-zinc-950 mt-24 py-12 w-full text-white'>
+        <PricingAndPolicies />
+        <Reviews />
+        <FAQ />
       </div>
     </div>
   )

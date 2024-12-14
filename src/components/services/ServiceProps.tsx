@@ -1,7 +1,9 @@
+'use client'
 // ServiceProps.tsx
 import React from "react";
 import Image from 'next/image';
 import { IconType }  from 'react-icons'
+import { useRouter } from "next/navigation";
 
 interface ServiceItem {
     icon: IconType;
@@ -16,6 +18,7 @@ interface ServiceCardProps {
 }
 
 const ServiceProps = ({ imageSrc, title, description, services }: ServiceCardProps) => {
+    const router = useRouter();
     return (
         <div>
             <div className="h-60 relative x-sm:w-[400px] 2sm:w-[300px]">
@@ -36,7 +39,7 @@ const ServiceProps = ({ imageSrc, title, description, services }: ServiceCardPro
                     {services.map((service, index) => {
                     const Icon = service.icon;
                     return (
-                        <li key={index} className="flex items-center">
+                        <li onClick={() => router.push(`/create-task?task=${encodeURIComponent(service.text)}`)} key={index} className="flex items-center cursor-pointer hover:underline">
                         <Icon className="mr-1" /> {service.text}
                         </li>
                     );
