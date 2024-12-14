@@ -1,113 +1,83 @@
-'use client'
-import { useState } from "react";
-import { TaskCardforTasker } from "@/interface/task";
-import {
-    Modal,
+import { TaskCardforTasker, TaskCardforUser } from "@/interface/task";
+import { Card, CardBody, CardHeader, CardFooter, Tooltip, Button, Avatar, Divider, ScrollShadow } from "@nextui-org/react";
+import { Modal,
+    ModalContent,
     ModalHeader,
     ModalBody,
-    ModalFooter,
-    Button,
-    useDisclosure,
-    ModalContent,
-} from "@nextui-org/react";
+    ModalFooter, useDisclosure } from "@nextui-org/react";
+import Image from "next/image";
+import { FaList } from "react-icons/fa";
+import { useState } from "react";
+import { TbChecklist } from "react-icons/tb";
+import { BiSolidCheckCircle } from "react-icons/bi";
 
 export default function TaskCard({ task }: { task: TaskCardforTasker  }) {
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [isVisible, setIsVisible] = useState(true);
+    const getImageSrc = () => {
+        const randomIndex = Math.floor(Math.random() * 3) + 1;
+        return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
+    }  
 
-    const formatTaskId = (id: number) => {
-        const letterCode = Math.floor((id - 1) / 9999);
-        const letter = String.fromCharCode(65 + letterCode);
-        const number = ((id - 1) % 9999) + 1;
-        return `${letter}${String(number).padStart(4, "0")}`;
-    };
-
-    const taskId = formatTaskId(task.id);
-
-    const handleCancel = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setIsVisible(false);
-    };
-
-    if (!isVisible) return null;
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
     return (
-        <>
-            <div className="flex flex-col gap-4 bg-zinc-100 shadow-xl hover:shadow-lg p-4 rounded-xl h-64 transition-shadow cursor-pointer" onClick={onOpen}>
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <h2 className="font-bold text-gray-700">{taskId}</h2>
-                        <span className={`px-2 py-1 rounded-full text-sm font-semibold ${task.task_status === "Pending"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : task.task_status === "In Progress"
-                                ? "bg-blue-100 text-blue-700"
-                                : "bg-green-100 text-green-700"
-                            }`}>
-                            {task.task_status}
-                        </span>
+    <div>
+        <Card isFooterBlurred className="w-[400px] h-[450px]">
+            <Image src={getImageSrc()} alt=""  className={`object-cover`} fill />
+            <CardHeader className="flex flex-col bg-slate-200">
+                <p className="font-bold text-emerald-700 text-xl">T00{task.id}</p>
+                <p className="font-semibold text-lg">{task.title}</p>
+            </CardHeader>
+            <CardBody className="p-0">
+                <div className="w-full h-full relative">
+                    <div className="absolute transform -translate-x-1/2 -translate-y-1/2 top-2/3 left-1/2 bg-gray-200 rounded-lg py-4 pl-2 w-11/12 flex items-center justify-between">
+                        <div>
+                            <p className="truncate mb-2  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Description:</span>{task.description}</p>
+                            <p className="truncate mb-2  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{task.estimated_duration}$ /h</p>
+                            <p className="truncate  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">End date:</span>{task.fee_per_hour}</p>
+                        </div>
+                        <div>
+                            <Tooltip content="View more details">
+                                <Button onPress={onOpen} variant="light" className="text-emerald-700 text-lg"><FaList /></Button>
+                            </Tooltip>
+                        </div>
                     </div>
-                    {task.task_status === "Pending" && (
-                        <Button
-                            color="danger"
-                            size="sm"
-                            variant="flat"
-                            onClick={(e) => handleCancel(e)}
-                        >
-                            Cancel
-                        </Button>
-                    )}
                 </div>
-
-                <div className="overflow-hidden space-y-3">
-                    <div className="space-y-2">
-                        <p className="truncate font-semibold">{task.title}</p>
-                        <p className="truncate">{task.description}</p>
-                        <p className="truncate">{task.district}</p>
-                        <p className="truncate">{task.estimated_duration}</p>
+            </CardBody>
+            <CardFooter className="mt-3 flex flex-col h-[150px]">
+                <div><Button color="danger" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Cancel this Task</Button></div>
+                <div><Button color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Complete Comfirmation</Button></div>
+            </CardFooter>
+        </Card>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+            <ModalContent>
+            {(onClose) => (
+                <>
+                <ModalHeader className="font-bold text-emerald-800">
+                    <div className="flex flex-col">
+                        <p className="font-bold text-emerald-700 text-xl">T00{task.id}</p>
+                        <p className="font-semibold text-lg">{task.title}</p>
                     </div>
-                            <div className="space-y-1">
-                                <p className="truncate">Customer: {task.username}</p>
-                                {task.task_status === "In Progress" && (
-                                    <Button
-                                        color="success"
-                                        className="w-full mt-2"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            task.task_status = "Completed";
-                                        }}
-                                    >
-                                        Complete
-                                    </Button>
-                                )}
-                            </div>
+                </ModalHeader>
+                <ModalBody>
+                <div className="flex flex-col gap-y-3">
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Description:</span>{task.description}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">District:</span>{task.district}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Description:</span>Estimated Duration{task.estimated_duration}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{task.fee_per_hour}$ /h</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Start Date:</span>{task.start_date}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">End Date:</span>{task.end_date}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Status:</span>{task.task_status}</p>
                 </div>
-            </div>
-
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl">
-                <ModalContent className="max-h-[80vh]">
-                    {(onClose) => (
-                        <>
-                            <ModalHeader>{taskId}</ModalHeader>
-                            <ModalBody className="overflow-y-auto py-4">
-                                <div className="space-y-6">
-                                    <div className="space-y-3">
-                                        <p className="font-semibold">{task.title}</p>
-                                        <p className="whitespace-pre-wrap">{task.description}</p>
-                                        <p>{task.district}</p>
-                                        <p>{task.estimated_duration}</p>
-                                        <p>{task.username}</p>
-                                    </div>
-                                </div>
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button color="danger" variant="light" onPress={onClose}>
-                                    Close
-                                </Button>
-                            </ModalFooter>
-                        </>
-                    )}
-                </ModalContent>
-            </Modal>
-        </>
-    );
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                    </Button>
+                </ModalFooter>
+                </>
+            )}
+            </ModalContent>
+      </Modal>
+    </div>
+   )
 }

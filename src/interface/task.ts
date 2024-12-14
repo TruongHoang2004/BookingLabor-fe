@@ -11,7 +11,10 @@ export interface TaskCardforTasker {
   task_status: string;
   district: string;
   estimated_duration: string;
+  fee_per_hour: string;
   username: string;
+  start_date: string;
+  end_date: string;
 }
 
 export interface Tasker {

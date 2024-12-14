@@ -26,9 +26,6 @@ export default function TasksView() {
                         Change to Customer View
                     </Button>
                 </div>
-                <div className="w-80">
-                    <TaskSearchBar onSearch={handleSearch} />
-                </div>
             </div>
             <div className="desktop:w-5/6 laptop:w-5/6 mx-auto w-full">
                 <TasksList />

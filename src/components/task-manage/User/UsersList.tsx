@@ -26,6 +26,13 @@ const tasksList: TaskCardforUser[] = [
   { id: 20, title: "Task 20", description: "Description 20", task_status: "Pending", district: "District 20", street: "Street 20", estimated_duration: 4, fee_per_hour: "60", start_date: "2023-02-08", end_date: "2023-02-09", created_at: "2023-02-08", updated_at: "2023-02-08", apply_tasker: [], chosen_tasker: null }, 
 ];   
 export default function UsersList() {
+    tasksList.map(task => {
+        if (task.apply_tasker.length === 0) {
+          task.task_status = "Posted";
+        }
+        return task;
+    });
+    
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState('all');
     const usersPerPage = 12;
@@ -48,15 +55,9 @@ export default function UsersList() {
     };
     return (
         <div className="flex flex-col items-center w-full">
-            <TaskFilter
-                selectedCategory={selectedCategory}
-                onCategoryChange={handleCategoryChange}
-                tasks={tasksList}
-            />
-
             {/* Users Grid */}
             <div className="flex justify-center items-center my-8 w-full">
-                <div className="gap-4 grid grid-cols-6 laptop:grid-cols-4 mini-laptop:grid-cols-4 mobile:grid-cols-1 tablet:grid-cols-2 w-full">
+                <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-10 w-full">
                     {currentUsers.map(user => (
                         <UserCard key={user.id} userCard={user}/>
                     ))}

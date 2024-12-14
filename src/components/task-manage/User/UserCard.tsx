@@ -1,197 +1,161 @@
-import { useState } from 'react';
-import { TaskCardforUser, Tasker } from "@/interface/task";
-import { Card, CardBody } from "@nextui-org/react";
-import {
-    Modal,
+import { TaskCardforUser } from "@/interface/task";
+import { Card, CardBody, CardHeader, CardFooter, Tooltip, Button, Avatar, Divider, ScrollShadow } from "@nextui-org/react";
+import { Modal,
+    ModalContent,
     ModalHeader,
     ModalBody,
-    ModalFooter,
-    Button,
-    useDisclosure,
-    ModalContent,
-} from "@nextui-org/react";
-import { format } from 'path';
+    ModalFooter, useDisclosure } from "@nextui-org/react";
+import Image from "next/image";
+import { FaList } from "react-icons/fa";
+import { useState } from "react";
+import { TbChecklist } from "react-icons/tb";
+import { BiSolidCheckCircle } from "react-icons/bi";
 
 export default function UserCard({ userCard }: { userCard: TaskCardforUser}) {
-    ;
-    const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [taskerModalOpen, setTaskerModalOpen] = useState(false);
-    const [selectedTasker, setSelectedTasker] = useState<Tasker | null>(null);
-    const [isVisible, setIsVisible] = useState(true);
+    const getImageSrc = () => {
+        const randomIndex = Math.floor(Math.random() * 3) + 1;
+        return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
+    }  
+    const [ taskDetailVisible, setTaskDetailVisible] = useState(false);
+    const [ choseTaskerVisible, setChoseTaskerVisible] = useState(false);
+    const {isOpen, onOpen, onOpenChange} = useDisclosure();
 
-    const formatUserId = (id: number) => {
-        const letterCode = Math.floor((id - 1) / 9999);
-        const letter = String.fromCharCode(65 + letterCode);
-        const number = ((id - 1) % 9999) + 1;
-        return `${letter}${String(number).padStart(4, '0')}`;
+    const handleChoseTasker = () => {
+        setTaskDetailVisible(false);
+        setChoseTaskerVisible(true);
     }
 
-    const handleChoose = (e: React.MouseEvent, index: number) => {
-        e.stopPropagation();
-        const selectedTasker = userCard.apply_tasker[index];
-        setSelectedTasker(selectedTasker);
-        userCard.chosen_tasker = selectedTasker;
-        userCard.task_status = "In Progress";
-    };
+    const handleShowTaskDetails = () => {
+        setTaskDetailVisible(true);
+        setChoseTaskerVisible(false);
+    }
 
-    const handleComplete = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        userCard.task_status = "Completed";
-    };
-
-    const handleTaskerClick = (taskerId: number) => {
-        const tasker = userCard.apply_tasker.find(t => t.id === taskerId);
-        if (tasker) {
-            setSelectedTasker(tasker);
-            setTaskerModalOpen(true);
+    const renderModalHeader = () => {
+        // nếu xem thông tin mà không phải chọn taskers
+        if(taskDetailVisible && !choseTaskerVisible) {
+            return (
+                <div className="flex flex-col">
+                    <p className="font-bold text-emerald-700 text-xl">T00{userCard.id}</p>
+                    <p className="font-semibold text-lg">{userCard.title}</p>
+                </div>
+            )
         }
-    };
+        // nếu chọn tasker mà không phải hiện thông tin task
+        if(!taskDetailVisible && choseTaskerVisible) {
+            return (
+                <div className="font-bold text-emerald-800 text-2xl">
+                    Choose your tasker 
+                </div>
+            )
+        }
+    }
 
-    const taskID = formatUserId(userCard.id);
-
-    const handleCancel = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setIsVisible(false); // Hide the card
-    };
-
-    if (!isVisible) return null; // Don't render the card if it's not visible
+    const renderModalContent = () => {
+          // nếu xem thông tin mà không phải chọn taskers
+          if(taskDetailVisible && !choseTaskerVisible) {
+            return (
+                <div className="flex flex-col gap-y-3">
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Description:</span>{userCard.description}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">District:</span>{userCard.district}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Street:</span>{userCard.street}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Description:</span>Estimated Duration{userCard.estimated_duration}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{userCard.fee_per_hour}$ /h</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Start Date:</span>{userCard.start_date}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">End Date:</span>{userCard.end_date}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Status:</span>{userCard.task_status}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Created At:</span>{userCard.created_at}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Number of Taskers applying:</span>{userCard.apply_tasker.length}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Chosen Tasker:</span>{userCard.chosen_tasker?.name || ""}</p>
+                </div>
+            )
+        }
+        // nếu chọn tasker mà không phải hiện thông tin task
+        if(!taskDetailVisible && choseTaskerVisible) {
+            return (
+                <ScrollShadow className="flex flex-col gap-y-5 max-h-[400px] p-4">
+                    {userCard.apply_tasker.map((tasker) => (
+                       <div>
+                            <div className="flex items-center gap-x-3">
+                                <Avatar isBordered name={`Ta${tasker.id.toString()}`} size='sm' />
+                                <p className="font-semibold">{tasker.name}</p>
+                            </div>
+                            <div className="flex flex-col gap-y-2 mt-3 bg-gray-200 rounded-xl p-3">
+                                <p><span className="text-emerald-700 font-semibold mr-1">Skill:</span>{tasker.skill.join(",")}</p>
+                                <p><span className="text-emerald-700 font-semibold mr-1">Experience:</span>{tasker.experience}</p>
+                            </div>
+                            <Button className="bg-emerald-700 mt-3 font-semibold text-white">Choose this Tasker</Button>
+                            <Divider className="mt-5" />
+                       </div>
+                    ))}
+                </ScrollShadow>
+            )
+        }
+    }
 
     return (
-        <>
-            <div className="flex flex-col gap-4 bg-zinc-100 shadow-xl hover:shadow-lg p-4 rounded-xl h-64 transition-shadow cursor-pointer" onClick={onOpen}>
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <h2 className="font-bold text-gray-700">{taskID}</h2>
-                        <span className={`px-2 py-1 rounded-full text-sm font-semibold ${userCard.task_status === "Posted"
-                            ? "bg-gray-300 text-gray-700"
-                            : userCard.task_status === "Pending"
-                                ? "bg-yellow-100 text-yellow-700"
-                                : userCard.task_status === "In Progress"
-                                    ? "bg-blue-100 text-blue-700"
-                                    : "bg-green-100 text-green-700"
-                            }`}>
-                            {userCard.task_status}
-                        </span>
+    <div>
+        <Card isFooterBlurred className="w-[400px] h-[450px]">
+            <Image src={getImageSrc()} alt=""  className={`object-cover`} fill />
+            <CardHeader className="flex flex-col bg-slate-200">
+                <p className="font-bold text-emerald-700 text-xl">T00{userCard.id}</p>
+                <p className="font-semibold text-lg">{userCard.title}</p>
+            </CardHeader>
+            <CardBody className="p-0">
+                <div className="w-full h-full relative">
+                    <div className="absolute transform -translate-x-1/2 -translate-y-1/2 top-2/3 left-1/2 bg-gray-200 rounded-lg py-4 pl-2 w-11/12 flex items-center justify-between">
+                        <div>
+                            <p className="truncate mb-2  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Description:</span>{userCard.description}</p>
+                            <p className="truncate mb-2  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">District:</span>{userCard.district}</p>
+                            <p className="truncate mb-2  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{userCard.fee_per_hour}$ /h</p>
+                            <p className="truncate  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">End date:</span>{userCard.end_date}</p>
+                        </div>
+                        <div>
+                            <Tooltip content="View more details">
+                                <Button onPress={onOpen} onClick={handleShowTaskDetails}  variant="light" className="text-emerald-700 text-lg"><FaList /></Button>
+                            </Tooltip>
+                        </div>
                     </div>
-                    {(userCard.task_status === "Posted" || userCard.task_status === "Pending") && (
-                        <Button
-                            color="danger"
-                            size="sm"
-                            variant="flat"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleCancel(e);
-                            }}
-                            className='px-2'
-                        >
-                            Cancel
+                </div>
+            </CardBody>
+            <CardFooter className="mt-3 flex flex-col h-[150px]">
+                <div className="flex items-center">
+                    <span className="mr-5 font-bold text-emerald-800 text-sm">{userCard.apply_tasker.length} Taskers applying : </span>
+                    {userCard.apply_tasker.map((tasker) => (
+                        <div key={tasker.id}>
+                            <Avatar isBordered name={`Ta${tasker.id.toString()}`} size='sm' />
+                        </div>
+                    ))}
+                </div>
+                <div>
+                    {/* Hiển thị nút Choose Tasker nếu có tasker */}
+                    {userCard.apply_tasker.length > 0 && (
+                        <Button onPress={onOpen} onClick={handleChoseTasker} className="mt-3 px-4 py-2 bg-emerald-700 text-white font-semibold rounded-lg shadow-md">
+                            Choose Tasker
                         </Button>
                     )}
                 </div>
-                <div className="overflow-hidden">
-                    <p className="mb-2 truncate font-semibold">{userCard.title}</p>
-                    <p className="truncate">{userCard.description}</p>
-                    <p className="truncate">{userCard.district}</p>
-                    <p className="truncate">{userCard.estimated_duration}</p>
-                    <p className="truncate">
-                        {"Applied Taskers: "}
-                        {Array.isArray(userCard.apply_tasker)
-                            ? userCard.apply_tasker.length
-                            : userCard.apply_tasker ? 1 : 0}
-                    </p>
-                </div>
-                {userCard.task_status === "In Progress" && (
-                    <div className="mt-auto">
-                        <Button
-                            color="success"
-                            className="w-full"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleComplete(e);
-                            }}
-                        >
-                            Complete
-                        </Button>
-                    </div>
-                )}
-            </div>
-
-            <Modal
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                size="3xl"
-            >
-                <ModalContent className="max-h-[80vh]">
-                    {(onClose) => (
-                        <>
-                            <ModalHeader className="flex flex-col gap-1">
-                                {formatUserId(userCard.id)}
-                            </ModalHeader>
-                            <ModalBody className="overflow-y-auto py-4">
-                                <div className="bg-gray-200 p-2 rounded-lg w-full mb-4">
-                                    <h2 className="font-bold text-gray-700">{userCard.id}</h2>
-                                </div>
-                                <div className="space-y-4">
-                                    <p className="mb-2 font-semibold">{userCard.title}</p>
-                                    <p className="whitespace-pre-wrap">{userCard.description}</p>
-                                    <p>{userCard.district}</p>
-                                    <p>{userCard.estimated_duration}</p>
-
-                                    <div className="grid gap-4">
-                                        {Array.from({
-                                            length: Array.isArray(userCard.apply_tasker)
-                                                ? userCard.apply_tasker.length
-                                                : userCard.apply_tasker ? 1 : 0
-                                        }).map((_, index) => (
-                                            <Card key={index} className="shadow-sm">
-                                                <CardBody>
-                                                    <p className="text-gray-700 flex items-center gap-x-[15px]">
-                                                        <span
-                                                            className="min-w-[120px] cursor-pointer hover:text-blue-600"
-                                                            onClick={() => handleTaskerClick(userCard.apply_tasker[index].id)}
-                                                        >
-                                                            {userCard.apply_tasker[index].name}
-                                                        </span>
-                                                        <Modal isOpen={taskerModalOpen} onClose={() => setTaskerModalOpen(false)}>
-                                                            <ModalContent>
-                                                                <ModalHeader>Tasker Details</ModalHeader>
-                                                                <ModalBody>
-                                                                    {selectedTasker && (
-                                                                        <div className="space-y-4">
-                                                                            <p><strong>Name:</strong> {selectedTasker.name}</p>
-                                                                            <p><strong>Skills:</strong> {selectedTasker.skill.join(",")}</p>
-                                                                            <p><strong>Experience:</strong> {selectedTasker.experience}</p>
-                                                                        </div>
-                                                                    )}
-                                                                </ModalBody>
-                                                            </ModalContent>
-                                                        </Modal>
-                                                        <Button
-                                                            style={{ backgroundColor: "#777777", color: "white" }}
-                                                            size="sm"
-                                                            onClick={(e) => {
-                                                                handleChoose(e, index);
-                                                            }}
-                                                            disabled={selectedTasker !== null}
-                                                        >
-                                                            {selectedTasker === userCard.chosen_tasker ?   "Choose" : "Selected"}
-                                                        </Button>
-                                                    </p>
-                                                </CardBody>
-                                            </Card>
-                                        ))}
-                                    </div>
-                                </div>
-                            </ModalBody>
-                            <ModalFooter>
-                                <Button color="danger" variant="light" onPress={onClose}>
-                                    Close
-                                </Button>
-                            </ModalFooter>
-                        </>
-                    )}
-                </ModalContent>
-            </Modal>
-        </>
-    );
+                <div><Button color="danger" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Cancel this Task</Button></div>
+            </CardFooter>
+        </Card>
+        <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+            <ModalContent>
+            {(onClose) => (
+                <>
+                <ModalHeader>
+                    {renderModalHeader()}
+                </ModalHeader>
+                <ModalBody>
+                    {renderModalContent()}
+                </ModalBody>
+                <ModalFooter>
+                    <Button color="danger" variant="light" onPress={onClose}>
+                    Close
+                    </Button>
+                </ModalFooter>
+                </>
+            )}
+            </ModalContent>
+      </Modal>
+    </div>
+   )
 }

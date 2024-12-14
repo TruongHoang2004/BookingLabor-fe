@@ -2,7 +2,6 @@
 import { useRouter } from 'next/navigation';
 import UserSearchBar from "@/components/task-manage/User/SearchBar";
 import UsersList from "@/components/task-manage/User/UsersList";
-// import TaskerList from "@/components/tasks/User/UsersList";
 import { Button } from '@nextui-org/react';
 
 export default function UsersView() {
@@ -15,7 +14,7 @@ export default function UsersView() {
     return (
         <div className="flex flex-col p-4 w-full">
             <div className='w-full flex justify-center font-bold text-3xl text-emerald-700 mt-10'>
-                <p>Managing your on-going Tasks</p>
+                <p>Manages your posted And on-going Tasks</p>
             </div>
             <div className="flex items-center justify-end gap-x-10 mb-8 w-full mt-10 pr-10">
                 <div className="w-48">
@@ -26,9 +25,6 @@ export default function UsersView() {
                     >
                         Change to Tasker View
                     </Button>
-                </div>
-                <div className="w-80">
-                    <UserSearchBar onSearch={handleSearch} />
                 </div>
             </div>
             <div className="desktop:w-5/6 laptop:w-5/6 mx-auto w-full">
