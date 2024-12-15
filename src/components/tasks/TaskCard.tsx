@@ -31,7 +31,7 @@ export default function TaskCard({ task }: { task: Task }) {
                 <p className="mb-2">{task.title}</p>
                 <p className="mb-2">{task.description}</p>
                 <p className="mb-2">{task.district}</p>
-                <p className="mb-2">{task.street}</p>
+                <p className="mb-2">{task.detail_address}</p>
                 <p className="mb-2">{task.estimated_duration}</p>
             </div>
         </div>

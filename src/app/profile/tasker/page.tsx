@@ -53,7 +53,7 @@ const TaskerProfilePage = () => {
               <EditableField
                 type="text"
                 label="Work Area"
-                defaultValue={user?.tasker?.word_area || ''}
+                defaultValue={user?.tasker?.work_area || ''}
               />
               <Input
                 isDisabled

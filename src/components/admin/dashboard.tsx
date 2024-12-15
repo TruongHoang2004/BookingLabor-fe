@@ -7,6 +7,7 @@ import { ProtectedRoute } from '../protectedRoute';
 const Dashboard: React.FC = () => {
     const router = useRouter();
     return (
+        <ProtectedRoute>
         <div className="gap-4 grid grid-cols-2 sm:grid-cols-4 p-4">
             <div className="col-span-2 sm:col-span-4 mb-4 flex justify-center">
                 <Card className="max-w-[600px] w-full">
@@ -123,6 +124,7 @@ const Dashboard: React.FC = () => {
                 </CardBody>
             </Card>
         </div>
+        </ProtectedRoute>
     );
 };
 
