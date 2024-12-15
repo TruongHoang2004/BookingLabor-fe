@@ -7,7 +7,7 @@ import { Task } from "@/interface/task";
 export const taskService = {
   async create(userData: RegisterRequest): Promise<User> {
     try {
-      const response = await api.post<User>("/task", userData);
+      const response = await api.post<User>("/tasks", userData);
       toast.success("Tạo công việc thành công");
       return response.data;
     } catch (error) {
@@ -17,7 +17,7 @@ export const taskService = {
   },
   async getMe(): Promise<Task[]> {
     try {
-      const response = await api.get<Task[]>("/task");
+      const response = await api.get<Task[]>("/tasks");
       return response.data;
     } catch (error) {
       toast.error("Không thể lấy thông tin công việc");

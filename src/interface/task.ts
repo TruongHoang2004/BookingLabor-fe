@@ -1,3 +1,5 @@
+import { Skill } from "./skill";
+
 export interface TaskCard {
   id: number;
   title: string;
@@ -11,7 +13,9 @@ export interface Task {
   description: string;
   task_status: string;
   district: string;
-  street: string;
+  ward: string;
+  detail_address: string;
+  skill: Skill;
   estimated_duration: number;
   fee_per_hour: string;
   start_date: string;

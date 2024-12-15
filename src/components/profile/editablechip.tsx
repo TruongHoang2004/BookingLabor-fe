@@ -5,13 +5,13 @@ import { Edit3, Save} from 'react-feather';
 
 interface EditableChipInputProps {
   label: string;
-  defaultSkills?: string[];
+  defaultValue?: string[];
 }
 
-const EditableChipInput: React.FC<EditableChipInputProps> = ({ label, defaultSkills = [] }) => {
+const EditableChipInput: React.FC<EditableChipInputProps> = ({ label, defaultValue = [] }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [skillInput, setSkillInput] = useState('');
-  const [skills, setSkills] = useState<string[]>(defaultSkills);
+  const [skills, setSkills] = useState<string[]>(defaultValue);
 
   const toggleEditable = () => {
     setIsEditable(!isEditable);

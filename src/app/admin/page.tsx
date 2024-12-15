@@ -3,8 +3,10 @@ import React from 'react';
 import PricingAndPolicies from '@/components/homepage/PricingAndPolicies';
 import Reviews from '@/components/homepage/Reviews';
 import Dashboard from '@/components/admin/dashboard';
+import { ProtectedRoute } from '@/components/protectedRoute';
 const Admin = () => {
     return (
+        <ProtectedRoute>
         <div>
             <h1 className="text-5xl font-extrabold text-emerald-800 text-center py-8">
                 Welcome Back,
@@ -17,6 +19,7 @@ const Admin = () => {
                 <Reviews/>
             </div>
         </div>
+        </ProtectedRoute>
     )
 }
 

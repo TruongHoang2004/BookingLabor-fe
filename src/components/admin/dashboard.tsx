@@ -3,6 +3,7 @@
 import React from 'react';
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, ScrollShadow, User } from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
+import { ProtectedRoute } from '../protectedRoute';
 const Dashboard: React.FC = () => {
     const router = useRouter();
     return (

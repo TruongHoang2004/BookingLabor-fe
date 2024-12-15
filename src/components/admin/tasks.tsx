@@ -1,7 +1,7 @@
 'use client'
 import React from "react";
-
-import {
+import { Task } from "@/interface/task";
+import { 
     Card,
     CardBody,
     Button,
@@ -17,26 +17,16 @@ import {
     ModalFooter,
     useDisclosure
 } from "@nextui-org/react";
-import { Mail, Edit, Trash, MoreVertical, MapPin, Clock } from "lucide-react";
-
+import { Mail, Edit, Trash, Badge, MoreVertical, MapPin, Clock } from "lucide-react";
+     
 
 interface TaskCardProps {
-    task: {
-        id: number;
-        type: string;
-        status: string;
-        area: string;
-        time: string;
-        duration: string;
-        price: string;
-        description: string;
-    };
+    task: Task;
     onView: (id: number) => void;
     onModify: (id: number) => void;
     onDelete: (id: number) => void;
     onMessage: (id: number) => void;
 }
-
 
 const TaskCard: React.FC<TaskCardProps> = ({
     task,
@@ -55,30 +45,35 @@ const TaskCard: React.FC<TaskCardProps> = ({
             default: return "default";
         }
     };
-
     const {isOpen, onOpen, onClose} = useDisclosure();
 
     return (
+        
         <Card className="w-full">
             <CardBody>
                 <div className="flex justify-between items-start">
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
-                            <h3 className="text-lg font-semibold">{task.type}</h3>
-                            <Chip color={getStatusColor(task.status)} size="sm">
-                                {task.status}
+                            <h3 className="text-lg font-semibold">{task.title}</h3>
+                            <Chip color={getStatusColor(task.task_status)} size="sm">
+                                {task.task_status}
                             </Chip>
                         </div>
                         <div className="flex items-center gap-2 text-gray-500">
                             <MapPin size={16} />
-                            <span>{task.area}</span>
+                            <span>{task.district}</span>
                         </div>
                         <div className="flex items-center gap-4 text-gray-500">
                             <div className="flex items-center gap-2">
                                 <Clock size={16} />
-                                <span>{task.time}</span>
+                                <span>{task.start_date}</span>
                             </div>
-                            <div>Duration: {task.duration}</div>
+                            <div>Duration: {task.estimated_duration} h </div>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-500">
+                            <Badge size={16} />
+                            {/* <span> Skill: {task.skill.name}</span> */}
+                            <span>No Skill</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -102,36 +97,44 @@ const TaskCard: React.FC<TaskCardProps> = ({
                                 <ModalBody>
                                     <div className="space-y-4">
                                         <div>
-                                            <h3 className="text-sm text-gray-500">Task Type</h3>
-                                            <p className="text-lg font-semibold">{task.type}</p>
+                                            <h3 className="text-sm text-gray-500">Task Title</h3>
+                                            <p className="text-lg font-semibold">{task.title}</p>
                                         </div>
                                         <div>
                                             <h3 className="text-sm text-gray-500">Status</h3>
-                                            <Chip color={getStatusColor(task.status)} size="sm">
-                                                {task.status}
+                                            <Chip color={getStatusColor(task.task_status)} size="sm">
+                                                {task.task_status}
                                             </Chip>
                                         </div>
                                         <div>
                                             <h3 className="text-sm text-gray-500">Area</h3>
                                             <p className="flex items-center gap-2">
                                                 <MapPin size={16} />
-                                                {task.area}
+                                                {task.district}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm text-gray-500">Area</h3>
+                                            <p className="flex items-center gap-2">
+                                                <Badge size={16} />
+                                                {/* {task.skill.name || "No skill"} */}
+                                                No Skill
                                             </p>
                                         </div>
                                         <div>
                                             <h3 className="text-sm text-gray-500">Time</h3>
                                             <p className="flex items-center gap-2">
                                                 <Clock size={16} />
-                                                {task.time}
+                                                {task.start_date}
                                             </p>
                                         </div>
                                         <div>
                                             <h3 className="text-sm text-gray-500">Duration</h3>
-                                            <p>{task.duration}</p>
+                                            <p>{task.estimated_duration} h</p>
                                         </div>
                                         <div>
                                             <h3 className="text-sm text-gray-500">Price</h3>
-                                            <p>{task.price}</p>
+                                            <p>{task.fee_per_hour} VNĐ</p>
                                         </div>
                                         <div>
                                             <h3 className="text-sm text-gray-500">Description</h3>

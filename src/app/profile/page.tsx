@@ -59,14 +59,12 @@ const ProfilePage = () => {
               <EditableField
                 type="mobile"
                 label="Phone"
+                defaultValue={user?.profile.phone_number || ''}
               />
               <EditableField
                 type="text"
-                label="Address"
-              />
-              <EditableField
-                type="text"
-                label="Country"
+                label="Date of Birth"
+                defaultValue={user?.profile.birth_date || ''}
               />
             </div>
 
@@ -99,6 +97,7 @@ const ProfilePage = () => {
               <EditableTextarea
                 type='text'
                 label="Description"
+                defaultValue={user?.profile.description || ''}
               />
             </div>
           </div>

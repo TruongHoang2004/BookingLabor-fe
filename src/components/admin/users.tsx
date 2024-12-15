@@ -1,12 +1,14 @@
 'use client'
 import React from "react";
+import { User as UserType } from "@/interface/user";  
+import { User as UserComponent } from "@nextui-org/react";
+import { useEffect, useState } from "react";
 import {
     Avatar,
     Card,
     CardBody,
     CardFooter,
     Button,
-    User,
     Dropdown,
     DropdownTrigger,
     DropdownMenu,
@@ -18,18 +20,10 @@ import {
     ModalFooter,
     useDisclosure
 } from "@nextui-org/react";
-import { Edit, Trash, Bell, Phone, MoreVertical, Mail, MapIcon, Ban, EyeIcon } from "lucide-react";
+import { Edit, Trash, Bell, Phone, MoreVertical, Mail, MapPin,  CalendarDaysIcon, Ban, EyeIcon } from "lucide-react";
 
 interface UserCardProps {
-    user: {
-        id: number;
-        name: string;
-        email: string;
-        avatar: string;
-        phone: string;
-        address: string;
-        role: string;
-    };
+    user: UserType;
     onView: (id: number) => void;
     onBlock: (id: number) => void;
     onHistory: (id: number) => void;
@@ -37,6 +31,22 @@ interface UserCardProps {
     onDelete: (id: number) => void;
     onNotify: (id: number) => void;
 }
+interface District {
+    name: string;
+    code: string;
+    division_type: string;
+    codename: string;
+    province_code: string;
+  }
+  
+  interface HanoiResponse {
+    name: string;
+    code: string;
+    division_type: string;
+    codename: string;
+    phone_code: number;
+    districts: District[];
+  }
 
 const UserCard: React.FC<UserCardProps> = ({
     user,
@@ -47,18 +57,47 @@ const UserCard: React.FC<UserCardProps> = ({
     onDelete,
     onNotify,
 }) => {
+    const [districts, setDistricts] = useState<District[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchDistricts = async () => {
+      try {
+        const response = await fetch('https://provinces.open-api.vn/api/p/01?depth=2');
+        const data: HanoiResponse = await response.json();
+        setDistricts(data.districts);
+      } catch (error) {
+        console.error('Error fetching districts:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchDistricts();
+  }, []);
+  console.log(districts);
+  const getDistrictNames = (codes: string): string => {
+    if (!codes) return 'No area specified';
+    
+    const districtCodes = codes.split(',')
+      .map(code => code.trim())
+      .map(code => parseInt(code)); // Convert to numbers
+      
+    const districtNames = districtCodes.map(code => 
+      districts.find(d => parseInt(d.code) === code)?.name || code.toString()
+    );
+    
+    return districtNames.join(', ');
+  };
     const {isOpen, onOpen, onClose} = useDisclosure();
 
     return (
         <Card className="w-full">
         <CardBody>
             <div className="flex justify-between items-start">
-                <User
-                    name={user.name}
+                <UserComponent
+                    name={user.profile.first_name + " " + user.profile.last_name}
                     description={user.email}
-                    avatarProps={{
-                        src: user.avatar,
-                    }}
+                    avatarProps={<Avatar name={user.profile.first_name + " " + user.profile.last_name} />}
                 />
                 <div className="flex items-center gap-2">
                     <Button onPress={onOpen}
@@ -81,14 +120,13 @@ const UserCard: React.FC<UserCardProps> = ({
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-4">
                                         <Avatar 
-                                            src={user.avatar} 
                                             className="w-20 h-20"
                                             showFallback
-                                            name={user.name}
+                                            name={user.profile.first_name + " " + user.profile.last_name}
                                         />
                                         <div>
                                             <h3 className="text-sm text-gray-500">Name</h3>
-                                            <p className="text-lg font-semibold">{user.name}</p>
+                                            <p className="text-lg font-semibold">{user.profile.first_name + " " + user.profile.last_name}</p>
                                         </div>
                                     </div>
 
@@ -103,19 +141,73 @@ const UserCard: React.FC<UserCardProps> = ({
                                         <h3 className="text-sm text-gray-500">Phone</h3>
                                         <p className="flex items-center gap-2">
                                             <Phone size={16} />
-                                            {user.phone}
+                                            {user.profile.phone_number}
                                         </p>
                                     </div>
                                     <div>
-                                        <h3 className="text-sm text-gray-500">Address</h3>
+                                        <h3 className="text-sm text-gray-500">Gender</h3>
                                         <p className="flex items-center gap-2">
-                                            <MapIcon size={16} />
-                                            {user.address}
+                                            {user.profile.gender}
                                         </p>
                                     </div>
                                     <div>
-                                        <h3 className="text-sm text-gray-500">Role</h3>
-                                        <p>{user.role}</p>
+                                        <h3 className="text-sm text-gray-500">Date_of_Birth</h3>
+                                        <p className="flex items-center gap-2">
+                                            <CalendarDaysIcon size={16} />
+                                            {user.profile.birth_date}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h3 className="text-sm text-gray-500">Work Area</h3>
+                                        {user.tasker ? (
+                                            <div className="space-y-2">
+                                                <p className="flex items-center gap-2">
+                                                    <MapPin size={16} />
+                                                    {isLoading 
+                                                        ? 'Loading districts...' 
+                                                        : getDistrictNames(user.tasker.work_area)
+            }
+                                                </p>
+                                                
+                                                <div>
+                                                    <h4 className="text-sm text-gray-500">Skills</h4>
+                                                    {user.tasker.skills && user.tasker.skills.length > 0 ? (
+                                                        <ul className="list-disc list-inside">
+                                                            {user.tasker.skills.map((skill, id) => (
+                                                                <li key={id} className="text-sm">{skill.name}</li>
+                                                            ))}
+                                                        </ul>
+                                                    ) : (
+                                                        <p className="text-sm text-gray-400">No skills listed</p>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                        <h3 className="text-gray-500">Experience</h3>
+                                                        <p>{user.tasker.experience || 'N/A'}</p>
+                                                    </div>
+                                                <div className="grid grid-cols-3 gap-2 text-sm">
+            
+                                                    <div>
+                                                        <h4 className="text-gray-500">Tasks Completed</h4>
+                                                        <p>{user.tasker.completed_tasks || 0}</p>
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="text-gray-500">Rating</h4>
+                                                        <p>{user.tasker.avg_rating?.toFixed(1) || 'No ratings'}</p>
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="text-gray-500">Rating Count</h4>
+                                                        <p>{user.tasker.rating_count || 0}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <p className="text-sm text-gray-400">Not a tasker</p>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <h3 className="text-sm text-gray-500">Description</h3>
+                                        <p>{user.profile.description}</p>
                                     </div>
                                 </div>
                                 </ModalBody>
@@ -176,8 +268,9 @@ const UserCard: React.FC<UserCardProps> = ({
             </div>
             </CardBody>
             <CardFooter>
-                <div className="flex items-center">
+                <div className="flex items-center gap-1">
                     <div className="text-small text-default-500">Role: {user.role}</div>
+                    {user.tasker && <div className="text-small text-default-500">TASKER</div>}
                 </div>
             </CardFooter>
         </Card>

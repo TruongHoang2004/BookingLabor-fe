@@ -47,10 +47,12 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen relative">
+      <div className='absolute inset-0'>
       <Background imageUrl='/img/register.jpg' />
-      <Card className="top-1/2 left-1/2 z-10 absolute mt-20 p-8 w-full max-w-2xl transform -translate-x-1/2 -translate-y-1/2">
-        <CardHeader className="flex flex-col gap-3 pt-2 pb-2">
+      </div>
+      <Card className="w-full max-w-2xl z-10 p-6"> 
+        <CardHeader className="flex flex-col gap-3 pt-2 pb-2 max-w-2xl">
           <h1 className="font-extrabold text-4xl">Register</h1>
           <p className="text-gray-600 text-sm">Create an account to get started.</p>
           <Divider orientation='horizontal' className="rounded-t-lg" />
