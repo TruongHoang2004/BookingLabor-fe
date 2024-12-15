@@ -13,6 +13,7 @@ export interface Profile {
   last_name: string;
   phone_number: string;
   gender: Gender;
+  birthdate: string;
   description: string | null;
   create_at: string;
   updated_at: string;
@@ -37,3 +38,4 @@ export interface User {
   profile: Profile;
   tasker: Tasker | null; // Tasker có thể là null nếu người dùng không phải là Tasker
 }
+

@@ -12,7 +12,7 @@ import { BiSolidCheckCircle } from "react-icons/bi";
 
 export default function TaskCard({ task }: { task: TaskCardforTasker  }) {
     const getImageSrc = () => {
-        const randomIndex = Math.floor(Math.random() * 3) + 1;
+        const randomIndex = 1;
         return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
     }  
 
@@ -30,9 +30,9 @@ export default function TaskCard({ task }: { task: TaskCardforTasker  }) {
                 <div className="w-full h-full relative">
                     <div className="absolute transform -translate-x-1/2 -translate-y-1/2 top-2/3 left-1/2 bg-gray-200 rounded-lg py-4 pl-2 w-11/12 flex items-center justify-between">
                         <div>
-                            <p className="truncate mb-2  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Description:</span>{task.description}</p>
-                            <p className="truncate mb-2  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{task.estimated_duration}$ /h</p>
-                            <p className="truncate  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">End date:</span>{task.fee_per_hour}</p>
+                            <p className="truncate mb-2 max-w-[290px] flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Description:</span>{task.description}</p>
+                            <p className="truncate mb-2 max-w-[290px] flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{task.fee_per_hour}VND /h</p>
+                            <p className="truncate max-w-[290px] flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">End date:</span>{task.end_date}</p>
                         </div>
                         <div>
                             <Tooltip content="View more details">
@@ -61,8 +61,8 @@ export default function TaskCard({ task }: { task: TaskCardforTasker  }) {
                 <div className="flex flex-col gap-y-3">
                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Description:</span>{task.description}</p>
                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">District:</span>{task.district}</p>
-                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Description:</span>Estimated Duration{task.estimated_duration}</p>
-                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{task.fee_per_hour}$ /h</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Estimated Duratio:</span>{task.estimated_duration}</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{task.fee_per_hour}VND /h</p>
                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Start Date:</span>{task.start_date}</p>
                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">End Date:</span>{task.end_date}</p>
                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Status:</span>{task.task_status}</p>

@@ -1,31 +1,22 @@
 import TaskCard from "./TaskCard";
 import { useState, useEffect } from "react";
-import TaskFilter from "./Filter";
+// import TaskFilter from "./Filter";
 import { taskService } from "@/service/task/task";
-import { Task } from "@/interface/task";
+import { TaskCardforTasker } from "@/interface/task";
 
 export default function TasksList() {
-    const [tasksList, setTasksList] = useState<Task[]>([]);
+    const [tasksList, setTasksList] = useState<TaskCardforTasker[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedCategory, setSelectedCategory] = useState('all');
-    const tasksPerPage = 24;
+    const tasksPerPage = 12;
 
     useEffect(() => {
         const fetchTasks = async () => {
-            try {
-                const response = await taskService.getMe();
-                console.log(response);
-                if (!response) {
-                    throw new Error('No data received');
-                }
-                setTasksList(Array.isArray(response) ? response : [response]);
-                setIsLoading(false);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to fetch tasks');
-                setIsLoading(false);
-            }
+            const response = await taskService.getMe();
+            setTasksList(response)
+            setIsLoading(false)
         };
 
         fetchTasks();
@@ -55,15 +46,9 @@ export default function TasksList() {
 
     return (
         <div className="flex flex-col items-center w-full">
-            <TaskFilter
-                selectedCategory={selectedCategory}
-                onCategoryChange={handleCategoryChange}
-                tasks={tasksList}
-            />
-
             {/* Tasks Grid */}
             <div className="flex justify-center items-center my-8 w-full">
-                <div className="gap-4 grid grid-cols-6 laptop:grid-cols-4 mini-laptop:grid-cols-4 mobile:grid-cols-1 tablet:grid-cols-2 w-full">
+                <div className="flex flex-wrap gap-x-10 gap-y-10">
                     {currentTasks.map(task => (
                         <TaskCard key={task.id} task={task} />
                     ))}

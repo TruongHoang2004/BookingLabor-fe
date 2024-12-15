@@ -10,10 +10,15 @@ import {Textarea} from "@nextui-org/react";
 import {CardFooter} from "@nextui-org/react";
 import {Button} from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { TaskFormDetails } from "@/interface/task";
+import { DateValue } from "@nextui-org/react";
+import { Skill } from "@/interface/user";
+import { SkillService } from "@/service/skill/skill";
+import { taskService } from "@/service/task/task";
 
 interface District {
   name: string;
-  code: string;
+  code: number;
   division_type: string;
   codename: string;
   wards: Ward[];
@@ -21,20 +26,39 @@ interface District {
 
 interface Ward {
   name: string;
-  code: string;
+  code: number;
   division_type: string;
   codename: string;
 }
 
+
 export default function TaskFormPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [task, setTask] = useState(searchParams.get('task') ?? "");
-    const [districts, setDistricts] = useState<District[]>([]);
-    const [wards, setWards] = useState<Ward[]>([]);
+    const [task, setTask] = useState(searchParams.get('task') ?? ""); // title
+    const [districts, setDistricts] = useState<District[]>([]); // district
+    const [wards, setWards] = useState<Ward[]>([]); // ward
     const [selectedDistrict, setSelectedDistrict] = useState("");
+    const [selectedWard, setSelectedWard] = useState("");
+    const [detailedAddress, setDetailedAddress] = useState("");
+    const [startDate, setStartDate] =  useState<DateValue | undefined>(undefined)
+    const [endDate, setEndDate] = useState<DateValue | undefined>(undefined)
+    const [estimatedDuration, setEstimatedDuration] = useState("");
+    const [expectedRate, setExpectedRate] = useState("");
+    const [taskDescription, setTaskDescription] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const [skills, setSkills] = useState<Skill[]>([])
+    const [chosenSkillId, setChosenSkillID] = useState(0);
+
+    const fetchSkills = async () => {
+        const response = await SkillService.getAllSkills();
+        setSkills(response)
+    }
+
+    useEffect(() => {
+        fetchSkills()
+    }, [])
 
     useEffect(() => {
         fetchDistricts();
@@ -54,12 +78,16 @@ export default function TaskFormPage() {
         }
     };
 
+    const handleSkillChange = (skillID: string) => {
+        setChosenSkillID(parseInt(skillID, 10))
+    }
+
     const handleDistrictChange = async (districtCode: string) => {
         setSelectedDistrict(districtCode);
         setIsLoading(true);
         try {
             const response = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`);
-            const data = await response.json();
+            const data = await response.json(); 
             setWards(data.wards);
         } catch (err) {
             setError("Failed to fetch wards");
@@ -69,27 +97,55 @@ export default function TaskFormPage() {
         }
     };
 
-    const validateForm = (): boolean => {
-        if (!task) {
-            setError("Please fill in all fields");
-            return false;
-        }
-        if (!selectedDistrict) {
-            setError("Please select a district");
-            return false;
-        }
-        return true;
+    const handleWardChange = (wardCode: string) => {
+        setSelectedWard(wardCode)
+    }
+
+    const handleStartDateChange = (date: DateValue | undefined) => {
+        setStartDate(date)
+    }
+
+    const handleEndDateChange = (date: DateValue | undefined) => {
+        setEndDate(date)
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!validateForm()) return;
-        try {
-            router.push('/tasks');
-        } catch (error) {
-            console.error('Error posting task:', error);
-            alert('Failed to post task. Please try again.');
+        const start_day = startDate?.day;
+        const start_month = startDate?.month;
+        const start_year = startDate?.year;
+        const end_day = endDate?.day;
+        const end_month = endDate?.month;
+        const end_year = endDate?.year;
+        let formattedStartDate;
+        let formattedEndDate;
+        if(start_day && start_day < 10) {
+            formattedStartDate = `${start_year}-${start_month}-0${start_day}`
         }
+        else {
+            formattedStartDate = `${start_year}-${start_month}-${start_day}`
+        }
+        if(end_day && end_day < 10) {
+            formattedEndDate = `${end_year}-${end_month}-0${end_day}`
+        }
+        else {
+           formattedEndDate = `${end_year}-${end_month}-${end_day}`
+        }
+        const taskForm: TaskFormDetails = {
+            title: task, 
+            description: taskDescription, 
+            skill_id: chosenSkillId,
+            district: selectedDistrict, 
+            ward: selectedWard, 
+            detail_address: detailedAddress, 
+            estimated_duration: parseInt(estimatedDuration,10), 
+            fee_per_hour: expectedRate, 
+            start_date: formattedStartDate, 
+            end_date: formattedEndDate, 
+        }
+        const response = await taskService.create(taskForm);
+        console.log(response)
+        router.push('/taskmanage')
     }
 
     return (
@@ -104,6 +160,23 @@ export default function TaskFormPage() {
                             <FormTaskTitle task={task} setTask={setTask} />
                         </CardHeader>
                         <CardBody className="flex flex-col gap-y-7 mt-5">   
+                            <div>
+                                <Select 
+                                    labelPlacement="outside" 
+                                    label="Select your Skill for this Task" 
+                                    placeholder="Choose Skill"
+                                    isRequired 
+                                    variant="faded"
+                                    isLoading={isLoading}
+                                    onChange={(e) => handleSkillChange(e.target.value)}
+                                > 
+                                    {skills.map((skill) => (
+                                        <SelectItem key={skill.id} value={skill.id}>
+                                            {skill.name}
+                                        </SelectItem>
+                                    ))}
+                                </Select>
+                            </div>
                             <div>
                                 <Select 
                                     labelPlacement="outside" 
@@ -130,6 +203,7 @@ export default function TaskFormPage() {
                                     variant="faded"
                                     isLoading={isLoading}
                                     isDisabled={!selectedDistrict}
+                                      onChange={(e) => handleWardChange(e.target.value)}
                                 > 
                                     {wards.map((ward) => (
                                         <SelectItem key={ward.code} value={ward.code}>
@@ -148,6 +222,7 @@ export default function TaskFormPage() {
                                     isRequired
                                     size="md"
                                     variant= "faded"
+                                    onChange={(e) => setDetailedAddress(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -157,6 +232,8 @@ export default function TaskFormPage() {
                                     isRequired
                                     size="md"
                                     variant= "faded"
+                                    value={startDate}
+                                    onChange={handleStartDateChange}
                                 />
                             </div>
                             <div>
@@ -166,6 +243,8 @@ export default function TaskFormPage() {
                                     isRequired
                                     size="md"
                                     variant= "faded"
+                                    value={endDate}
+                                    onChange={handleEndDateChange}
                                 />
                             </div>
                             <div>
@@ -177,6 +256,7 @@ export default function TaskFormPage() {
                                     isRequired
                                     size="md"
                                     variant= "faded"
+                                    onChange={(e) => setEstimatedDuration(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -188,6 +268,7 @@ export default function TaskFormPage() {
                                     isRequired
                                     size="md"
                                     variant= "faded"
+                                    onChange={(e) => setExpectedRate(e.target.value)}
                                 />
                             </div>
                             <div>
@@ -199,11 +280,12 @@ export default function TaskFormPage() {
                                     isRequired
                                     size="md"
                                     variant= "faded"
+                                    onChange={(e) => setTaskDescription(e.target.value)}
                                 />
                             </div>
                         </CardBody>
                         <CardFooter className="flex flex-col items-end gap-y-4 mt-5">
-                            <Button onClick={() => router.push('/tasks')} className="w-full" color="success" type="submit">POST YOUR TASK</Button>
+                            <Button className="w-full" color="success" type="submit">POST YOUR TASK</Button>
                             <p onClick={() => router.push('/services')} className="underline md:text-base x-sm:text-xs 2sm:text-[8px] cursor-pointer text-green-500">
                                 Looking for more services? Goes here.
                             </p>   
