@@ -7,9 +7,9 @@ import { TaskCardforTasker } from "@/interface/task";
 export default function TasksList() {
     const [tasksList, setTasksList] = useState<TaskCardforTasker[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [selectedCategory, setSelectedCategory] = useState('all');
+    const [selectedCategory] = useState('all');
     const tasksPerPage = 12;
 
     useEffect(() => {
@@ -37,12 +37,6 @@ export default function TasksList() {
     // Tính tổng số trang sau khi filter
     const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-
-    // Reset về trang 1 khi thay đổi filter
-    const handleCategoryChange = (category: string) => {
-        setSelectedCategory(category);
-        setCurrentPage(1);
-    };
 
     return (
         <div className="flex flex-col items-center w-full">
