@@ -10,7 +10,7 @@ const fetchDistricts = async () => {
     districts = data.districts;
   } catch (error) {
     toast.error('Lỗi khi tải dữ liệu quận huyện');
-    throw new Error('Failed to fetch districts');
+    throw error;
   }
 };
 

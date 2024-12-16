@@ -1,7 +1,6 @@
 // pages/admin/skills/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
 import { ScrollShadow } from "@nextui-org/react";
 import { SkillRequest, Skill } from "@/interface/skill";
 import SkillsCard from "@/components/admin/skills";
