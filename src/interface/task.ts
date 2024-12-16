@@ -69,7 +69,7 @@ export interface TaskFormDetails {
   title: string;
   skill_id: number;
   description: string;
-  district: string;
+  district: number;
   ward: string;
   detail_address: string;
   estimated_duration: number;

@@ -22,24 +22,7 @@ const LoginForm: React.FC = () => {
       // Dispatch login action with email and password
       const email = formData.email;
       const password = formData.password;
-      // console.log(email + "-" + password)
       await authService.login({ email, password });
-      // const { user, token } = response.data;
-      // console.log(response.data);
-      // const userInfo = {
-      //   id: user.id,
-      //   email: user.email,
-      //   fullname: user.fullname,
-      //   gender: user.gender,
-      //   date_of_birth: user.date_of_birth,
-      // };
-      // dispatch(setCredentials({
-      //   user: userInfo,
-      //   accessToken: token.access_token,
-      //   refreshToken: token.refresh_token
-      // }));
-      // alert("Đăng nhập thành công")
-      // Redirect to home page after successful login
       const response = await authService.login({ email, password });
       if (response.user.role === 'ADMIN') {
         router.push('/admin');
