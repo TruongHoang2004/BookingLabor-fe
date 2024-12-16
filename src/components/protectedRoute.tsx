@@ -10,18 +10,27 @@ interface ProtectedRouteProps {
   requireAdmin?: boolean;
 }
 
-export function ProtectedRoute({ children}: ProtectedRouteProps) {
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { isAuthenticated, user } = useAppSelector((state) => state.auth);
   const router = useRouter();
   const pathname = usePathname();
 
-  const adminRoutes = ['/admin','/admin/users', '/admin/tasks', '/admin/monitor'];
+  const adminRoutes = ['/admin', '/admin/users', '/admin/tasks', '/admin/monitor'];
+  const { isTasker } = useAppSelector((state) => state.auth);
+
 
   useEffect(() => {
     // Check authentication first
     if (!isAuthenticated) {
       router.replace('/login');
-      return;
+    }
+    else {
+      const path = window.location.pathname;
+      if (!isTasker) {
+        if (['/tasks', '/taskmanage'].includes(path)) {
+          router.replace('/becometasker');
+        }
+      }
     }
 
     // Check admin routes access
@@ -36,7 +45,7 @@ export function ProtectedRoute({ children}: ProtectedRouteProps) {
       router.replace('/admin');
       return;
     }
-  }, [isAuthenticated, user, router, pathname]);
+  }, [isAuthenticated, user, pathname, router]);
 
   // Show loading state while checking auth
   if (!isAuthenticated) {

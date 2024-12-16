@@ -1,10 +1,10 @@
 export interface Skill {
-    id: number;
-    name: string;
-    description: string;
-  }
-  
+  id: number;
+  name: string;
+  description: string;
+}
+
 export interface SkillRequest {
-    name: string;
-    description: string;
+  name: string;
+  description: string;
 }

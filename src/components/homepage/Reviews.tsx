@@ -67,7 +67,7 @@ const Reviews = () => {
                     <FaStar className='w-14 h-14 text-yellow-300 mr-2' />
                 </div>
                 <div className='flex justify-between items-center py-2'>
-                    <BiSolidLeftArrow className='x-sm:w-16 x-sm:h-16 2sm:w-10 2sm:h-10' onClick={handlePrev} />
+                    <BiSolidLeftArrow className='x-sm:w-16 x-sm:h-16 2sm:w-10 2sm:h-10 cursor-pointer' onClick={handlePrev} />
                     <div className='flex items-center justify-center gap-x-3'>
                         <Image width={80} height={80} src={currentReview.avatar} alt="avatar" className='2sm:w-10 2sm:h-10 x-sm:w-20 x-sm:h-20' />
                         <div>
@@ -75,7 +75,7 @@ const Reviews = () => {
                             <p className='x-sm:text-sm 2sm:text-xs font-semibold text-gray-500'>{currentReview.username}</p>
                         </div>
                     </div>
-                    <BiSolidRightArrow className='x-sm:w-16 x-sm:h-16 2sm:w-10 2sm:h-10' onClick={handleNext} />
+                    <BiSolidRightArrow className='x-sm:w-16 x-sm:h-16 2sm:w-10 2sm:h-10 cursor-pointer' onClick={handleNext} />
                 </div>
             </div>
         </div>

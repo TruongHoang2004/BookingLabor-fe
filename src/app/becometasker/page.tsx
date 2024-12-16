@@ -6,7 +6,7 @@ const BecomeTaskerPage = () => {
     return (
         <div>
             <ProtectedRoute>
-            <BecomeTaskerForm />
+                <BecomeTaskerForm />
             </ProtectedRoute>
         </div>
     );

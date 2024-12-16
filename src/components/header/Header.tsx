@@ -60,9 +60,10 @@ const Header: React.FC = () => {
     ]
 
     if (user?.role === Role.ADMIN) {
-        return(
+        return (
             <HeaderAdmin />
-        )}
+        )
+    }
 
     return (
         <header className="border-slate-300 py-4 border-b text-green-950 caret-transparent">

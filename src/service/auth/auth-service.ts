@@ -33,6 +33,7 @@ class AuthService {
 
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
+      console.log(process.env.NEXT_PUBLIC_API_BASE_URL + "/auth/login")
       const response = await api.post<LoginResponse>(
         "/auth/login",
         JSON.stringify(credentials)
@@ -48,6 +49,7 @@ class AuthService {
       return response.data;
     } catch (error) {
       console.log(error);
+      toast.error("Đăng nhập thất bại");
       this.handleAuthError(credentials);
       throw error;
     }

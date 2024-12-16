@@ -24,19 +24,71 @@ const RegisterForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
+  const isValidGmail = (email: string): boolean => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailPattern.test(email);
+  };
+
+  const isValidVietnamesePhone = (phone: string): boolean => {
+    const phonePattern = /^(0[2|3|5|7|8|9])+([0-9]{8})\b/;
+    return phonePattern.test(phone);
+  };
+
+  const isAtLeast16 = (birthDate: string): boolean => {
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+
+    return age >= 18;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { password, confirmPassword, ...registerData } = formData;
+      const { email, password, confirmPassword, ...registerData } = formData;
+
+      if (!isValidVietnamesePhone(formData.phone_number)) {
+        toast.error('Please enter a valid Vietnamese phone number', { duration: 2000 });
+        return;
+      }
+
+      if (!isValidGmail(formData.email)) {
+        toast.error('Please enter a valid Gmail address', { duration: 2000 });
+        return;
+      }
+      if (password.length < 8) {
+        toast.error('Password must be at least 8 characters long', { duration: 2000 });
+        return;
+      }
+
+      if (!isAtLeast16(formData.date_of_birth)) {
+        toast.error('You must be at least 18 years old to register', { duration: 2000 });
+        return;
+      }
+
+      if (!/[A-Z]/.test(password)) {
+        toast.error('Password must contain at least one uppercase letter', { duration: 2000 });
+        return;
+      }
+
+      if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        toast.error('Password must contain at least one special character', { duration: 2000 });
+        return;
+      }
 
       if (password !== confirmPassword) {
-        toast.error('Passwords do not match');
+        toast.error('Passwords do not match', { duration: 2000 });
         return;
       }
 
       await authService.register({
         ...registerData,
+        email,
         password
       });
 
@@ -47,18 +99,16 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen relative">
-      <div className='absolute inset-0'>
+    <div className="relative flex justify-center items-center min-h-screen">
       <Background imageUrl='/img/register.jpg' />
-      </div>
-      <Card className="w-full max-w-2xl z-10 p-6"> 
-        <CardHeader className="flex flex-col gap-3 pt-2 pb-2 max-w-2xl">
+      <Card className="top-1/2 left-1/2 z-10 absolute flex flex-col p-0 w-full max-w-2xl max-h-[90vh] transform -translate-x-1/2 -translate-y-1/2">
+        <CardHeader className="flex flex-col gap-3 px-8 pt-4">
           <h1 className="font-extrabold text-4xl">Register</h1>
-          <p className="text-gray-600 text-sm">Create an account to get started.</p>
+          <p className="text-gray-600 text-sm">Create your account to get started.</p>
           <Divider orientation='horizontal' className="rounded-t-lg" />
         </CardHeader>
-        <form onSubmit={handleSubmit}>
-          <CardBody className="gap-6">
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+          <CardBody className="gap-4 px-8 py-4 overflow-y-auto">
             <div className="flex gap-4">
               <Input
                 size="sm"
@@ -81,7 +131,7 @@ const RegisterForm: React.FC = () => {
             <Input
               size="sm"
               label="Email"
-              type="email"
+              type="text"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
@@ -170,7 +220,7 @@ const RegisterForm: React.FC = () => {
             </Select> */}
           </CardBody>
 
-          <CardFooter className="flex flex-col gap-4">
+          <CardFooter className="flex flex-col gap-4 px-8 py-4 border-t">
             <Button
               type="submit"
               color="primary"

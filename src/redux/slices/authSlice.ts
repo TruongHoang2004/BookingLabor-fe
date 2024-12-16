@@ -6,6 +6,7 @@ const initialState: AuthState = {
   accessToken: null,
   refreshToken: null,
   isAuthenticated: false,
+  isTasker: false,
 };
 
 const authSlice = createSlice({
@@ -18,22 +19,32 @@ const authSlice = createSlice({
       state.accessToken = token.access_token;
       state.refreshToken = token.refresh_token;
       state.isAuthenticated = true;
-
+      if (user.tasker) {
+        state.isTasker = true;
+      }
       // Save to localStorage
       localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("isTasker", state.isTasker.toString());
       localStorage.setItem("accessToken", token.access_token);
       localStorage.setItem("refreshToken", token.refresh_token);
+    },
+    setisTaskers: (state, action: PayloadAction<boolean>) => {
+      state.isTasker = action.payload;
+      localStorage.setItem("isTasker", "true");
     },
     logout: (state) => {
       state.user = null;
       state.accessToken = null;
       state.refreshToken = null;
+      state.isTasker = false;
       state.isAuthenticated = false;
 
       // Clear localStorage
       localStorage.removeItem("user");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      localStorage.removeItem("isTasker");
+
     },
     loginFailure: (state) => {
       console.log("Login failed");
@@ -45,6 +56,7 @@ const authSlice = createSlice({
         const storedUser = localStorage.getItem("user");
         const accessToken = localStorage.getItem("accessToken");
         const refreshToken = localStorage.getItem("refreshToken");
+        const isTasker = localStorage.getItem("isTasker");
 
         if (storedUser && accessToken && refreshToken) {
           state.user = JSON.parse(storedUser);
@@ -54,6 +66,9 @@ const authSlice = createSlice({
         } else {
           state.isAuthenticated = false;
         }
+        if (isTasker?.toString() === "true") {
+          state.isTasker = isTasker === "true";
+        }
       } catch (error) {
         console.error("Error initializing auth from localStorage:", error);
         state.isAuthenticated = false; // Xử lý trường hợp dữ liệu không hợp lệ
@@ -62,6 +77,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logout, initializeAuth, loginFailure } =
+export const { setCredentials, logout, initializeAuth, loginFailure, setisTaskers } =
   authSlice.actions;
 export default authSlice.reducer;

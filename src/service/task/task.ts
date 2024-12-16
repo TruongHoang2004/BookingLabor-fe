@@ -1,13 +1,11 @@
-import { RegisterRequest } from "@/interface/auth";
-import { User } from "@/interface/user";
 import toast from "react-hot-toast";
 import api from "../config";
-import { Task } from "@/interface/task";
+import { Task, TaskFormDetails } from "@/interface/task";
 
 export const taskService = {
-  async create(userData: RegisterRequest): Promise<User> {
+  async create(taskForm: TaskFormDetails): Promise<Task> {
     try {
-      const response = await api.post<User>("/tasks", userData);
+      const response = await api.post<Task>("/tasks", taskForm);
       toast.success("Tạo công việc thành công");
       return response.data;
     } catch (error) {
