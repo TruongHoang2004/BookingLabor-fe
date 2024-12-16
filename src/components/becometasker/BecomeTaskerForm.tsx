@@ -3,77 +3,87 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardBody, CardFooter, Divider, Button, Select, SelectItem, Textarea } from "@nextui-org/react";
 import Background from '../layout-background';
+import { TaskerForm } from '@/interface/becometasker';
+import { becomtaskerService } from '@/service/becometasker/becometasker';
+import { SkillService } from '@/service/skill/skill';
+import { Skill } from '@/interface/user';
+import { useAppSelector } from '@/redux/store';
 
-interface FormData {
-    skill: number[];
-    work_area: string[];
-    experience: string;
-}
 
 interface District {
     name: string;
-    code: string;
+    code: number;
     division_type: string;
     codename: string;
 }
 
 const BecomeTaskerForm: React.FC = () => {
-    const [formData, setFormData] = useState<FormData>({
-        skill: [],
+    const [formData] = useState<TaskerForm>({
+        skillIds: [],
         work_area: [],
         experience: ''
     });
-    
+
     const router = useRouter();
+    const handleSkillChange = (skillID: string) => {
+        //setChosenSkillID(parseInt(skillID, 10))
+        const arr: number[] = skillID.split(',').map(Number)
+        setChosenSkillID(arr);
+    }
 
-    const handleInputChange = (field: keyof FormData, value: string | number) => {
-        setFormData(prev => ({
-            ...prev,
-            [field]: value
-        }));
+    const handleWorkAreaChange = (work_area: string) => {
+        const arr: number[] = work_area.split(',').map(Number)
+        setChosenDistricts(arr)
     };
-
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        try {
-            router.push('/tasks/tasker');
-        } catch (error) {
-            console.error('Error becoming a tasker:', error);
-            alert('Registration failed. Please try again.');
+        const data: TaskerForm = {
+            skillIds: chosenSkillId,
+            work_area: chosenDistricts,
+            experience: experience
         }
+        const response = await becomtaskerService.create(data);
+        router.push(`/taskmanage`);
+        console.log(response);
+        //console.log(isTasker)
     };
 
-    const skills = [
-        { key: 1, value: "1", label: "Cleaning" },
-        { key: 2, value: "2", label: "Delivery" },
-        { key: 3, value: "3", label: "Handyman" },
-        { key: 4, value: "4", label: "Moving" },
-        { key: 5, value: "5", label: "Packing" },
-        { key: 6, value: "6", label: "Pet Sitting" },
-        { key: 7, value: "7", label: "Plumbing" },
-        { key: 8, value: "8", label: "Electrical" },
-        { key: 9, value: "9", label: "Gardening" },
-        { key: 10, value: "10", label: "Painting" }
-    ];
+    const [districts, setDistricts] = useState<District[]>([]);
+    const [chosenDistricts, setChosenDistricts] = useState<number[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [skills, setSkills] = useState<Skill[]>([])
+    const [chosenSkillId, setChosenSkillID] = useState<number[]>([]);
+    const [experience, setExperience] = useState("")
+    const { isTasker } = useAppSelector((state) => state.auth);
 
-    const [districts, setDistricts] = useState<District[]>([]); 
-    const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
         fetchDistricts();
-    }, []);
+        fetchSkills()
+        if (isTasker) {
+            router.push('/taskmanage');
+        }
+        setIsLoading(false);
+        console.log(isTasker)
+        return () => {
+            setIsLoading(false);
+        };
+    }, [isTasker, router]);
     const fetchDistricts = async () => {
-        setIsLoading(true);
         try {
             const response = await fetch('https://provinces.open-api.vn/api/p/01?depth=2');
             const data = await response.json();
             setDistricts(data.districts);
         } catch (err) {
             console.error(err);
-        } finally {
-            setIsLoading(false);
         }
     };
+
+
+    const fetchSkills = async () => {
+        const response = await SkillService.getAllSkills();
+        setSkills(response)
+    }
 
     return (
         <div className="relative flex min-h-screen items-center justify-center">
@@ -87,43 +97,42 @@ const BecomeTaskerForm: React.FC = () => {
 
                 <form onSubmit={handleSubmit}>
                     <CardBody className="gap-4">
-                        <Select 
+                        <Select
                             label="Choose your job"
                             placeholder="Select your skill"
-                            value={formData.skill.toString()}
+                            value={Array.from(new Set(formData.skillIds.map(String)))}
                             isRequired
                             selectionMode='multiple'
-                            onChange={(e) => handleInputChange('skill', parseInt(e.target.value))}
+                            onChange={(e) => handleSkillChange(e.target.value)}
                             className="text-lg"
                         >
-
                             {skills.map(skill => (
-                                <SelectItem key={skill.key} value={skill.value}>{skill.label}</SelectItem>
+                                <SelectItem key={skill.id} value={skill.id}>{skill.name}</SelectItem>
                             ))}
                         </Select>
-                        
-                        <Select 
+
+                        <Select
                             label="Choose your work area"
                             placeholder="Choose district"
-                            value={formData.work_area.toString()}
-                            isRequired 
+                            value={Array.from(new Set(formData.work_area.map(String)))}
+                            isRequired
                             selectionMode='multiple'
                             variant="faded"
                             isLoading={isLoading}
-                            onChange={(e) => handleInputChange('work_area', e.target.value)}
-                            > 
-                                {districts.map((district) => (
-                                    <SelectItem key={district.code} value={district.code}>
-                                        {district.name}
-                                    </SelectItem>
-                                ))}
-                            </Select>
-                        
+                            onChange={(e) => handleWorkAreaChange(e.target.value)}
+                        >
+                            {districts.map((district) => (
+                                <SelectItem key={district.code} value={district.code}>
+                                    {district.name}
+                                </SelectItem>
+                            ))}
+                        </Select>
+
                         <Textarea
                             label="Experience"
                             placeholder="Describe your experience"
-                            value={formData.experience}
-                            onChange={(e) => handleInputChange('experience', e.target.value)}
+                            value={experience}
+                            onChange={(e) => setExperience(e.target.value)}
                             className="text-lg"
                         />
                     </CardBody>
