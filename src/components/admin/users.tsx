@@ -3,6 +3,7 @@ import React from "react";
 import { User as UserType } from "@/interface/user";  
 import { User as UserComponent } from "@nextui-org/react";
 import { useEffect, useState } from "react";
+import { locationService } from "@/service/location/location";
 import {
     Avatar,
     Card,
@@ -31,22 +32,22 @@ interface UserCardProps {
     onDelete: (id: number) => void;
     onNotify: (id: number) => void;
 }
-interface District {
-    name: string;
-    code: string;
-    division_type: string;
-    codename: string;
-    province_code: string;
-  }
+// interface District {
+//     name: string;
+//     code: string;
+//     division_type: string;
+//     codename: string;
+//     province_code: string;
+//   }
   
-  interface HanoiResponse {
-    name: string;
-    code: string;
-    division_type: string;
-    codename: string;
-    phone_code: number;
-    districts: District[];
-  }
+//   interface HanoiResponse {
+//     name: string;
+//     code: string;
+//     division_type: string;
+//     codename: string;
+//     phone_code: number;
+//     districts: District[];
+//   }
 
 const UserCard: React.FC<UserCardProps> = ({
     user,
@@ -57,37 +58,57 @@ const UserCard: React.FC<UserCardProps> = ({
     onDelete,
     onNotify,
 }) => {
-    const [districts, setDistricts] = useState<District[]>([]);
+    const [districtNames, setDistrictNames] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDistricts = async () => {
+    const fetchDistrictNames = async () => {
       try {
-        const response = await fetch('https://provinces.open-api.vn/api/p/01?depth=2');
-        const data: HanoiResponse = await response.json();
-        setDistricts(data.districts);
+        if (user.tasker?.work_area) {
+          const names = await locationService.getDistrict(user.tasker.work_area);
+          setDistrictNames(names);
+        }
       } catch (error) {
-        console.error('Error fetching districts:', error);
+        console.error('Error fetching district names:', error);
+        setDistrictNames('Error loading districts');
       } finally {
         setIsLoading(false);
       }
     };
-    fetchDistricts();
-  }, []);
-  console.log(districts);
-  const getDistrictNames = (codes: string): string => {
-    if (!codes) return 'No area specified';
+
+    fetchDistrictNames();
+  }, [user.tasker?.work_area]);
+//     const [districts, setDistricts] = useState<District[]>([]);
+//   const [isLoading, setIsLoading] = useState(true);
+
+//   useEffect(() => {
+//     const fetchDistricts = async () => {
+//       try {
+//         const response = await fetch('https://provinces.open-api.vn/api/p/01?depth=2');
+//         const data: HanoiResponse = await response.json();
+//         setDistricts(data.districts);
+//       } catch (error) {
+//         console.error('Error fetching districts:', error);
+//       } finally {
+//         setIsLoading(false);
+//       }
+//     };
+//     fetchDistricts();
+//   }, []);
+//   console.log(districts);
+//   const getDistrictNames = (codes: string): string => {
+//     if (!codes) return 'No area specified';
     
-    const districtCodes = codes.split(',')
-      .map(code => code.trim())
-      .map(code => parseInt(code)); // Convert to numbers
+//     const districtCodes = codes.split(',')
+//       .map(code => code.trim())
+//       .map(code => parseInt(code)); // Convert to numbers
       
-    const districtNames = districtCodes.map(code => 
-      districts.find(d => parseInt(d.code) === code)?.name || code.toString()
-    );
+//     const districtNames = districtCodes.map(code => 
+//       districts.find(d => parseInt(d.code) === code)?.name || code.toString()
+//     );
     
-    return districtNames.join(', ');
-  };
+//     return districtNames.join(', ');
+//   };
     const {isOpen, onOpen, onClose} = useDisclosure();
 
     return (
@@ -165,7 +186,7 @@ const UserCard: React.FC<UserCardProps> = ({
                                                     <MapPin size={16} />
                                                     {isLoading 
                                                         ? 'Loading districts...' 
-                                                        : getDistrictNames(user.tasker.work_area)
+                                                        : districtNames || 'No area specified'
             }
                                                 </p>
                                                 

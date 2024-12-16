@@ -1,6 +1,8 @@
 'use client'
 import React from "react";
 import { Task } from "@/interface/task";
+import { useState, useEffect } from "react";
+import { locationService } from "@/service/location/location";
 import { 
     Card,
     CardBody,
@@ -35,6 +37,26 @@ const TaskCard: React.FC<TaskCardProps> = ({
     onDelete,
     onMessage
 }) => {
+    const [districtNames, setDistrictNames] = useState<string>('');
+    const [isLoading, setIsLoading] = useState(true);
+  
+    useEffect(() => {
+      const fetchDistrictNames = async () => {
+        try {
+          if (task.district) {
+            const names = await locationService.getDistrict(task.district);
+            setDistrictNames(names);
+          }
+        } catch (error) {
+          console.error('Error fetching district names:', error);
+          setDistrictNames('Error loading districts');
+        } finally {
+          setIsLoading(false);
+        }
+      };
+  
+      fetchDistrictNames();
+    }, [task.district]);
     const getStatusColor = (status: string) => {
         switch (status.toLowerCase()) {
             case "posting": return "warning";
@@ -61,19 +83,18 @@ const TaskCard: React.FC<TaskCardProps> = ({
                         </div>
                         <div className="flex items-center gap-2 text-gray-500">
                             <MapPin size={16} />
-                            <span>{task.district}</span>
+                            <span>{districtNames}</span>
                         </div>
                         <div className="flex items-center gap-4 text-gray-500">
                             <div className="flex items-center gap-2">
                                 <Clock size={16} />
-                                <span>{task.start_date}</span>
+                                <span> {new Date(task.start_date).toLocaleDateString()}</span>
                             </div>
                             <div>Duration: {task.estimated_duration} h </div>
                         </div>
                         <div className="flex items-center gap-2 text-gray-500">
                             <Badge size={16} />
-                            {/* <span> Skill: {task.skill.name}</span> */}
-                            <span>No Skill</span>
+                            <span> Skill: {task.skill?.name || "No Skill"}</span>
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -110,15 +131,15 @@ const TaskCard: React.FC<TaskCardProps> = ({
                                             <h3 className="text-sm text-gray-500">Area</h3>
                                             <p className="flex items-center gap-2">
                                                 <MapPin size={16} />
-                                                {task.district}
+                                                {isLoading ? 'Loading...' : districtNames || task.district}
                                             </p>
                                         </div>
                                         <div>
-                                            <h3 className="text-sm text-gray-500">Area</h3>
+                                            <h3 className="text-sm text-gray-500">Skill</h3>
                                             <p className="flex items-center gap-2">
                                                 <Badge size={16} />
-                                                {/* {task.skill.name || "No skill"} */}
-                                                No Skill
+                                                {task.skill?.name || "No skill"}
+                                              
                                             </p>
                                         </div>
                                         <div>

@@ -60,6 +60,14 @@ const Dashboard: React.FC = () => {
                             className="bg-primary text-white px-3 py-1 rounded-md text-sm">
                             Monitoring
                         </Button>
+                        <Button
+                            radius="full"
+                            color="success"
+                            variant="solid"
+                            onClick={() => { router.push('/admin/skills') }}
+                            className="bg-primary text-white px-3 py-1 rounded-md text-sm">
+                            Skills
+                        </Button>
                     </CardFooter>
                 </Card>
             </div>

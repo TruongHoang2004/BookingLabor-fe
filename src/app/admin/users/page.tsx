@@ -24,7 +24,6 @@ const UsersPage = () => {
     }
         try {
             const response = await userService.getAll();
-            console.log(response);
             if (!response) {
                 throw new Error('No data received');
             }

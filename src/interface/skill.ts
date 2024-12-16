@@ -4,3 +4,7 @@ export interface Skill {
     description: string;
   }
   
+export interface SkillRequest {
+    name: string;
+    description: string;
+}
