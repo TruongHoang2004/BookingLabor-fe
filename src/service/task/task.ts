@@ -1,13 +1,11 @@
-import { RegisterRequest } from "@/interface/auth";
-import { User } from "@/interface/user";
 import toast from "react-hot-toast";
 import api from "../config";
-import { Task } from "@/interface/task";
+import { Task, TaskCardforTasker, TaskFormDetails } from "@/interface/task";
 
 export const taskService = {
-  async create(userData: RegisterRequest): Promise<User> {
+  async create(taskForm: TaskFormDetails): Promise<Task> {
     try {
-      const response = await api.post<User>("/task", userData);
+      const response = await api.post<Task>("/tasks", taskForm);
       toast.success("Tạo công việc thành công");
       return response.data;
     } catch (error) {
@@ -15,13 +13,14 @@ export const taskService = {
       throw error;
     }
   },
-  async getMe(): Promise<Task[]> {
+  async getMe(): Promise<TaskCardforTasker[]> {
     try {
-      const response = await api.get<Task[]>("/task");
+      const response = await api.get<TaskCardforTasker[]>("/tasks");
       return response.data;
     } catch (error) {
       toast.error("Không thể lấy thông tin công việc");
       throw error;
     }
   },
+
 };

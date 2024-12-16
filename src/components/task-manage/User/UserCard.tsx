@@ -13,8 +13,7 @@ import { BiSolidCheckCircle } from "react-icons/bi";
 
 export default function UserCard({ userCard }: { userCard: TaskCardforUser}) {
     const getImageSrc = () => {
-        const randomIndex = Math.floor(Math.random() * 3) + 1;
-        return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
+        return `/img/taskmanage/task-manage-bg6.jpg`
     }  
     const [ taskDetailVisible, setTaskDetailVisible] = useState(false);
     const [ choseTaskerVisible, setChoseTaskerVisible] = useState(false);
@@ -58,8 +57,8 @@ export default function UserCard({ userCard }: { userCard: TaskCardforUser}) {
                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Description:</span>{userCard.description}</p>
                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">District:</span>{userCard.district}</p>
                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Street:</span>{userCard.street}</p>
-                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Description:</span>Estimated Duration{userCard.estimated_duration}</p>
-                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{userCard.fee_per_hour}$ /h</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Estimated Duration:</span>{userCard.estimated_duration} hour</p>
+                   <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{userCard.fee_per_hour}VND /h</p>
                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Start Date:</span>{userCard.start_date}</p>
                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">End Date:</span>{userCard.end_date}</p>
                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500"/><span className="text-emerald-700 font-semibold mr-1">Status:</span>{userCard.task_status}</p>
@@ -103,11 +102,11 @@ export default function UserCard({ userCard }: { userCard: TaskCardforUser}) {
             <CardBody className="p-0">
                 <div className="w-full h-full relative">
                     <div className="absolute transform -translate-x-1/2 -translate-y-1/2 top-2/3 left-1/2 bg-gray-200 rounded-lg py-4 pl-2 w-11/12 flex items-center justify-between">
-                        <div>
-                            <p className="truncate mb-2  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Description:</span>{userCard.description}</p>
-                            <p className="truncate mb-2  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">District:</span>{userCard.district}</p>
-                            <p className="truncate mb-2  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{userCard.fee_per_hour}$ /h</p>
-                            <p className="truncate  flex items-center"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">End date:</span>{userCard.end_date}</p>
+                        <div className="">
+                            <p className="truncate mb-2  flex items-center max-w-[290px] "><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Description:</span>{userCard.description}</p>
+                            <p className="truncate mb-2  flex items-center max-w-[290px]"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">District:</span>{userCard.district}</p>
+                            <p className="truncate mb-2  flex items-center max-w-[290px]"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{userCard.fee_per_hour}VND /h</p>
+                            <p className="truncate  flex items-center max-w-[290px]"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">End date:</span>{userCard.end_date}</p>
                         </div>
                         <div>
                             <Tooltip content="View more details">
