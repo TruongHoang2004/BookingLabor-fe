@@ -101,14 +101,14 @@ const RegisterForm: React.FC = () => {
   return (
     <div className="relative flex justify-center items-center min-h-screen">
       <Background imageUrl='/img/register.jpg' />
-      <Card className="top-1/2 left-1/2 z-10 absolute p-0 w-full max-w-2xl max-h-[90vh] transform -translate-x-1/2 -translate-y-1/2 flex flex-col">
-        <CardHeader className="flex flex-col gap-3 pt-4 px-8">
+      <Card className="top-1/2 left-1/2 z-10 absolute flex flex-col p-0 w-full max-w-2xl max-h-[90vh] transform -translate-x-1/2 -translate-y-1/2">
+        <CardHeader className="flex flex-col gap-3 px-8 pt-4">
           <h1 className="font-extrabold text-4xl">Register</h1>
           <p className="text-gray-600 text-sm">Create your account to get started.</p>
           <Divider orientation='horizontal' className="rounded-t-lg" />
         </CardHeader>
-        <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
-          <CardBody className="gap-4 overflow-y-auto px-8 py-4">
+        <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+          <CardBody className="gap-4 px-8 py-4 overflow-y-auto">
             <div className="flex gap-4">
               <Input
                 size="sm"

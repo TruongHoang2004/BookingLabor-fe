@@ -13,6 +13,7 @@ import {
     Activity,
     Database
 } from "lucide-react";
+import { ProtectedRoute } from '@/components/protectedRoute';
 
 interface MonitoringMetrics {
     pageLoadTime: number;
@@ -90,6 +91,7 @@ const systemEvents: SystemEvent[] = [
         }
     ];
     return (
+        <ProtectedRoute>
         <div className="p-8 bg-gray-50 min-h-screen">
             <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">
                 Website Monitoring Dashboard
@@ -257,7 +259,7 @@ const systemEvents: SystemEvent[] = [
                 </Card>
             </div>
         </div>
-
+     </ProtectedRoute>                       
         
     );
 };

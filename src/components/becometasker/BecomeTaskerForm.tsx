@@ -6,8 +6,8 @@ import Background from '../layout-background';
 import { TaskerForm } from '@/interface/becometasker';
 import { becomtaskerService } from '@/service/becometasker/becometasker';
 import { SkillService } from '@/service/skill/skill';
-import { Skill } from '@/interface/user';
 import { useAppSelector } from '@/redux/store';
+import { Skill } from '@/interface/skill';
 
 
 interface District {
@@ -86,12 +86,12 @@ const BecomeTaskerForm: React.FC = () => {
     }
 
     return (
-        <div className="relative flex min-h-screen items-center justify-center">
+        <div className="relative flex justify-center items-center min-h-screen">
             <Background imageUrl='./img/becometasker.jpg' />
-            <Card className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl p-8 z-10">
-                <CardHeader className="flex flex-col gap-3 pb-2 pt-2">
-                    <h1 className="text-4xl font-extrabold">Become a Tasker</h1>
-                    <p className="text-sm text-gray-600">Be flexible, Be helpful</p>
+            <Card className="top-1/2 left-1/2 z-10 absolute p-8 w-full max-w-2xl transform -translate-x-1/2 -translate-y-1/2">
+                <CardHeader className="flex flex-col gap-3 pt-2 pb-2">
+                    <h1 className="font-extrabold text-4xl">Become a Tasker</h1>
+                    <p className="text-gray-600 text-sm">Be flexible, Be helpful</p>
                     <Divider orientation='horizontal' className="rounded-t-lg" />
                 </CardHeader>
 

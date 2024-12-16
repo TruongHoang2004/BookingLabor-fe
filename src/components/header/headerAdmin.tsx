@@ -10,7 +10,7 @@ import Image from "next/image";
 import { FaBell } from "react-icons/fa6";
 import { Badge } from "@nextui-org/react";
 import { useAppSelector } from '@/redux/store';
-import { useAppDispatch } from '../redux/store';
+import { useAppDispatch } from '../../redux/store';
 import { logout } from '@/redux/slices/authSlice';
 
 const lobster = Lobster({
@@ -23,11 +23,10 @@ const kanit = Kanit({
     weight: ['400', '500', '600', '700'],
     display: 'swap',
 })
-// lg: 1024 -> 
-const Header: React.FC = () => {
+
+const HeaderAdmin: React.FC = () => {
     const { isAuthenticated, user } = useAppSelector((state) => state.auth);
     let isLoggedIn = false;
-    //const user = {fullname: "jqnwd", email: "aodwnmoiamdio"}
     if (isAuthenticated && user) {
         isLoggedIn = true;
     }
@@ -39,7 +38,6 @@ const Header: React.FC = () => {
         } else {
             router.push(path);
         }
-
     }
     const dispatch = useAppDispatch();
     const handleLogOut = () => {
@@ -60,70 +58,33 @@ const Header: React.FC = () => {
     return (
         <header className="border-slate-300 py-4 border-b text-green-950 caret-transparent">
             <div className="flex justify-between items-center m-auto w-10/12">
-                <h1 className={`${lobster.className} sm:text-5xl 2sm:text-2xl h-full flex items-center cursor-pointer `} onClick={() => router.push('/')}>
+                <h1 className={`${lobster.className} sm:text-5xl 2sm:text-2xl h-full flex items-center cursor-pointer `} onClick={() => router.push('/admin')}>
                     <p>DREAM LABOUR</p>
                 </h1>
-                {/* Nếu chưa login thì hiển thị div này ~ màn hình to*/}
                 <div className={`${isLoggedIn ? 'hidden' : '1100:block 2sm:hidden'}`}>
                     <div className={`${kanit.className} lg:text-lg sm:text-sm font-normal flex h-5 items-center space-x-4 justify-between gap-x-2`}>
-                        <p onClick={() => router.push('/services')} className="hover:underline no-underline cursor-pointer">Services</p>
-                        <Divider orientation="vertical" className="bg-lime-500" />
-                        <p onClick={() => router.push('/login')} className="hover:underline no-underline cursor-pointer">Login / Register</p>
-                        <Divider orientation="vertical" className="bg-lime-500" />
-                        <p onClick={() => router.push('/becometasker')} className="hover:bg-emerald-100 px-3 py-1 border border-lime-500 rounded-xl font-medium hover:underline no-underline cursor-pointer">Become a Tasker</p>
+                        <p onClick={() => router.push('/admin/login')} className="hover:underline no-underline cursor-pointer">Login</p>
                     </div>
                 </div>
-                {/* Nếu chưa login thì hiển thị div này ~ màn hình nhỏ*/}
                 <div className={`${isLoggedIn ? 'hidden' : 'sm:block 1100:hidden'}`}>
                     <Dropdown>
                         <DropdownTrigger>
-                            <Button
-                                className="bg-white font-semibold"
-                            >
+                            <Button className="bg-white font-semibold">
                                 <IoMenu className="text-3xl text-emerald-700" />
                             </Button>
                         </DropdownTrigger>
-                        <DropdownMenu
-                            aria-label="Action event example"
-                            onAction={(key) => handleEvent(key.toString())}
-                        >
-                            <DropdownItem key="services">Services</DropdownItem>
+                        <DropdownMenu aria-label="Action event example" onAction={(key) => handleEvent(key.toString())}>
                             <DropdownItem key="login">Login</DropdownItem>
-                            <DropdownItem key="register">Sign-up</DropdownItem>
-                            <DropdownItem key="becometasker">
-                                Register as a Tasker
-                            </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>
                 </div>
-                {/* Nếu login vào rồi thì hiển thị giao diện khi này và không hiển thị giao diện mặc định nữa ~ Giao diện khi màn còn to*/}
                 <div className={`${isLoggedIn ? '1100:block 2sm:hidden' : 'hidden'}`}>
                     <div className={`${kanit.className} lg:text-lg sm:text-sm font-normal flex h-5 items-center space-x-4 justify-between gap-x-2`}>
-                        <p onClick={() => router.push('/services')} className="hover:underline no-underline cursor-pointer">Services</p>
+                        <p onClick={() => router.push('/admin/users')} className="hover:underline no-underline cursor-pointer">User Management</p>
                         <Divider orientation="vertical" className="bg-lime-500" />
-                        <p onClick={() => router.push('/tasks')} className="hover:underline no-underline cursor-pointer">Task Manage</p>
+                        <p onClick={() => router.push('/admin/tasks')} className="hover:underline no-underline cursor-pointer">Task Management</p>
                         <Divider orientation="vertical" className="bg-lime-500" />
-                        <Popover placement="bottom">
-                            <PopoverTrigger>
-                                <p className="hover:underline no-underline cursor-pointer">My Profile</p>
-                            </PopoverTrigger>
-                            <PopoverContent>
-                                <div className="flex flex-col gap-y-5 px-1 py-2">
-                                    <div className="flex gap-x-3">
-                                        <Image src="/img/header/cool-ava.jpg" width={60} height={30} className="rounded" alt="ava" />
-                                        <div>
-                                            <p className="font-semibold text-lg">{"Đinh Kiên"}</p>
-                                            <p className="font-medium text-emerald-600 t">{user?.email}</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex justify-center items-center space-x-2 h-5">
-                                        <p onClick={() => router.push('/becometasker')} className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold hover:underline no-underline cursor-pointer">Register as a Tasker</p>
-                                        <Divider orientation="vertical" className="bg-emerald-800" />
-                                        <p onClick={() => router.push('/profile')} className="bg-emerald-100 ml-2 px-3 py-1 border border-lime-500 rounded font-semibold hover:underline no-underline cursor-pointer">Edit Your Profile</p>
-                                    </div>
-                                </div>
-                            </PopoverContent>
-                        </Popover>
+                        <p onClick={() => router.push('/admin/skills')} className="hover:underline no-underline cursor-pointer">Skill Management</p>
                         <Divider orientation="vertical" className="bg-lime-500" />
                         <Popover placement="bottom">
                             <PopoverTrigger>
@@ -152,7 +113,6 @@ const Header: React.FC = () => {
                         <p onClick={handleLogOut} className="hover:underline no-underline cursor-pointer">Log Out</p>
                     </div>
                 </div>
-                {/* Nếu login vào rồi thì hiển thị giao diện này và không hiển thị giao diện mặc định nữa ~ Giao diện khi màn nhỏ đi*/}
                 <div className={`${isLoggedIn ? 'sm:block 1100:hidden' : 'hidden'}`}>
                     <div className="flex items-center gap-x-5">
                         <Popover placement="bottom">
@@ -179,23 +139,15 @@ const Header: React.FC = () => {
                         </Popover>
                         <Dropdown>
                             <DropdownTrigger>
-                                <Button
-                                    className="bg-white font-semibold"
-                                >
+                                <Button className="bg-white font-semibold">
                                     <IoMenu className="text-3xl text-emerald-700" />
                                 </Button>
                             </DropdownTrigger>
-                            <DropdownMenu
-                                aria-label="Action event example"
-                                onAction={(key) => handleEvent(key.toString())}
-                            >
-                                <DropdownItem key="services">Services</DropdownItem>
-                                <DropdownItem key="tasks">Task Manage</DropdownItem>
+                            <DropdownMenu aria-label="Action event example" onAction={(key) => handleEvent(key.toString())}>
+                                <DropdownItem key="dashboard">Dashboard</DropdownItem>
+                                <DropdownItem key="users">User Management</DropdownItem>
                                 <DropdownItem key="profile">My Profile</DropdownItem>
-                                <DropdownItem key="become-tasker">Become Tasker</DropdownItem>
-                                <DropdownItem key="logout">
-                                    Log Out
-                                </DropdownItem>
+                                <DropdownItem key="logout">Log Out</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
                     </div>
@@ -205,4 +157,4 @@ const Header: React.FC = () => {
     )
 }
 
-export default Header;
+export default HeaderAdmin;

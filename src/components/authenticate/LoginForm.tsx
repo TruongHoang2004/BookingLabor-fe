@@ -40,7 +40,12 @@ const LoginForm: React.FC = () => {
       // }));
       // alert("Đăng nhập thành công")
       // Redirect to home page after successful login
-      router.push('/');
+      const response = await authService.login({ email, password });
+      if (response.user.role === 'ADMIN') {
+        router.push('/admin');
+      } else {
+        router.push('/');
+      }
     } catch (error) {
       console.error('Error logging in:', error);
     }

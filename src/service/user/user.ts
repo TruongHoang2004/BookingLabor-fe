@@ -23,4 +23,14 @@ export const userService = {
       throw error;
     }
   },
+
+  async getAll(): Promise<User[]> {
+    try {
+      const response = await api.get<User[]>("/users");
+      return response.data;
+    } catch (error) {
+      toast.error("Không thể lấy thông tin người dùng");
+      throw error;
+    }
+  }
 };

@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import api from "../config";
-import { Task, TaskCardforTasker, TaskFormDetails } from "@/interface/task";
+import { Task, TaskFormDetails } from "@/interface/task";
 
 export const taskService = {
   async create(taskForm: TaskFormDetails): Promise<Task> {
@@ -13,14 +13,13 @@ export const taskService = {
       throw error;
     }
   },
-  async getMe(): Promise<TaskCardforTasker[]> {
+  async getMe(): Promise<Task[]> {
     try {
-      const response = await api.get<TaskCardforTasker[]>("/tasks");
+      const response = await api.get<Task[]>("/tasks");
       return response.data;
     } catch (error) {
       toast.error("Không thể lấy thông tin công việc");
       throw error;
     }
   },
-
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import BecomeTaskerForm from '../../components/becometasker/BecomeTaskerForm';
-import { ProtectedRoute } from '../../components/protectedRoute';
+import { ProtectedRoute } from '@/components/protectedRoute';
 
 const BecomeTaskerPage = () => {
     return (

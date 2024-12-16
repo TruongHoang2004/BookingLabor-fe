@@ -1,11 +1,6 @@
 import { Gender } from "@/enum/gender";
 import { Role } from "@/enum/role";
-
-export interface Skill {
-  id: number;
-  name: string;
-  description: string;
-}
+import { Skill } from "./skill";
 
 export interface Profile {
   id: number;
@@ -13,7 +8,7 @@ export interface Profile {
   last_name: string;
   phone_number: string;
   gender: Gender;
-  birthdate: string;
+  birth_date: string;
   description: string | null;
   create_at: string;
   updated_at: string;
@@ -21,7 +16,7 @@ export interface Profile {
 
 export interface Tasker {
   id: number;
-  word_area: string;
+  work_area: string;
   experience: string;
   completed_tasks: number;
   avg_rating: number;
@@ -38,4 +33,3 @@ export interface User {
   profile: Profile;
   tasker: Tasker | null; // Tasker có thể là null nếu người dùng không phải là Tasker
 }
-

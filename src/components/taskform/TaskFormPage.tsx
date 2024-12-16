@@ -12,10 +12,10 @@ import { Button } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import { TaskFormDetails } from "@/interface/task";
 import { DateValue } from "@nextui-org/react";
-import { Skill } from "@/interface/user";
 import { SkillService } from "@/service/skill/skill";
 import { taskService } from "@/service/task/task";
 import toast from 'react-hot-toast';
+import { Skill } from "@/interface/skill";
 
 interface District {
     name: string;
@@ -219,12 +219,12 @@ export default function TaskFormPage() {
 
     return (
         <div className="my-10">
-            <p className="font-bold md:text-3xl x-sm:text-lg 2sm:text-sm text-emerald-900 text-center">
+            <p className="font-bold text-center text-emerald-900 x-sm:text-lg 2sm:text-sm md:text-3xl">
                 Provide us with more details of your task here
             </p>
             <div>
                 <form onSubmit={handleSubmit}>
-                    <Card className="w-10/12 m-auto py-4 mt-6 px-10">
+                    <Card className="m-auto mt-6 px-10 py-4 w-10/12">
                         <CardHeader>
                             <FormTaskTitle task={task} setTask={setTask} />
                         </CardHeader>
@@ -355,7 +355,7 @@ export default function TaskFormPage() {
                         </CardBody>
                         <CardFooter className="flex flex-col items-end gap-y-4 mt-5">
                             <Button className="w-full" color="success" type="submit">POST YOUR TASK</Button>
-                            <p onClick={() => router.push('/services')} className="underline md:text-base x-sm:text-xs 2sm:text-[8px] cursor-pointer text-green-500">
+                            <p onClick={() => router.push('/services')} className="text-green-500 x-sm:text-xs 2sm:text-[8px] md:text-base underline cursor-pointer">
                                 Looking for more services? Goes here.
                             </p>
                         </CardFooter>

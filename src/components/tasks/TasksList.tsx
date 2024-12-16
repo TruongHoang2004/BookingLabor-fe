@@ -2,10 +2,11 @@ import TaskCard from "./TaskCard";
 import { useState, useEffect } from "react";
 // import TaskFilter from "./Filter";
 import { taskService } from "@/service/task/task";
-import { TaskCardforTasker } from "@/interface/task";
+import LoadingSpinner from "../LoadingSpinner";
+import { Task } from "@/interface/task";
 
 export default function TasksList() {
-    const [tasksList, setTasksList] = useState<TaskCardforTasker[]>([]);
+    const [tasksList, setTasksList] = useState<Task[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
@@ -22,7 +23,7 @@ export default function TasksList() {
         fetchTasks();
     }, []);
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <div><LoadingSpinner /></div>;
     if (error) return <div>Error: {error}</div>;
     // Filter tasks theo category
     const filteredTasks = selectedCategory === 'all'
