@@ -1,29 +1,37 @@
 'use client'
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
-import { 
-  Card, 
-  CardHeader, 
-  CardBody, 
-  CardFooter, 
-  Input, 
-  Select, 
-  SelectItem, 
-  DateInput, 
-  Textarea, 
-  Button, 
-  DateValue 
-} from "@nextui-org/react";
 import FormTaskTitle from "./FormTaskTitle";
+import { Card, CardHeader, CardBody } from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
+import { Select, SelectItem } from "@nextui-org/react";
+import { DateInput } from "@nextui-org/react";
+import { Textarea } from "@nextui-org/react";
+import { CardFooter } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import { TaskFormDetails } from "@/interface/task";
-import { Skill } from "@/interface/skill";
+import { DateValue } from "@nextui-org/react";
 import { SkillService } from "@/service/skill/skill";
 import { taskService } from "@/service/task/task";
-import toast from "react-hot-toast";
-import { locationService } from "@/service/location/location1";
-import { District, Ward } from "@/interface/location1";
+import toast from 'react-hot-toast';
+import { Skill } from "@/interface/skill";
 
-const locations = new locationService();
+interface District {
+    name: string;
+    code: number;
+    division_type: string;
+    codename: string;
+    wards: Ward[];
+}
+
+interface Ward {
+    name: string;
+    code: number;
+    division_type: string;
+    codename: string;
+}
+
 
 export default function TaskFormPage() {
     const router = useRouter();
@@ -31,7 +39,7 @@ export default function TaskFormPage() {
     const [task, setTask] = useState(searchParams.get('task') ?? ""); // title
     const [districts, setDistricts] = useState<District[]>([]); // district
     const [wards, setWards] = useState<Ward[]>([]); // ward
-    const [selectedDistrict, setSelectedDistrict] = useState(0);
+    const [selectedDistrict, setSelectedDistrict] = useState("");
     const [selectedWard, setSelectedWard] = useState("");
     const [detailedAddress, setDetailedAddress] = useState("");
     const [startDate, setStartDate] = useState<DateValue | undefined>(undefined)
@@ -51,24 +59,37 @@ export default function TaskFormPage() {
 
     useEffect(() => {
         fetchSkills()
-        fetchDistricts();
     }, [])
 
-    const fetchDistricts = () => {
-        const D: District[] = locations.getAllDistricts();
-        setDistricts(D);
+    useEffect(() => {
+        fetchDistricts();
+    }, []);
+
+    const fetchDistricts = async () => {
+        setIsLoading(true);
+        try {
+            const response = await fetch('https://provinces.open-api.vn/api/p/01?depth=2');
+            const data = await response.json();
+            setDistricts(data.districts);
+        } catch (err) {
+            setError("Failed to fetch districts");
+            console.error(err);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const handleSkillChange = (skillID: string) => {
         setChosenSkillID(parseInt(skillID, 10))
     }
 
-    const handleDistrictChange =  (districtCode: string) => {
-        setSelectedDistrict(parseInt(districtCode,10));
+    const handleDistrictChange = async (districtCode: string) => {
+        setSelectedDistrict(districtCode);
         setIsLoading(true);
         try {
-            const w: Ward[] = locations.getWardsInDistrict(parseInt(districtCode, 10));
-            setWards(w);
+            const response = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`);
+            const data = await response.json();
+            setWards(data.wards);
         } catch (err) {
             setError("Failed to fetch wards");
             console.error(err);
@@ -159,43 +180,31 @@ export default function TaskFormPage() {
             toast.error("Please provide a task description.", { duration: 2000 });
             return;
         }
-        let start_day;
-        let start_month;
+        const start_day = startDate?.day;
+        const start_month = startDate?.month;
         const start_year = startDate?.year;
-        let end_day;
-        let end_month;
+        const end_day = endDate?.day;
+        const end_month = endDate?.month;
         const end_year = endDate?.year;
-        if (startDate?.day && startDate?.day < 10) {
-            start_day = `0${startDate?.day}`
+        let formattedStartDate;
+        let formattedEndDate;
+        if (start_day && start_day < 10) {
+            formattedStartDate = `${start_year}-${start_month}-0${start_day}`
         }
         else {
-           start_day = `${startDate?.day}`
+            formattedStartDate = `${start_year}-${start_month}-${start_day}`
         }
-        if (endDate?.day && endDate?.day < 10) {
-            end_day = `0${endDate?.day}`
-        }
-        else {
-           end_day = `${endDate?.day}`
-        }
-        if (startDate?.month && startDate?.month < 10) {
-            start_month = `0${startDate?.month}`
+        if (end_day && end_day < 10) {
+            formattedEndDate = `${end_year}-${end_month}-0${end_day}`
         }
         else {
-            start_month = `${startDate?.month}`
+            formattedEndDate = `${end_year}-${end_month}-${end_day}`
         }
-        if (endDate?.month && endDate?.month < 10) {
-            end_month = `0${endDate?.month}`
-        }
-        else {
-            end_month = `${endDate?.month}`
-        }
-        const formattedStartDate = `${start_year}-${start_month}-${start_day}`
-        const formattedEndDate = `${end_year}-${end_month}-${end_day}`
         const taskForm: TaskFormDetails = {
             title: task,
             description: taskDescription,
             skill_id: chosenSkillId,
-            district: selectedDistrict,
+            district: parseInt(selectedDistrict, 10),
             ward: selectedWard,
             detail_address: detailedAddress,
             estimated_duration: parseInt(estimatedDuration, 10),
@@ -203,7 +212,6 @@ export default function TaskFormPage() {
             start_date: formattedStartDate,
             end_date: formattedEndDate,
         }
-         //console.log(taskForm)
         const response = await taskService.create(taskForm);
         console.log(response)
         router.push('/taskmanage')

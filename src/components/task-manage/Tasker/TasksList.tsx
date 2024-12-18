@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Task } from "@/interface/task";
+import { TaskCardforTasker } from "@/interface/task";
 import { taskService } from "@/service/task/task";
 import TaskCard from "./TaskCard";
 
 export default function TasksList() {
-    const [tasksList, setTasksList] = useState<Task[]>([]); // State để lưu danh sách task
+    const [tasksList, setTasksList] = useState<TaskCardforTasker[]>([]); // State để lưu danh sách task
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);

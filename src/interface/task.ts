@@ -29,7 +29,7 @@ export interface TaskCardforTasker {
 export interface Tasker {
   id: number;
   name: string;
-  skills: Skill[];
+  skill: string[];
   experience: string;
 }
 
@@ -69,8 +69,6 @@ export interface Task {
   updated_at: string | null; // ISO timestamp
   task_status: string; // Task status (e.g., PENDING)
   skill: Skill | null; // Nested skill object
-  tasker: Tasker | null;
-  taskers: Tasker[] | null;
 }
 
 export interface TaskFormDetails {

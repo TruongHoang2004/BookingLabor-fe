@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import api from "../config";
-import { Task, TaskFormDetails } from "@/interface/task";
+import { Task, TaskFormDetails, TaskCardforTasker } from "@/interface/task";
 
 export const taskService = {
   async create(taskForm: TaskFormDetails): Promise<Task> {
@@ -19,25 +19,6 @@ export const taskService = {
       return response.data;
     } catch (error) {
       toast.error("Không thể lấy thông tin công việc");
-      throw error;
-    }
-  },
-
-  async getAllTasksCreatedByUser(): Promise<Task[]> {
-    try {
-      const response = await api.get<Task[]>("/tasks/user");
-      return response.data;
-    } catch (error) {
-      toast.error("Không thể lấy thông tin công việc");
-      throw error;
-    }
-  },
-  async userChooseTasker(task_id: number , tasker_id: number) {
-    try {
-      await api.patch<Task>(`/tasks/${task_id}/choose/${tasker_id}`);
-      toast.success("Chọn Người làm việc thành công");
-    } catch (error) {
-      toast.error("Không thể chọn người làm này! Hãy thử lại sau");
       throw error;
     }
   },
@@ -66,9 +47,13 @@ export const taskService = {
     }
   },
 
-  async getTaskerTasks(): Promise<Task[]> {
+
+
+
+
+  async getTaskerTasks(): Promise<TaskCardforTasker[]> {
     try {
-      const response = await api.get<Task[]>("/tasks/tasker");
+      const response = await api.get<TaskCardforTasker[]>("/tasks/tasker");
       console.log(response.data);
       return response.data;
     } catch (error) {

@@ -101,7 +101,7 @@ const TaskOptions: React.FC = () => {
                 <Image src="/img/home_img/home_page_img_8.png" alt="Image 4" width={120} height={200} className='absolute top-0 right-0 lg:block 2sm:hidden'/>
                 <div className= {`w-8/12 m-auto mt-8 ${options_details[activeOption - 1].bg_color} rounded-2xl p-8 md:pl-20`}>
                     <div className='w-11/12 m-auto md:relative md:h-[430px] 2sm:h-auto'>
-                        <Image priority src={options_details[activeOption -  1].bg_img_src} alt="" className={`object-cover rounded-xl md:block 2sm:hidden`} fill />
+                        <Image src={options_details[activeOption -  1].bg_img_src} alt="" className={`object-cover rounded-xl md:block 2sm:hidden`} fill />
                         <div className='py-8 pl-8 pr-4 rounded-xl md:absolute bg-slate-100 md:w-80 2sm:w-full md:h-72 2sm:h-full md:top-1/2 md:left-24 2sm:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2'>
                             <div className=''>
                                 <p className='md:text-3xl sm:text-2xl 2sm:text-lg font-bold mb-6'>{options_details[activeOption - 1].title}</p>
