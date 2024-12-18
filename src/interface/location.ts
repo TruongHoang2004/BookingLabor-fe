@@ -14,12 +14,3 @@ export  interface HanoiResponse {
     phone_code: number;
     districts: District[];
   }
-
-  export interface Ward {
-    name: string,
-    code: number,
-    division_type: string,
-    codename: string,
-    district_code: number;
-  }
-

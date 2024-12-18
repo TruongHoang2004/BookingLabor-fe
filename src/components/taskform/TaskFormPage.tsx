@@ -1,37 +1,29 @@
 'use client'
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { 
+  Card, 
+  CardHeader, 
+  CardBody, 
+  CardFooter, 
+  Input, 
+  Select, 
+  SelectItem, 
+  DateInput, 
+  Textarea, 
+  Button, 
+  DateValue 
+} from "@nextui-org/react";
 import FormTaskTitle from "./FormTaskTitle";
-import { Card, CardHeader, CardBody } from "@nextui-org/react";
-import { Input } from "@nextui-org/react";
-import { Select, SelectItem } from "@nextui-org/react";
-import { DateInput } from "@nextui-org/react";
-import { Textarea } from "@nextui-org/react";
-import { CardFooter } from "@nextui-org/react";
-import { Button } from "@nextui-org/react";
-import { useRouter } from "next/navigation";
 import { TaskFormDetails } from "@/interface/task";
-import { DateValue } from "@nextui-org/react";
+import { Skill } from "@/interface/skill";
 import { SkillService } from "@/service/skill/skill";
 import { taskService } from "@/service/task/task";
-import toast from 'react-hot-toast';
-import { Skill } from "@/interface/skill";
+import toast from "react-hot-toast";
+import { locationService } from "@/service/location/location1";
+import { District, Ward } from "@/interface/location1";
 
-interface District {
-    name: string;
-    code: number;
-    division_type: string;
-    codename: string;
-    wards: Ward[];
-}
-
-interface Ward {
-    name: string;
-    code: number;
-    division_type: string;
-    codename: string;
-}
-
+const locations = new locationService();
 
 export default function TaskFormPage() {
     const router = useRouter();
@@ -52,8 +44,6 @@ export default function TaskFormPage() {
     const [skills, setSkills] = useState<Skill[]>([])
     const [chosenSkillId, setChosenSkillID] = useState(0);
 
-
-
     const fetchSkills = async () => {
         const response = await SkillService.getAllSkills();
         setSkills(response)
@@ -64,29 +54,21 @@ export default function TaskFormPage() {
         fetchDistricts();
     }, [])
 
-    const fetchDistricts = async () => {
-    
-        try {
-            const response = await fetch('https://provinces.open-api.vn/api/p/01?depth=2');
-            const data = await response.json();
-            setDistricts(data.districts);
-        } catch (err) {
-            setError("Failed to fetch districts");
-            console.error(err);
-        }
+    const fetchDistricts = () => {
+        const D: District[] = locations.getAllDistricts();
+        setDistricts(D);
     };
 
     const handleSkillChange = (skillID: string) => {
         setChosenSkillID(parseInt(skillID, 10))
     }
 
-    const handleDistrictChange = async (districtCode: string) => {
+    const handleDistrictChange =  (districtCode: string) => {
         setSelectedDistrict(parseInt(districtCode,10));
         setIsLoading(true);
         try {
-            const response = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`);
-            const data = await response.json();
-            setWards(data.wards);
+            const w: Ward[] = locations.getWardsInDistrict(parseInt(districtCode, 10));
+            setWards(w);
         } catch (err) {
             setError("Failed to fetch wards");
             console.error(err);
@@ -183,8 +165,6 @@ export default function TaskFormPage() {
         let end_day;
         let end_month;
         const end_year = endDate?.year;
-        let formattedStartDate;
-        let formattedEndDate;
         if (startDate?.day && startDate?.day < 10) {
             start_day = `0${startDate?.day}`
         }
@@ -209,8 +189,8 @@ export default function TaskFormPage() {
         else {
             end_month = `${endDate?.month}`
         }
-        formattedStartDate = `${start_year}-${start_month}-${start_day}`
-        formattedEndDate = `${end_year}-${end_month}-${end_day}`
+        const formattedStartDate = `${start_year}-${start_month}-${start_day}`
+        const formattedEndDate = `${end_year}-${end_month}-${end_day}`
         const taskForm: TaskFormDetails = {
             title: task,
             description: taskDescription,
@@ -223,8 +203,9 @@ export default function TaskFormPage() {
             start_date: formattedStartDate,
             end_date: formattedEndDate,
         }
-        // console.log(taskForm)
+         //console.log(taskForm)
         const response = await taskService.create(taskForm);
+        console.log(response)
         router.push('/taskmanage')
     }
 

@@ -10,7 +10,9 @@ const tasksList: Task[] = [
         user: null,
         created_at: "",
         updated_at: "",
-        skill: null
+        skill: null,
+        tasker: null,
+        taskers: null
     },
     {
         id: 2, title: "Task 2", description: "Description 2", task_status: "In-progress", district: "District 2", estimated_duration: 100, fee_per_hour: "34", start_date: "2023-01-01", end_date: "2023-01-02",
@@ -19,7 +21,9 @@ const tasksList: Task[] = [
         user: null,
         created_at: "",
         updated_at: "",
-        skill: null
+        skill: null,
+        tasker: null,
+        taskers: null
     },
     {
         id: 3, title: "Task 3", description: "Description 3", task_status: "Pending", district: "District 3", estimated_duration: 100, fee_per_hour: "34", start_date: "2023-01-01", end_date: "2023-01-02",
@@ -28,7 +32,9 @@ const tasksList: Task[] = [
         user: null,
         created_at: "",
         updated_at: "",
-        skill: null
+        skill: null,
+        tasker: null,
+        taskers: null
     },
     {
         id: 4, title: "Task 4", description: "Description 4", task_status: "Pending", district: "District 4", estimated_duration: 100, fee_per_hour: "34", start_date: "2023-01-01", end_date: "2023-01-02",
@@ -37,7 +43,9 @@ const tasksList: Task[] = [
         user: null,
         created_at: "",
         updated_at: "",
-        skill: null
+        skill: null,
+        tasker: null,
+        taskers: null
     },
     {
         id: 5, title: "Task 5", description: "Description 5", task_status: "In-progress", district: "District 5", estimated_duration: 100, fee_per_hour: "34", start_date: "2023-01-01", end_date: "2023-01-02",
@@ -46,7 +54,9 @@ const tasksList: Task[] = [
         user: null,
         created_at: "",
         updated_at: "",
-        skill: null
+        skill: null,
+        tasker: null,
+        taskers: null
     },
     {
         id: 6, title: "Task 6", description: "Description 6", task_status: "Pending", district: "District 6", estimated_duration: 100, fee_per_hour: "34", start_date: "2023-01-01", end_date: "2023-01-02",
@@ -55,7 +65,9 @@ const tasksList: Task[] = [
         user: null,
         created_at: "",
         updated_at: "",
-        skill: null
+        skill: null,
+        tasker: null,
+        taskers: null
     },
     {
         id: 7, title: "Task 7", description: "Description 7", task_status: "Pending", district: "District 7", estimated_duration: 100, fee_per_hour: "34", start_date: "2023-01-01", end_date: "2023-01-02",
@@ -64,7 +76,9 @@ const tasksList: Task[] = [
         user: null,
         created_at: "",
         updated_at: "",
-        skill: null
+        skill: null,
+        tasker: null,
+        taskers: null
     },
     {
         id: 8, title: "Task 8", description: "Description 8", task_status: "In-progress", district: "District 8", estimated_duration: 100, fee_per_hour: "34", start_date: "2023-01-01", end_date: "2023-01-02",
@@ -73,7 +87,9 @@ const tasksList: Task[] = [
         user: null,
         created_at: "",
         updated_at: "",
-        skill: null
+        skill: null,
+        tasker: null,
+        taskers: null
     },
     {
         id: 9, title: "Task 9", description: "Description 9", task_status: "Pending", district: "District 9", estimated_duration: 100, fee_per_hour: "34", start_date: "2023-01-01", end_date: "2023-01-02",
@@ -82,7 +98,9 @@ const tasksList: Task[] = [
         user: null,
         created_at: "",
         updated_at: "",
-        skill: null
+        skill: null,
+        tasker: null,
+        taskers: null
     },
     {
         id: 10, title: "Task 10", description: "Description 10", task_status: "Pending", district: "District 10", estimated_duration: 100, fee_per_hour: "34", start_date: "2023-01-01", end_date: "2023-01-02",
@@ -91,7 +109,9 @@ const tasksList: Task[] = [
         user: null,
         created_at: "",
         updated_at: "",
-        skill: null
+        skill: null,
+        tasker: null,
+        taskers: null
     }
 ];
 

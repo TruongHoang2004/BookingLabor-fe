@@ -2,8 +2,6 @@ import { Task } from "@/interface/task";
 import UserCard from "./UserCard";
 import { useState, useEffect } from "react";
 import { taskService } from "@/service/task/task"; 
-import toast from "react-hot-toast";
-import { div } from "framer-motion/client";
 
 export default function UsersList() {
     const [userTasksList, setUserTaskList] = useState<Task[]>([]);

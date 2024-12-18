@@ -1,6 +1,6 @@
 'use client'
 import { Task } from "@/interface/task";
-import { Card, CardBody, CardHeader, CardFooter, Tooltip, Button, Avatar, Divider, ScrollShadow, user } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, CardFooter, Tooltip, Button, Avatar, Divider, ScrollShadow } from "@nextui-org/react";
 import { Modal,
     ModalContent,
     ModalHeader,
@@ -8,11 +8,10 @@ import { Modal,
     ModalFooter, useDisclosure } from "@nextui-org/react";
 import Image from "next/image";
 import { FaList } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TbChecklist } from "react-icons/tb";
 import { BiSolidCheckCircle } from "react-icons/bi";
 import { taskService } from "@/service/task/task";
-import { useRouter } from "next/navigation";
 import { locationService } from "@/service/location/location1";
 
 
@@ -87,7 +86,7 @@ export default function UserCard({
         setTaskChosen(!isTaskerChosen)
     }
 
-    const renderModalContent = (onClose: any) => {
+    const renderModalContent = (onClose: () => void) => {
           // nếu xem thông tin mà không phải chọn taskers
           if(taskDetailVisible && !choseTaskerVisible) {
             return (
@@ -122,7 +121,7 @@ export default function UserCard({
                                     <span className="text-emerald-700 font-semibold mr-1">Skill:</span>
                                     <div>
                                         {tasker.skills.map((s) => (
-                                            <p className="mb-1 flex items-center"><BiSolidCheckCircle className="text-emerald-500 flex-shrink-0 mr-1"/>{s.name}</p>
+                                            <p key={s.id} className="mb-1 flex items-center"><BiSolidCheckCircle className="text-emerald-500 flex-shrink-0 mr-1"/>{s.name}</p>
                                         ))}
                                     </div>
                                 </div> 

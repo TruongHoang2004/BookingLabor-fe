@@ -1,4 +1,4 @@
-import { District, HanoiResponse, Ward } from '@/interface/location';
+import { District, HanoiResponse } from '@/interface/location';
 import toast from 'react-hot-toast';
 
 let districts: District[] = [];

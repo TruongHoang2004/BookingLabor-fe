@@ -33,7 +33,7 @@ export const taskService = {
   },
   async userChooseTasker(task_id: number , tasker_id: number) {
     try {
-      const response = await api.patch<Task>(`/tasks/${task_id}/choose/${tasker_id}`);
+      await api.patch<Task>(`/tasks/${task_id}/choose/${tasker_id}`);
       toast.success("Chọn Người làm việc thành công");
     } catch (error) {
       toast.error("Không thể chọn người làm này! Hãy thử lại sau");
