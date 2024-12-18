@@ -10,8 +10,10 @@ import Image from "next/image";
 import { FaBell } from "react-icons/fa6";
 import { Badge } from "@nextui-org/react";
 import { useAppSelector } from '@/redux/store';
-import { useAppDispatch } from '../redux/store';
+import { useAppDispatch } from '../../redux/store';
 import { logout } from '@/redux/slices/authSlice';
+import { Role } from "@/enum/role";
+import HeaderAdmin from "./headerAdmin";
 
 const lobster = Lobster({
     subsets: ['latin'],
@@ -25,7 +27,7 @@ const kanit = Kanit({
 })
 // lg: 1024 -> 
 const Header: React.FC = () => {
-    const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+    const { isAuthenticated, user, isTasker } = useAppSelector((state) => state.auth);
     let isLoggedIn = false;
     //const user = {fullname: "jqnwd", email: "aodwnmoiamdio"}
     if (isAuthenticated && user) {
@@ -56,6 +58,12 @@ const Header: React.FC = () => {
         { text: 'Random Text 12345678910', date: "10 days" },
         { text: 'Random Text 12345678910', date: "10 days" },
     ]
+
+    if (user?.role === Role.ADMIN) {
+        return (
+            <HeaderAdmin />
+        )
+    }
 
     return (
         <header className="border-slate-300 py-4 border-b text-green-950 caret-transparent">
@@ -101,7 +109,7 @@ const Header: React.FC = () => {
                     <div className={`${kanit.className} lg:text-lg sm:text-sm font-normal flex h-5 items-center space-x-4 justify-between gap-x-2`}>
                         <p onClick={() => router.push('/services')} className="hover:underline no-underline cursor-pointer">Services</p>
                         <Divider orientation="vertical" className="bg-lime-500" />
-                        <p onClick={() => router.push('/tasks')} className="hover:underline no-underline cursor-pointer">Task Manage</p>
+                        <p onClick={() => router.push('/tasks')} className="hover:underline no-underline cursor-pointer">View Tasks</p>
                         <Divider orientation="vertical" className="bg-lime-500" />
                         <Popover placement="bottom">
                             <PopoverTrigger>
@@ -112,12 +120,16 @@ const Header: React.FC = () => {
                                     <div className="flex gap-x-3">
                                         <Image src="/img/header/cool-ava.jpg" width={60} height={30} className="rounded" alt="ava" />
                                         <div>
-                                            <p className="font-semibold text-lg">{user?.profile.last_name}</p>
+                                            <p className="font-semibold text-lg">{`${user?.profile?.first_name ?? ''} ${user?.profile?.last_name ?? ''}`.trim()}</p>
                                             <p className="font-medium text-emerald-600 t">{user?.email}</p>
                                         </div>
                                     </div>
                                     <div className="flex justify-center items-center space-x-2 h-5">
-                                        <p onClick={() => router.push('/becometasker')} className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold hover:underline no-underline cursor-pointer">Register as a Tasker</p>
+                                        {isTasker ? (
+                                            <p onClick={() => router.push('/taskmanage')} className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold hover:underline no-underline cursor-pointer">Task Manage</p>
+                                        ) : (
+                                            <p onClick={() => router.push('/becometasker')} className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold hover:underline no-underline cursor-pointer">Register as a Tasker</p>
+                                        )}
                                         <Divider orientation="vertical" className="bg-emerald-800" />
                                         <p onClick={() => router.push('/profile')} className="bg-emerald-100 ml-2 px-3 py-1 border border-lime-500 rounded font-semibold hover:underline no-underline cursor-pointer">Edit Your Profile</p>
                                     </div>
@@ -190,9 +202,13 @@ const Header: React.FC = () => {
                                 onAction={(key) => handleEvent(key.toString())}
                             >
                                 <DropdownItem key="services">Services</DropdownItem>
-                                <DropdownItem key="tasks">Task Manage</DropdownItem>
+                                <DropdownItem key="tasks">View Tasks</DropdownItem>
                                 <DropdownItem key="profile">My Profile</DropdownItem>
-                                <DropdownItem key="become-tasker">Become Tasker</DropdownItem>
+                                {isTasker ? (
+                                    <DropdownItem key="taskmanage">Task Manage</DropdownItem>
+                                ) : (
+                                    <DropdownItem key="becometasker">Become Tasker</DropdownItem>
+                                )}
                                 <DropdownItem key="logout">
                                     Log Out
                                 </DropdownItem>

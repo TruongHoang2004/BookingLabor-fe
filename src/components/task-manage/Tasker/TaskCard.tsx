@@ -1,132 +1,127 @@
-'use client'
-import { useState } from "react";
-import { Task } from "@/types/Tasks";
-import { Customer } from "@/types/User";
+import { Task } from "@/interface/task";
+import { Card, CardBody, CardHeader, CardFooter, Tooltip, Button } from "@nextui-org/react";
 import {
     Modal,
+    ModalContent,
     ModalHeader,
     ModalBody,
-    ModalFooter,
-    Button,
-    useDisclosure,
-    ModalContent,
+    ModalFooter, useDisclosure
 } from "@nextui-org/react";
+import Image from "next/image";
+import { FaList } from "react-icons/fa";
+import { TbChecklist } from "react-icons/tb";
+import { BiSolidCheckCircle } from "react-icons/bi";
+import { locationService } from "@/service/location/location";
+import { useState, useEffect } from "react";
+import { taskService } from "@/service/task/task";
+import toast from "react-hot-toast";
 
-export default function TaskCard({ task, customerList }: { task: Task; customerList: Customer[] }) {
-    const getInitialStatus = () => {
-        const hasAssignedCustomers = Array.isArray(task.assigned_customer_id)
-            ? task.assigned_customer_id.length > 0
-            : task.assigned_customer_id !== null;
-        return hasAssignedCustomers ? "In Progress" : "Pending";
-    };
+export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Task; isAccepted: boolean; setIsAccepted: React.Dispatch<React.SetStateAction<boolean>>; }) {
 
-    const [status, setStatus] = useState(getInitialStatus());
+
+    const [districtName, setDistrictName] = useState<string>("");
+    const getImageSrc = () => {
+        const randomIndex = 1;
+        return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
+    }
+
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
-    const [isVisible, setIsVisible] = useState(true);
-
-    const formatTaskId = (id: number) => {
-        const letterCode = Math.floor((id - 1) / 9999);
-        const letter = String.fromCharCode(65 + letterCode);
-        const number = ((id - 1) % 9999) + 1;
-        return `${letter}${String(number).padStart(4, "0")}`;
+    const formatDate = (dateString: string): string => {
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
     };
 
-    const taskId = formatTaskId(task.id);
+    useEffect(() => {
+        const fetchLocationNames = async () => {
+            try {
+                const district_ = await locationService.getDistrict(task.district);
+                //const ward = await locationService.getWard(task.ward);
+                setDistrictName(district_);
+                //setWardName(ward);
+            } catch (error) {
+                console.error("Failed to fetch district or ward name:", error);
+            }
+        };
 
-    const handleCancel = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setIsVisible(false);
+        fetchLocationNames();
+    }, [task.district, task.ward]);
+
+    const handleAccept = async () => {
+        try {
+            await taskService.acceptTask(task.id); // Gọi hàm service với task.id
+            toast.success("Xác nhận thành công!"); // Thông báo thành công
+            setIsAccepted(!isAccepted)
+        } catch (error) {
+            toast.error("Xác nhận thất bại!"); // Thông báo lỗi
+            console.error("Lỗi khi xác nhận:", error);
+        }
     };
 
-    if (!isVisible) return null;
 
     return (
-        <>
-            <div className="flex flex-col gap-4 bg-zinc-100 shadow-xl hover:shadow-lg p-4 rounded-xl h-64 transition-shadow cursor-pointer" onClick={onOpen}>
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
-                        <h2 className="font-bold text-gray-700">{taskId}</h2>
-                        <span className={`px-2 py-1 rounded-full text-sm font-semibold ${status === "Pending"
-                            ? "bg-yellow-100 text-yellow-700"
-                            : status === "In Progress"
-                                ? "bg-blue-100 text-blue-700"
-                                : "bg-green-100 text-green-700"
-                            }`}>
-                            {status}
-                        </span>
-                    </div>
-                    {status === "Pending" && (
-                        <Button
-                            color="danger"
-                            size="sm"
-                            variant="flat"
-                            onClick={(e) => handleCancel(e)}
-                        >
-                            Cancel
-                        </Button>
-                    )}
-                </div>
-
-                <div className="space-y-3 overflow-hidden">
-                    <div className="space-y-2">
-                        <p className="font-semibold truncate">{task.title}</p>
-                        <p className="truncate">{task.description}</p>
-                        <p className="truncate">{task.location}</p>
-                        <p className="truncate">{task.category}</p>
-                    </div>
-
-                    {customerList
-                        .filter((customer) =>
-                            Array.isArray(task.assigned_customer_id)
-                                ? task.assigned_customer_id.includes(customer.id)
-                                : task.assigned_customer_id === customer.id
-                        )
-                        .map((customer) => (
-                            <div key={customer.id} className="space-y-1">
-                                <p className="truncate">{customer.name}</p>
-                                {status === "In Progress" && (
-                                    <Button
-                                        color="success"
-                                        className="mt-2 w-full"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setStatus("Completed");
-                                        }}
-                                    >
-                                        Complete
-                                    </Button>
-                                )}
+        <div>
+            <Card isFooterBlurred className="w-[400px] h-[450px]">
+                <Image src={getImageSrc()} alt="" className={`object-cover`} fill />
+                <CardHeader className="flex flex-col bg-slate-200">
+                    <p className="font-bold text-emerald-700 text-xl">T00{task.id}</p>
+                    <p className="font-semibold text-lg">{task.title}</p>
+                </CardHeader>
+                <CardBody className="p-0">
+                    <div className="relative w-full h-full">
+                        <div className="top-2/3 left-1/2 absolute flex justify-between items-center bg-gray-200 py-4 pl-2 rounded-lg w-11/12 transform -translate-x-1/2 -translate-y-1/2">
+                            <div>
+                                <p className="flex items-center mb-2 max-w-[290px] truncate"><TbChecklist className="mr-1 text-emerald-700 text-xl" /> <span className="mr-1 font-semibold text-emerald-700">Description:</span>{task.description}</p>
+                                <p className="flex items-center mb-2 max-w-[290px] truncate"><TbChecklist className="mr-1 text-emerald-700 text-xl" /> <span className="mr-1 font-semibold text-emerald-700">Fee per hour:</span>{task.fee_per_hour}VND /h</p>
+                                <p className="flex items-center max-w-[290px] truncate"><TbChecklist className="mr-1 text-emerald-700 text-xl" /> <span className="mr-1 font-semibold text-emerald-700">End date:</span>{formatDate(task.end_date)}</p>
                             </div>
-                        ))}
-                </div>
-            </div>
+                            <div>
+                                <Tooltip content="View more details">
+                                    <Button onPress={onOpen} variant="light" className="text-emerald-700 text-lg"><FaList /></Button>
+                                </Tooltip>
+                            </div>
+                        </div>
+                    </div>
+                </CardBody>
+                <CardFooter className="flex flex-col mt-3 h-[150px]">
+                    <div>
+                        {/* Hiển thị nút nút tương ứng với các trạng thái  */}
+                        {task.task_status === 'IN_PROGRESS' ? (
+                            <div><Button color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Completion Confirmation</Button></div>
+                        ) : (
+                            <div></div>
+                        )}
+                        {task.task_status === 'PENDING' ? (
+                            <div className="flex flex-col gap-y-2 justify-center items-center">
+                                <Button onClick={handleAccept} color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Accept Task</Button>
+                                <Button color="danger" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Decline Task</Button>
+                            </div>
+                        ) : (
+                            <div></div>
+                        )}
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="3xl">
-                <ModalContent className="max-h-[80vh]">
+                    </div>
+                </CardFooter>
+            </Card>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+                <ModalContent>
                     {(onClose) => (
                         <>
-                            <ModalHeader>{taskId}</ModalHeader>
-                            <ModalBody className="py-4 overflow-y-auto">
-                                <div className="space-y-6">
-                                    <div className="space-y-3">
-                                        <p className="font-semibold">{task.title}</p>
-                                        <p className="whitespace-pre-wrap">{task.description}</p>
-                                        <p>{task.location}</p>
-                                        <p>{task.category}</p>
-                                    </div>
-                                    <p className="font-semibold"> Customer Detail </p>
-                                    {customerList
-                                        .filter((customer) =>
-                                            Array.isArray(task.assigned_customer_id)
-                                                ? task.assigned_customer_id.includes(customer.id)
-                                                : task.assigned_customer_id === customer.id
-                                        )
-                                        .map((customer) => (
-                                            <div key={customer.id} className="space-y-3">
-                                                <p>{customer.name}</p>
-                                                <p>{customer.description}</p>
-                                            </div>
-                                        ))}
+                            <ModalHeader className="font-bold text-emerald-800">
+                                <div className="flex flex-col">
+                                    <p className="font-bold text-emerald-700 text-xl">T00{task.id}</p>
+                                    <p className="font-semibold text-lg">{task.title}</p>
+                                </div>
+                            </ModalHeader>
+                            <ModalBody>
+                                <div className="flex flex-col gap-y-3">
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Description:</span>{task.description}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">District:</span>{districtName}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Ward:</span>{task.ward}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Estimated Duration:</span>{task.estimated_duration}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Fee per hour:</span>{task.fee_per_hour}VND /h</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Start Date:</span>{formatDate(task.start_date)}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">End Date:</span>{formatDate(task.end_date)}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Status:</span>{task.task_status}</p>
                                 </div>
                             </ModalBody>
                             <ModalFooter>
@@ -138,6 +133,6 @@ export default function TaskCard({ task, customerList }: { task: Task; customerL
                     )}
                 </ModalContent>
             </Modal>
-        </>
-    );
+        </div>
+    )
 }
