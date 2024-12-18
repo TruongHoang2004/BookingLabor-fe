@@ -1,12 +1,13 @@
 export interface District {
     name: string;
-    code: string;
+    code: number;
     division_type: string;
     codename: string;
-    province_code: string;
+    province_code: number;
+    wards: Ward[];
   }
   
-export  interface HanoiResponse {
+export  interface City {
     name: string;
     code: string;
     division_type: string;
@@ -14,3 +15,12 @@ export  interface HanoiResponse {
     phone_code: number;
     districts: District[];
   }
+
+  export interface Ward {
+    name: string,
+    code: number,
+    division_type: string,
+    codename: string,
+    district_code: number;
+  }
+
