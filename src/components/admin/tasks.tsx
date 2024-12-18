@@ -15,51 +15,38 @@ import {
     ModalFooter,
     useDisclosure
 } from "@nextui-org/react";
-import { Trash, Badge, MapPin, Clock } from "lucide-react";
-import { taskService } from "@/service/task/task";
-import { useRouter } from "next/navigation";
+import { Badge, MapPin, Clock } from "lucide-react";
+     
 
 interface TaskCardProps {
-    tasks: Task[];
+    task: Task;
     onView: (id: number) => void;
-    onDelete: (task: Task) => void;
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({
-    tasks,
+    task,
     onView,
-    onDelete,
 }) => {
-    const router = useRouter();
-    const {isOpen, onOpen, onClose} = useDisclosure();
     const [districtNames, setDistrictNames] = useState<string>('');
-
+    const [isLoading, setIsLoading] = useState(true);
+  
     useEffect(() => {
-        const fetchDistrictNames = async (task: Task) => {
-            try {
-                if (task.district) {
-                    const names = await locationService.getDistrict(task.district);
-                    setDistrictNames(names);
-                }
-            } catch (error) {
-                console.error('Error fetching district names:', error);
-                setDistrictNames('Error loading districts');
-            } 
-        };
-
-        tasks.forEach(task => fetchDistrictNames(task));
-    }, [tasks]);
-
-    const handleDelete = async (task: Task) => {
+      const fetchDistrictNames = async () => {
         try {
-            await taskService.deleteMe(task);
-            onDelete(task); // Pass the task to the onDelete callback
-            router.refresh();
+          if (task.district) {
+            const names = await locationService.getDistrict(task.district);
+            setDistrictNames(names);
+          }
         } catch (error) {
-            console.error(error);
+          console.error('Error fetching district names:', error);
+          setDistrictNames('Error loading districts');
+        } finally {
+          setIsLoading(false);
         }
-    };
-
+      };
+  
+      fetchDistrictNames();
+    }, [task.district]);
     const getStatusColor = (status: string) => {
         switch (status.toLowerCase()) {
             case "posted": return "default";
@@ -70,121 +57,114 @@ const TaskCard: React.FC<TaskCardProps> = ({
             default: return "default";
         }
     };
+    const {isOpen, onOpen, onClose} = useDisclosure();
 
     return (
-        <>
-            {tasks.map((task) => (
-                <Card key={task.id} className="w-full">
-                    <CardBody>
-                        <div className="flex justify-between items-start">
-                            <div className="space-y-3">
-                                <div className="flex items-center gap-2">
-                                    <h3 className="text-lg font-semibold">{task.title}</h3>
-                                    <Chip color={getStatusColor(task.task_status)} size="sm">
-                                        {task.task_status}
-                                    </Chip>
-                                </div>
-                                <div className="flex items-center gap-2 text-gray-500">
-                                    <MapPin size={16} />
-                                    <span>{districtNames}</span>
-                                </div>
-                                <div className="flex items-center gap-4 text-gray-500">
-                                    <div className="flex items-center gap-2">
-                                        <Clock size={16} />
-                                        <span> {new Date(task.start_date).toLocaleDateString()}</span>
-                                    </div>
-                                    <div>Duration: {task.estimated_duration} h </div>
-                                </div>
-                                <div className="flex items-center gap-2 text-gray-500">
-                                    <Badge size={16} />
-                                    <span> Skill: {task.skill?.name || "No Skill"}</span>
-                                </div>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <Button onPress={onOpen}
-                                    variant="light"
-                                    onClick={() => onView(task.id)}
-                                    className="flex"
-                                >   
-                                    View Details
-                                </Button>
-                                <Modal 
-                                    isOpen={isOpen} 
-                                    onClose={onClose}
-                                    size="2xl"
-                                >
-                                    <ModalContent>
-                                        <ModalHeader className="flex flex-col gap-1">
-                                            Task Details
-                                        </ModalHeader>
-                                        <ModalBody>
-                                            <div className="space-y-4">
-                                                <div>
-                                                    <h3 className="text-sm text-gray-500">Task Title</h3>
-                                                    <p className="text-lg font-semibold">{task.title}</p>
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-sm text-gray-500">Status</h3>
-                                                    <Chip color={getStatusColor(task.task_status)} size="sm">
-                                                        {task.task_status}
-                                                    </Chip>
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-sm text-gray-500">Area</h3>
-                                                    <p className="flex items-center gap-2">
-                                                        <MapPin size={16} />
-                                                        {districtNames || task.district}
-                                                    </p>
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-sm text-gray-500">Skill</h3>
-                                                    <p className="flex items-center gap-2">
-                                                        <Badge size={16} />
-                                                        {task.skill?.name || "No skill"}
-                                                    </p>
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-sm text-gray-500">Time</h3>
-                                                    <p className="flex items-center gap-2">
-                                                        <Clock size={16} />
-                                                        {task.start_date}
-                                                    </p>
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-sm text-gray-500">Duration</h3>
-                                                    <p>{task.estimated_duration} h</p>
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-sm text-gray-500">Price</h3>
-                                                    <p>{task.fee_per_hour} VNĐ</p>
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-sm text-gray-500">Description</h3>
-                                                    <p className="text-gray-700">{task.description}</p>
-                                                </div>
-                                            </div>
-                                        </ModalBody>
-                                        <ModalFooter>
-                                            <Button color="primary" variant="solid" onPress={onClose}>
-                                                I got it
-                                            </Button>
-                                        </ModalFooter>
-                                    </ModalContent>
-                                </Modal>
-                                <Button
-                                    startContent={<Trash size={20} />}
-                                    className="text-white"
-                                    color="danger"
-                                    onClick={() => handleDelete(task)}
-                                >
-                                    Delete
-                                </Button>
-                            </div>
+        
+        <Card className="w-full">
+            <CardBody>
+                <div className="flex justify-between items-start">
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                            <h3 className="text-lg font-semibold">{task.title}</h3>
+                            <Chip color={getStatusColor(task.task_status)} size="sm">
+                                {task.task_status}
+                            </Chip>
                         </div>
-                    </CardBody>
-                </Card>
-            ))}
-        </>
+                        <div className="flex items-center gap-2 text-gray-500">
+                            <MapPin size={16} />
+                            <span>{districtNames}</span>
+                        </div>
+                        <div className="flex items-center gap-4 text-gray-500">
+                            <div className="flex items-center gap-2">
+                                <Clock size={16} />
+                                <span> {new Date(task.start_date).toLocaleDateString()}</span>
+                            </div>
+                            <div>Duration: {task.estimated_duration} h </div>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-500">
+                            <Badge size={16} />
+                            <span> Skill: {task.skill?.name || "No Skill"}</span>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Button onPress={onOpen}
+                            variant="light"
+                            onClick={() => onView(task.id)}
+                            className="flex"
+
+                        >   
+                            View Details
+                        </Button>
+                        <Modal 
+                            isOpen={isOpen} 
+                            onClose={onClose}
+                            size="2xl"
+                        >
+                            <ModalContent>
+                                <ModalHeader className="flex flex-col gap-1">
+                                    Task Details
+                                </ModalHeader>
+                                <ModalBody>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <h3 className="text-sm text-gray-500">Task Title</h3>
+                                            <p className="text-lg font-semibold">{task.title}</p>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm text-gray-500">Status</h3>
+                                            <Chip color={getStatusColor(task.task_status)} size="sm">
+                                                {task.task_status}
+                                            </Chip>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm text-gray-500">Area</h3>
+                                            <p className="flex items-center gap-2">
+                                                <MapPin size={16} />
+                                                {isLoading ? 'Loading...' : districtNames || task.district}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm text-gray-500">Skill</h3>
+                                            <p className="flex items-center gap-2">
+                                                <Badge size={16} />
+                                                {task.skill?.name || "No skill"}
+                                              
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm text-gray-500">Time</h3>
+                                            <p className="flex items-center gap-2">
+                                                <Clock size={16} />
+                                                {new Date(task.start_date).toLocaleDateString()}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm text-gray-500">Duration</h3>
+                                            <p>{task.estimated_duration} h</p>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm text-gray-500">Price</h3>
+                                            <p>{task.fee_per_hour} VNĐ</p>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm text-gray-500">Description</h3>
+                                            <p className="text-gray-700">{task.description}</p>
+                                        </div>
+                                    </div>
+                                </ModalBody>
+                                <ModalFooter>
+                                    <Button color="primary" variant="solid" onPress={onClose}>
+                                        I got it
+                                    </Button>
+                                </ModalFooter>
+                            </ModalContent>
+                        </Modal>
+                    </div>
+                </div>
+            </CardBody>
+        </Card>
+        
     );
 };
 

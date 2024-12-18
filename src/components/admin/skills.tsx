@@ -94,7 +94,7 @@ const SkillsCard: React.FC<SkillsCardProps> = ({
                 key={skill.id} 
                 className="flex justify-between items-center p-2 bg-gray-50 rounded-lg"
               >
-                <span>{skill.name}: {skill.description}</span>
+                <span className=''><strong>{skill.name}</strong>: {skill.description}</span>
                 <Dropdown>
                   <DropdownTrigger>
                     <Button size="sm" variant="light">Actions</Button>
