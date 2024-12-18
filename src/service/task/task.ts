@@ -15,11 +15,21 @@ export const taskService = {
   },
   async getMe(): Promise<Task[]> {
     try {
-      const response = await api.get<Task[]>("/tasks");
+      const response = await api.get<Task[]>("/tasks/admin");
       return response.data;
     } catch (error) {
       toast.error("Không thể lấy thông tin công việc");
       throw error;
     }
   },
+  async deleteMe(task: Task): Promise<Task> {
+    try {
+      const response = await api.delete<Task>(`/tasks/${task.id}`);
+      toast.success("Hủy công việc thành công");
+      return response.data;
+    } catch (error) {
+      toast.error("Không thể hủy công việc này");
+      throw error;
+    }
+  }
 };
