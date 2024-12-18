@@ -11,14 +11,52 @@ import Image from "next/image";
 import { FaList } from "react-icons/fa";
 import { TbChecklist } from "react-icons/tb";
 import { BiSolidCheckCircle } from "react-icons/bi";
+import { locationService } from "@/service/location/location";
+import { useState, useEffect } from "react";
+import { taskService } from "@/service/task/task";
+import toast from "react-hot-toast";
 
-export default function TaskCard({ task }: { task: Task }) {
+export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Task; isAccepted: boolean; setIsAccepted: React.Dispatch<React.SetStateAction<boolean>>; }) {
+
+
+    const [districtName, setDistrictName] = useState<string>("");
     const getImageSrc = () => {
         const randomIndex = 1;
         return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
     }
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const formatDate = (dateString: string): string => {
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
+    };
+
+    useEffect(() => {
+        const fetchLocationNames = async () => {
+            try {
+                const district_ = await locationService.getDistrict(task.district);
+                //const ward = await locationService.getWard(task.ward);
+                setDistrictName(district_);
+                //setWardName(ward);
+            } catch (error) {
+                console.error("Failed to fetch district or ward name:", error);
+            }
+        };
+
+        fetchLocationNames();
+    }, [task.district, task.ward]);
+
+    const handleAccept = async () => {
+        try {
+            await taskService.acceptTask(task.id); // Gọi hàm service với task.id
+            toast.success("Xác nhận thành công!"); // Thông báo thành công
+            setIsAccepted(!isAccepted)
+        } catch (error) {
+            toast.error("Xác nhận thất bại!"); // Thông báo lỗi
+            console.error("Lỗi khi xác nhận:", error);
+        }
+    };
+
 
     return (
         <div>
@@ -34,7 +72,7 @@ export default function TaskCard({ task }: { task: Task }) {
                             <div>
                                 <p className="flex items-center mb-2 max-w-[290px] truncate"><TbChecklist className="mr-1 text-emerald-700 text-xl" /> <span className="mr-1 font-semibold text-emerald-700">Description:</span>{task.description}</p>
                                 <p className="flex items-center mb-2 max-w-[290px] truncate"><TbChecklist className="mr-1 text-emerald-700 text-xl" /> <span className="mr-1 font-semibold text-emerald-700">Fee per hour:</span>{task.fee_per_hour}VND /h</p>
-                                <p className="flex items-center max-w-[290px] truncate"><TbChecklist className="mr-1 text-emerald-700 text-xl" /> <span className="mr-1 font-semibold text-emerald-700">End date:</span>{task.end_date}</p>
+                                <p className="flex items-center max-w-[290px] truncate"><TbChecklist className="mr-1 text-emerald-700 text-xl" /> <span className="mr-1 font-semibold text-emerald-700">End date:</span>{formatDate(task.end_date)}</p>
                             </div>
                             <div>
                                 <Tooltip content="View more details">
@@ -45,8 +83,23 @@ export default function TaskCard({ task }: { task: Task }) {
                     </div>
                 </CardBody>
                 <CardFooter className="flex flex-col mt-3 h-[150px]">
-                    <div><Button color="danger" className="shadow-md mt-2 px-3 py-2 rounded-lg font-semibold text-white">Cancel this Task</Button></div>
-                    <div><Button color="success" className="shadow-md mt-2 px-3 py-2 rounded-lg font-semibold text-white">Complete Comfirmation</Button></div>
+                    <div>
+                        {/* Hiển thị nút nút tương ứng với các trạng thái  */}
+                        {task.task_status === 'IN_PROGRESS' ? (
+                            <div><Button color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Completion Confirmation</Button></div>
+                        ) : (
+                            <div></div>
+                        )}
+                        {task.task_status === 'PENDING' ? (
+                            <div className="flex flex-col gap-y-2 justify-center items-center">
+                                <Button onClick={handleAccept} color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Accept Task</Button>
+                                <Button color="danger" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Decline Task</Button>
+                            </div>
+                        ) : (
+                            <div></div>
+                        )}
+
+                    </div>
                 </CardFooter>
             </Card>
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
@@ -62,11 +115,12 @@ export default function TaskCard({ task }: { task: Task }) {
                             <ModalBody>
                                 <div className="flex flex-col gap-y-3">
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Description:</span>{task.description}</p>
-                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">District:</span>{task.district}</p>
-                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Estimated Duratio:</span>{task.estimated_duration}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">District:</span>{districtName}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Ward:</span>{task.ward}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Estimated Duration:</span>{task.estimated_duration}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Fee per hour:</span>{task.fee_per_hour}VND /h</p>
-                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Start Date:</span>{task.start_date}</p>
-                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">End Date:</span>{task.end_date}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Start Date:</span>{formatDate(task.start_date)}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">End Date:</span>{formatDate(task.end_date)}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Status:</span>{task.task_status}</p>
                                 </div>
                             </ModalBody>

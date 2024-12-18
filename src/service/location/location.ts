@@ -15,26 +15,26 @@ const fetchDistricts = async () => {
 };
 
 export const locationService = {
-async getDistrict(codes: string): Promise<string> {
+  async getDistrict(codes: string): Promise<string> {
     try {
-        if (districts.length === 0) {
-            await fetchDistricts();
-        }
+      if (districts.length === 0) {
+        await fetchDistricts();
+      }
 
-        if (!codes) return 'No area specified';
-        
-        const districtCodes = codes.split(',')
-            .map(code => code.trim())
-            .map(code => parseInt(code));
-            
-        const districtNames = districtCodes.map(code => 
-            districts.find(d => parseInt(d.code) === code)?.name || code.toString()
-        );
-        
-        return districtNames.join(', ');
+      if (!codes) return 'No area specified';
+
+      const districtCodes = codes.split(',')
+        .map(code => code.trim())
+        .map(code => parseInt(code));
+
+      const districtNames = districtCodes.map(code =>
+        districts.find(d => parseInt(d.code) === code)?.name || code.toString()
+      );
+
+      return districtNames.join(', ');
     } catch (error) {
-        toast.error('Lỗi khi lấy dữ liệu quận huyện');
-        throw error;
+      toast.error('Lỗi khi lấy dữ liệu quận huyện');
+      throw error;
     }
-}
+  }
 };
