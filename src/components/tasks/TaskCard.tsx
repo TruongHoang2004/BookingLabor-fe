@@ -11,14 +11,26 @@ import Image from "next/image";
 import { FaList } from "react-icons/fa";
 import { TbChecklist } from "react-icons/tb";
 import { BiSolidCheckCircle } from "react-icons/bi";
+import { taskService } from "@/service/task/task";
+import toast from "react-hot-toast";
 
 export default function TaskCard({ task }: { task: Task }) {
     const getImageSrc = () => {
-        const randomIndex = 4;
+        const randomIndex = 2;
         return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
     }
 
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+    const handleApply = async () => {
+        try {
+            await taskService.applyTask(task.id); // Gọi hàm service với task.id
+            toast.success("Ứng tuyển thành công!"); // Thông báo thành công
+        } catch (error) {
+            toast.error("Ứng tuyển thất bại!"); // Thông báo lỗi
+            console.error("Lỗi khi ứng tuyển:", error);
+        }
+    };
 
     return (
         <div>
@@ -48,7 +60,7 @@ export default function TaskCard({ task }: { task: Task }) {
                     </div>
                 </CardBody>
                 <CardFooter className="flex flex-col mt-3 h-[100px]">
-                    <div><Button color="success" className="shadow-md mt-2 px-3 py-2 rounded-lg font-semibold text-white">APPLY</Button></div>
+                    <div><Button onPress={handleApply} color="success" className="shadow-md mt-2 px-3 py-2 rounded-lg font-semibold text-white">APPLY</Button></div>
                 </CardFooter>
             </Card>
             <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
