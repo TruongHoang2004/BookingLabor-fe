@@ -14,7 +14,7 @@ import { BiSolidCheckCircle } from "react-icons/bi";
 
 export default function TaskCard({ task }: { task: Task }) {
     const getImageSrc = () => {
-        const randomIndex = 4;
+        const randomIndex = 2;
         return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
     }
 

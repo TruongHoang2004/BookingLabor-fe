@@ -22,4 +22,22 @@ export const taskService = {
       throw error;
     }
   },
+  async getAllTasksCreatedByUser(): Promise<Task[]> {
+    try {
+      const response = await api.get<Task[]>("/tasks/user");
+      return response.data;
+    } catch (error) {
+      toast.error("Không thể lấy thông tin công việc");
+      throw error;
+    }
+  },
+  async userChooseTasker(task_id: number , tasker_id: number) {
+    try {
+      const response = await api.patch<Task>(`/tasks/${task_id}/choose/${tasker_id}`);
+      toast.success("Chọn Người làm việc thành công");
+    } catch (error) {
+      toast.error("Không thể chọn người làm này! Hãy thử lại sau");
+      throw error;
+    }
+  }
 };
