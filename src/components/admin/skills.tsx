@@ -28,11 +28,13 @@ interface SkillsCardProps {
   onModify: (skill: Skill) => void;
   onDelete: (skill: Skill) => void;
 }
-const SkillsCard: React.FC<SkillsCardProps> = ({ skills, onAdd, onModify, onDelete }) => {
+const SkillsCard: React.FC<SkillsCardProps> = ({ 
+  skills, onAdd, onModify, onDelete 
+}) => {
     const router = useRouter();
     const {isOpen, onOpen, onClose} = useDisclosure();
-  const [newSkill, setNewSkill] = useState<SkillRequest>({ name: '', description: '' });
-  const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
+    const [newSkill, setNewSkill] = useState<SkillRequest>({ name: '', description: '' });
+    const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
 
   const handleSubmit = async () => {
     try {
