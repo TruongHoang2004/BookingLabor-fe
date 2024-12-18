@@ -42,13 +42,12 @@ export default function TasksList() {
     return (
         <div className="flex flex-col items-center w-full">
             {/* Tasks Grid */}
-            <div className="flex justify-center items-center my-8 w-full">
-                <div className="flex flex-wrap gap-x-10 gap-y-10">
-                    {currentTasks.map(task => (
-                        <TaskCard key={task.id} task={task} />
-                    ))}
-                </div>
+            <div className="flex flex-wrap items-center gap-x-10 gap-y-10">
+                {currentTasks.map(task => (
+                    <TaskCard key={task.id} task={task} />
+                ))}
             </div>
+         
 
             {/* Pagination */}
             {totalPages > 1 && (

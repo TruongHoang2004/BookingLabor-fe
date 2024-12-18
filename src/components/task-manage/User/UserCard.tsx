@@ -161,8 +161,8 @@ export default function UserCard({
                     </div>
                 </div>
             </CardBody>
-            <CardFooter className="mt-3 flex flex-col h-[150px]">
-                <div className="mr-5 font-bold text-emerald-800 text-sm">
+            <CardFooter className="mt-3 flex flex-col h-[150px] justify-center items-center">
+                <div className="mr-5 font-bold text-emerald-800 text-sm ">
                       {/* Nếu trạng thái không phải là in progress thì hiển thị ra Các tasker đang apply nếu có */}
                     {userCard.task_status !== 'IN_PROGRESS' ? (
                         <div className="flex items-center" >
