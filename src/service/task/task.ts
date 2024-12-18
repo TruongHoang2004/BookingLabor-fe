@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import api from "../config";
-import { Task, TaskFormDetails, TaskCardforTasker } from "@/interface/task";
+import { Task, TaskFormDetails } from "@/interface/task";
 
 export const taskService = {
   async create(taskForm: TaskFormDetails): Promise<Task> {
@@ -40,7 +40,7 @@ export const taskService = {
       toast.error("Không thể chọn người làm này! Hãy thử lại sau");
       throw error;
     }
-  }
+  },
 
   async applyTask(id: number): Promise<void> {
     try {
@@ -66,9 +66,9 @@ export const taskService = {
     }
   },
 
-  async getTaskerTasks(): Promise<TaskCardforTasker[]> {
+  async getTaskerTasks(): Promise<Task[]> {
     try {
-      const response = await api.get<TaskCardforTasker[]>("/tasks/tasker");
+      const response = await api.get<Task[]>("/tasks/tasker");
       console.log(response.data);
       return response.data;
     } catch (error) {

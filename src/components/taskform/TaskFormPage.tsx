@@ -195,7 +195,7 @@ export default function TaskFormPage() {
             title: task,
             description: taskDescription,
             skill_id: chosenSkillId,
-            district: parseInt(selectedDistrict, 10),
+            district: selectedDistrict,
             ward: selectedWard,
             detail_address: detailedAddress,
             estimated_duration: parseInt(estimatedDuration, 10),
