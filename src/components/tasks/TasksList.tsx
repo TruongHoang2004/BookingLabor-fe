@@ -55,6 +55,9 @@ export default function TasksList() {
 
     return (
         <div className="flex flex-col items-center w-full">
+            <div className="font-bold text-emerald-700 text-2xl my-10">
+                SEE ALL AVAILABLE TASKS AND CHOOSE YOUR SUITABLE ONES
+            </div>
             {/* Skill Filter */}
             <div className="my-4">
                 <label htmlFor="skillFilter" className="mr-2 font-bold text-emerald-700 text-xl">Filter by Skill:</label>
@@ -72,16 +75,12 @@ export default function TasksList() {
                     ))}
                 </select>
             </div>
-
             {/* Tasks Grid */}
-            <div className="flex justify-center items-center my-8 w-full">
-                <div className="flex flex-wrap gap-x-10 gap-y-10">
-                    {currentTasks.map(task => (
-                        <TaskCard key={task.id} task={task} />
-                    ))}
-                </div>
+            <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-10">
+                {currentTasks.map(task => (
+                    <TaskCard key={task.id} task={task} />
+                ))}
             </div>
-
             {/* Pagination */}
             {totalPages > 1 && (
                 <div className="flex items-center gap-2 my-4">
