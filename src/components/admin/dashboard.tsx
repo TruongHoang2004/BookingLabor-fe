@@ -3,9 +3,11 @@
 import React from 'react';
 import { Button, Card, CardBody, CardFooter, CardHeader, Divider, ScrollShadow, User } from "@nextui-org/react";
 import { useRouter } from 'next/navigation';
+import { ProtectedRoute } from '../protectedRoute';
 const Dashboard: React.FC = () => {
     const router = useRouter();
     return (
+        <ProtectedRoute>
         <div className="gap-4 grid grid-cols-2 sm:grid-cols-4 p-4">
             <div className="col-span-2 sm:col-span-4 mb-4 flex justify-center">
                 <Card className="max-w-[600px] w-full">
@@ -57,6 +59,14 @@ const Dashboard: React.FC = () => {
                             onClick={() => { router.push('/admin/monitor') }}
                             className="bg-primary text-white px-3 py-1 rounded-md text-sm">
                             Monitoring
+                        </Button>
+                        <Button
+                            radius="full"
+                            color="success"
+                            variant="solid"
+                            onClick={() => { router.push('/admin/skills') }}
+                            className="bg-primary text-white px-3 py-1 rounded-md text-sm">
+                            Skills
                         </Button>
                     </CardFooter>
                 </Card>
@@ -122,6 +132,7 @@ const Dashboard: React.FC = () => {
                 </CardBody>
             </Card>
         </div>
+        </ProtectedRoute>
     );
 };
 

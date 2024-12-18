@@ -22,25 +22,13 @@ const LoginForm: React.FC = () => {
       // Dispatch login action with email and password
       const email = formData.email;
       const password = formData.password;
-      // console.log(email + "-" + password)
       await authService.login({ email, password });
-      // const { user, token } = response.data;
-      // console.log(response.data);
-      // const userInfo = {
-      //   id: user.id,
-      //   email: user.email,
-      //   fullname: user.fullname,
-      //   gender: user.gender,
-      //   date_of_birth: user.date_of_birth,
-      // };
-      // dispatch(setCredentials({
-      //   user: userInfo,
-      //   accessToken: token.access_token,
-      //   refreshToken: token.refresh_token
-      // }));
-      // alert("Đăng nhập thành công")
-      // Redirect to home page after successful login
-      router.push('/');
+      const response = await authService.login({ email, password });
+      if (response.user.role === 'ADMIN') {
+        router.push('/admin');
+      } else {
+        router.push('/');
+      }
     } catch (error) {
       console.error('Error logging in:', error);
     }
@@ -53,15 +41,15 @@ const LoginForm: React.FC = () => {
   return (
     <div className="relative flex justify-center items-center min-h-screen">
       <Background />
-      <Card className="top-1/2 left-1/2 z-10 absolute p-8 w-full max-w-2xl transform -translate-x-1/2 -translate-y-1/2">
-        <CardHeader className="flex flex-col gap-3 pt-2 pb-2">
+      <Card className="top-1/2 left-1/2 z-10 absolute p-0 w-full max-w-2xl max-h-[90vh] transform -translate-x-1/2 -translate-y-1/2 flex flex-col">
+        <CardHeader className="flex flex-col gap-3 pt-4 px-8">
           <h1 className="font-extrabold text-4xl">Login</h1>
           <p className="text-gray-600 text-sm">Welcome back! Please enter your details.</p>
           <Divider orientation='horizontal' className="rounded-t-lg" />
         </CardHeader>
 
-        <form onSubmit={handleSubmit}>
-          <CardBody className="gap-4">
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
+          <CardBody className="gap-4 overflow-y-auto px-8 py-4">
             <Input
               label="Email"
               type="email"
@@ -105,7 +93,7 @@ const LoginForm: React.FC = () => {
             </div>
           </CardBody>
 
-          <CardFooter className="flex flex-col gap-4">
+          <CardFooter className="flex flex-col gap-4 px-8 py-4 border-t">
             <Button
               type="submit"
               color="primary"

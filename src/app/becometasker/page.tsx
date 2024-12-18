@@ -1,10 +1,13 @@
 import React from 'react';
 import BecomeTaskerForm from '../../components/becometasker/BecomeTaskerForm';
+import { ProtectedRoute } from '@/components/protectedRoute';
 
 const BecomeTaskerPage = () => {
     return (
         <div>
-            <BecomeTaskerForm />
+            <ProtectedRoute>
+                <BecomeTaskerForm />
+            </ProtectedRoute>
         </div>
     );
 };

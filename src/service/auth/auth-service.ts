@@ -33,21 +33,18 @@ class AuthService {
 
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
+      console.log(process.env.NEXT_PUBLIC_API_BASE_URL + "/auth/login")
       const response = await api.post<LoginResponse>(
         "/auth/login",
         JSON.stringify(credentials)
       );
       const LoginResponse = response.data;
-      toast.success("Đăng nhập thành công");
-      // this.setTokens(access_token, refresh_token);
       store.dispatch(setCredentials(LoginResponse));
-
-      console.log(store.getState().auth.accessToken);
-      //   const user = api.get<User>("/users/me");
-
+      toast.success("Đăng nhập thành công");
       return response.data;
     } catch (error) {
       console.log(error);
+      toast.error("Đăng nhập thất bại");
       this.handleAuthError(credentials);
       throw error;
     }

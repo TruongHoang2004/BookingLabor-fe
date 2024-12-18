@@ -23,4 +23,24 @@ export const userService = {
       throw error;
     }
   },
+
+  async getAll(): Promise<User[]> {
+    try {
+      const response = await api.get<User[]>("/users");
+      return response.data;
+    } catch (error) {
+      toast.error("Không thể lấy thông tin người dùng");
+      throw error;
+    }
+  },
+  async deleteUser(userId: number): Promise<User> {
+    try {
+      const response = await api.delete<User>(`/users/${userId}`);
+      toast.success("Xóa người dùng thành công");
+      return response.data;
+    } catch (error) {
+      toast.error("Không thể xóa người dùng");
+      throw error;
+    }
+  }
 };

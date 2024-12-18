@@ -7,6 +7,7 @@ export interface AuthState {
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
+  isTasker: boolean;
 }
 
 export interface TokenResponse {

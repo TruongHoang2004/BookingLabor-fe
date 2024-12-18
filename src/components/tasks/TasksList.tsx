@@ -1,42 +1,48 @@
 import TaskCard from "./TaskCard";
 import { useState, useEffect } from "react";
-import TaskFilter from "./Filter";
+//import TaskFilter from "./Filter";
 import { taskService } from "@/service/task/task";
+import LoadingSpinner from "../LoadingSpinner";
 import { Task } from "@/interface/task";
 
 export default function TasksList() {
     const [tasksList, setTasksList] = useState<Task[]>([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [selectedCategory, setSelectedCategory] = useState('all');
-    const tasksPerPage = 24;
+    const [selectedCategory] = useState('all');
+    const [selectedSkill, setSelectedSkill] = useState<number | null>(null); // Lưu kỹ năng được chọn
+    const tasksPerPage = 12;
 
+    // Lấy dữ liệu tasks từ server
     useEffect(() => {
         const fetchTasks = async () => {
-            try {
-                const response = await taskService.getMe();
-                console.log(response);
-                if (!response) {
-                    throw new Error('No data received');
-                }
-                setTasksList(Array.isArray(response) ? response : [response]);
-                setIsLoading(false);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Failed to fetch tasks');
-                setIsLoading(false);
-            }
+            const response = await taskService.getMe();
+            setTasksList(response);
+            setIsLoading(false);
         };
 
         fetchTasks();
     }, []);
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <div><LoadingSpinner /></div>;
     if (error) return <div>Error: {error}</div>;
-    // Filter tasks theo category
-    const filteredTasks = selectedCategory === 'all'
-        ? tasksList
-        : tasksList.filter(task => task.task_status === selectedCategory);
+
+    // Lấy danh sách kỹ năng duy nhất từ tasksList
+    const skills = Array.from(
+        new Map(
+            tasksList
+                .filter(task => task.skill) // Lọc các task có skill
+                .map(task => [task.skill!.id, task.skill!]) // Chuyển thành map với id là key
+        ).values()
+    );
+
+    // Lọc tasks theo category và skill
+    const filteredTasks = tasksList.filter(task => {
+        const matchesCategory = selectedCategory === 'all' || task.task_status === selectedCategory;
+        const matchesSkill = selectedSkill === null || (task.skill && task.skill.id === selectedSkill);
+        return matchesCategory && matchesSkill;
+    });
 
     // Tính toán tasks cho trang hiện tại
     const indexOfLastTask = currentPage * tasksPerPage;
@@ -47,29 +53,34 @@ export default function TasksList() {
     const totalPages = Math.ceil(filteredTasks.length / tasksPerPage);
     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
-    // Reset về trang 1 khi thay đổi filter
-    const handleCategoryChange = (category: string) => {
-        setSelectedCategory(category);
-        setCurrentPage(1);
-    };
-
     return (
         <div className="flex flex-col items-center w-full">
-            <TaskFilter
-                selectedCategory={selectedCategory}
-                onCategoryChange={handleCategoryChange}
-                tasks={tasksList}
-            />
-
-            {/* Tasks Grid */}
-            <div className="flex justify-center items-center my-8 w-full">
-                <div className="gap-4 grid grid-cols-6 laptop:grid-cols-4 mini-laptop:grid-cols-4 mobile:grid-cols-1 tablet:grid-cols-2 w-full">
-                    {currentTasks.map(task => (
-                        <TaskCard key={task.id} task={task} />
-                    ))}
-                </div>
+            <div className="font-bold text-emerald-700 text-2xl my-10">
+                SEE ALL AVAILABLE TASKS AND CHOOSE YOUR SUITABLE ONES
             </div>
-
+            {/* Skill Filter */}
+            <div className="my-4">
+                <label htmlFor="skillFilter" className="mr-2 font-bold text-emerald-700 text-xl">Filter by Skill:</label>
+                <select
+                    id="skillFilter"
+                    value={selectedSkill || ""}
+                    onChange={(e) => setSelectedSkill(e.target.value ? Number(e.target.value) : null)}
+                    className="border px-3 py-2 rounded-lg"
+                >
+                    <option value="">All Skills</option>
+                    {skills.map(skill => (
+                        <option key={skill.id} value={skill.id}>
+                            {skill.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            {/* Tasks Grid */}
+            <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-10">
+                {currentTasks.map(task => (
+                    <TaskCard key={task.id} task={task} />
+                ))}
+            </div>
             {/* Pagination */}
             {totalPages > 1 && (
                 <div className="flex items-center gap-2 my-4">
@@ -109,7 +120,7 @@ export default function TasksList() {
             {/* No Results Message */}
             {filteredTasks.length === 0 && (
                 <div className="my-8 text-gray-500">
-                    No tasks found for the selected category.
+                    No tasks found for the selected criteria.
                 </div>
             )}
         </div>
