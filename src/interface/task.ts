@@ -7,18 +7,24 @@ export interface TaskCard {
   description: string;
   category: string;
 }
-// export interface TaskCardforTasker {
-//   id: number;
-//   title: string;
-//   description: string;
-//   task_status: string;
-//   district: string;
-//   estimated_duration: string;
-//   fee_per_hour: string;
-//   username: string;
-//   start_date: string;
-//   end_date: string;
-// }
+export interface TaskCardforTasker {
+  id: number;
+  title: string;
+  description: string;
+  task_status: string;
+  district: string;
+  ward: string;
+  detail_address: string;
+  estimated_duration: number;
+  fee_per_hour: string;
+  username: string;
+  start_date: string;
+  end_date: string;
+  created_at: string;
+  updated_at: string;
+  user: User;
+  skill: Skill;
+}
 
 export interface Tasker {
   id: number;
