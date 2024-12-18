@@ -41,14 +41,15 @@ export default function TasksList() {
 
     return (
         <div className="flex flex-col items-center w-full">
+            <div className="font-bold text-emerald-700 text-2xl my-10">
+                SEE ALL AVAILABLE TASKS AND CHOOSE YOUR SUITABLE ONES
+            </div>
             {/* Tasks Grid */}
-            <div className="flex flex-wrap items-center gap-x-10 gap-y-10">
+            <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-10">
                 {currentTasks.map(task => (
                     <TaskCard key={task.id} task={task} />
                 ))}
             </div>
-         
-
             {/* Pagination */}
             {totalPages > 1 && (
                 <div className="flex items-center gap-2 my-4">

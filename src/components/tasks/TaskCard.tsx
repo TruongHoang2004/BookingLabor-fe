@@ -16,7 +16,7 @@ import toast from "react-hot-toast";
 
 export default function TaskCard({ task }: { task: Task }) {
     const getImageSrc = () => {
-        const randomIndex = 2;
+        const randomIndex = 1;
         return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
     }
 
