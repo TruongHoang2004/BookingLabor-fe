@@ -12,7 +12,6 @@ import { FaList } from "react-icons/fa";
 import { TbChecklist } from "react-icons/tb";
 import { BiSolidCheckCircle } from "react-icons/bi";
 import { locationService } from "@/service/location/location1";
-import { useState, useEffect } from "react";
 import { taskService } from "@/service/task/task";
 import toast from "react-hot-toast";
 
