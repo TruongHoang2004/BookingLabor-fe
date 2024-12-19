@@ -22,6 +22,15 @@ export const taskService = {
       throw error;
     }
   },
+  async getAllTaskAvailable() : Promise<Task[]> {
+    try {
+      const response = await api.get<Task[]>("/tasks");
+      return response.data;
+    } catch (error) {
+      toast.error("Không thể lấy thông tin công việc");
+      throw error;
+    }
+  },
   async deleteMe(task: Task): Promise<Task> {
     try {
       const response = await api.delete<Task>(`/tasks/${task.id}`);

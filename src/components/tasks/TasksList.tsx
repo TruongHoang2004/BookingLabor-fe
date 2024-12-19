@@ -17,7 +17,7 @@ export default function TasksList() {
     // Lấy dữ liệu tasks từ server
     useEffect(() => {
         const fetchTasks = async () => {
-            const response = await taskService.getMe();
+            const response = await taskService.getAllTaskAvailable();
             setTasksList(response);
             setIsLoading(false);
         };

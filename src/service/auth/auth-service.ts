@@ -61,7 +61,7 @@ class AuthService {
     }
 
     this.refreshPromise = api
-      .post<TokenResponse>("/auth/refresh", { refreshToken })
+      .post<TokenResponse>("/auth/refresh", { refresh_token: refreshToken })
       .then((response) => {
         const { access_token, refresh_token } = response.data;
         store.dispatch(
