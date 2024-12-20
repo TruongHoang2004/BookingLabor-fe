@@ -11,7 +11,7 @@ import { ProtectedRoute } from '@/components/protectedRoute';
 
 export default function TaskerApplyTask() {
     const searchParams = useSearchParams();
-    const [taskID, setTaskID] = useState(searchParams.get('task_id') ?? ""); // title
+    const [taskID] = useState(searchParams.get('task_id') ?? ""); // title
     const [task, setTask] = useState<Task | null>(null)
     const handleTaskID =  (id:number) => {
         if(id < 0) {
