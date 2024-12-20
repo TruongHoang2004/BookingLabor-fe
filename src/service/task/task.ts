@@ -22,6 +22,16 @@ export const taskService = {
       throw error;
     }
   },
+  async getTaskById(id: number): Promise<Task> {
+    try {
+      const response = await api.get<Task>(`/tasks?id=${id}`);
+      //toast.success("Lấy thông tin công việc thành công")
+      return response.data;
+    } catch (error) {
+      toast.error("Không thể lấy thông tin công việc");
+      throw error;
+    }
+  },
   async getAllTaskAvailable(): Promise<Task[]> {
     try {
       const response = await api.get<Task[]>("/tasks");
