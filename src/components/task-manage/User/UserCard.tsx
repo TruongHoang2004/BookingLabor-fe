@@ -10,12 +10,13 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import { FaList } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TbChecklist } from "react-icons/tb";
 import { BiSolidCheckCircle } from "react-icons/bi";
 import { taskService } from "@/service/task/task";
 import { locationService } from "@/service/location/location1";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 //import TaskCard from "../Tasker/TaskCard";
 
 
@@ -35,6 +36,13 @@ export default function UserCard({
     const getImageSrc = () => {
         return `/img/taskmanage/task-manage-bg6.jpg`
     }
+
+    const [isMounted, setIsMounted] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        setIsMounted(true); // Ensure this runs only on the client
+    }, []);
 
 
     // const router = useRouter();
@@ -109,6 +117,47 @@ export default function UserCard({
             console.error("Lỗi khi xác nhận:", error);
         }
     };
+
+
+    const handleTaskerComfirmCompletion = async () => {
+        try {
+            await taskService.UserConfirmCompleteTask(userCard.id); // Gọi hàm service với task.id
+            // toast.success("Xác nhận thành công!"); // Thông báo thành công
+            setTaskChosen(!isTaskerChosen); // Cập nhật lại trạng thái
+        }
+        catch (error) {
+            toast.error("Xác nhận thất bại!"); // Thông báo lỗi
+            console.error("Lỗi khi xác nhận:", error);
+        }
+    };
+
+    const handleRouteToReview = async () => {
+        if (!isMounted) return;
+
+        try {
+            const queryParams = new URLSearchParams({
+                taskId: userCard.id.toString(),
+                title: userCard.title,
+                district: userCard.district,
+                ward: userCard.ward,
+                detail_address: userCard.detail_address,
+                start_date: new Date(userCard.start_date).toISOString(),
+                end_date: new Date(userCard.end_date).toISOString(),
+                fee_per_hour: userCard.fee_per_hour.toString(),
+                estimated_duration: userCard.estimated_duration.toString(),
+                description: userCard.description
+            }).toString();
+
+            console.log('Query params:', queryParams); // Debug log
+
+            await router.push(`/reviewTasker?${queryParams}`);
+        } catch (error) {
+            console.error('Navigation error:', error);
+            toast.error('Failed to navigate to order page');
+        }
+    };
+
+
 
     const renderModalContent = (onClose: () => void) => {
         // nếu xem thông tin mà không phải chọn taskers
@@ -194,8 +243,8 @@ export default function UserCard({
                 <CardFooter className="mt-3 flex flex-col h-[150px]">
                     <div className="mr-5 font-bold text-emerald-800 text-sm">
                         {/* Nếu trạng thái không phải là in progress thì hiển thị ra Các tasker đang apply nếu có */}
-                        {userCard.task_status !== 'IN_PROGRESS' ? (
-                            <div className="flex items-center" >
+                        {userCard.task_status !== 'IN_PROGRESS' && userCard.task_status !== 'WAITING' && userCard.task_status !== 'COMPLETED' ? (
+                            <div className="flex items-center">
                                 <span>{userCard.taskers && userCard.taskers.length} Taskers applying :</span>
                                 {userCard.taskers && userCard.taskers.map((tasker) => (
                                     <div key={tasker.id}>
@@ -210,11 +259,11 @@ export default function UserCard({
 
                     <div>
                         {/* Hiển thị nút nút tương ứng với các trạng thái  */}
-                        {userCard.task_status === 'IN_PROGRESS' ? (
+                        {/* {userCard.task_status === 'IN_PROGRESS' ? (
                             <div><Button color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Completion Confirmation</Button></div>
                         ) : (
                             <div></div>
-                        )}
+                        )} */}
                         {userCard.task_status === 'PENDING' ? (
                             <div className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">Waiting for Tasker's Final Confirmation</div>
                         ) : (
@@ -230,6 +279,16 @@ export default function UserCard({
                             <div><Button onClick={handleUserCancelTask} color="danger" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Cancel this Task</Button></div>
                         ) : (
                             <div></div>
+                        )}
+                        {userCard.task_status === 'WAITING' && (
+                            <Button onClick={handleTaskerComfirmCompletion} color="success" className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">
+                                Confirm Completion
+                            </Button>
+                        )}
+                        {userCard.task_status === 'COMPLETED' && (
+                            <Button onClick={handleRouteToReview} color="success" className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">
+                                Review Tasker
+                            </Button>
                         )}
                     </div>
                 </CardFooter>
