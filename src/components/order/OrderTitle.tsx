@@ -17,7 +17,7 @@ export default function OrderTitle() {
                     color: 'rgb(20 90 45)'
                 }}
             >
-                ORDER
+                PAYMENT
             </h1>
         </div>
     );
