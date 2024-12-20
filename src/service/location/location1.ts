@@ -2,7 +2,7 @@ import { District,Ward,City } from "@/interface/location1";
 import toast from "react-hot-toast";
 
 export class locationService {
-    private hostURL: string = "http://localhost:3000/";
+    private hostURL: string | undefined = process.env.NEXT_PUBLIC_FRONTEND_BSAE_URL;
     private cityData: City | null = null;
 
     constructor() {
