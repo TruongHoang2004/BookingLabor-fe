@@ -14,11 +14,45 @@ import AvatarUpload from "@/components/profile/avatar";
 const ProfilePage = () => {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const { user } = useAppSelector((state) => state.auth);
+  const [error, setError] = useState<string>('');
+  const [uploading, setUploading] = useState(false);
 
-  const handleFileSelect = (file: File) => {
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setAvatarUrl(imageUrl);
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setError('');
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || '';
+      formData.append('upload_preset', uploadPreset);
+
+      const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+      if (!cloudName) throw new Error('Cloudinary cloud name is not configured');
+
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error?.message || 'Upload failed');
+
+      setAvatarUrl(data.secure_url);
+      console.log('Cloudinary URL:', data.secure_url);
+
+      setAvatarUrl(data.secure_url);
+    } catch (err) {
+      console.error('Upload error:', err);
+      setError(err instanceof Error ? err.message : 'Upload failed');
+    } finally {
+      setUploading(false);
     }
   };
   const paymentOptions = [
@@ -34,10 +68,15 @@ const ProfilePage = () => {
         <div className="bg-white shadow-sm mt-2 p-10 rounded-md w-full">
           <HeaderProfile />
           <div className="flex justify-center shadow-sm p-6 rounded-lg">
-            <AvatarUpload
-              avatarUrl={avatarUrl}
-              onFileSelect={handleFileSelect}
-            />
+
+            <div className="flex justify-center shadow-sm p-6 rounded-lg">
+              <AvatarUpload
+                avatarUrl={avatarUrl}
+                uploading={uploading}
+                error={error}
+                onFileChange={handleFileChange}
+              />
+            </div>
           </div>
           {/* Main Content */}
           <div className="gap-8 grid grid-cols-1 md:grid-cols-2 bg-white shadow-sm p-12 rounded-md">
