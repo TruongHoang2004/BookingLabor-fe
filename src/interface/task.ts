@@ -1,5 +1,5 @@
 import { Skill } from "./skill";
-import { User } from "@/interface/user";
+import { User, Tasker } from "@/interface/user";
 
 export interface TaskCard {
   id: number;
@@ -24,13 +24,6 @@ export interface TaskCardforTasker {
   updated_at: string;
   user: User;
   skill: Skill;
-}
-
-export interface Tasker {
-  id: number;
-  name: string;
-  skills: Skill[];
-  experience: string;
 }
 
 export interface TaskCardforUser {
