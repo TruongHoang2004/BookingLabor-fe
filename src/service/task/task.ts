@@ -96,7 +96,7 @@ export const taskService = {
   },
   async UserCancelTask(id: number): Promise<void> {
     try {
-      const response = await api.delete(`/tasks/${id}`);
+      const response = await api.patch(`/tasks/${id}/cancel`);
       toast.success("Hủy công việc thành công!");
       console.log(response.data);
       return response.data;
@@ -114,6 +114,30 @@ export const taskService = {
       return response.data;
     } catch (error) {
       toast.error("Không thể từ chối công việc này");
+      throw error;
+    }
+  },
+
+  async TaskerCompleteTask(id: number): Promise<void> {
+    try {
+      const response = await api.patch(`/tasks/${id}/complete`);
+      toast.success("Hoàn thành công việc thành công!");
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      toast.error("Không thể hoàn thành công việc này");
+      throw error;
+    }
+  },
+
+  async UserConfirmCompleteTask(id: number): Promise<void> {
+    try {
+      const response = await api.patch(`/tasks/${id}/finish`);
+      toast.success("Xác nhận hoàn thành công việc thành công!");
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      toast.error("Không thể xác nhận hoàn thành công việc này");
       throw error;
     }
   }
