@@ -8,12 +8,12 @@ import ChangePassword from "@/components/profile/changepassword";
 import HeaderProfile from "@/components/profile/headerprofile";
 import { useAppSelector } from '@/redux/store';
 import { ProtectedRoute } from "@/components/protectedRoute";
-
 import AvatarUpload from "@/components/profile/avatar";
+import { userService } from "@/service/user/user";
 
 const ProfilePage = () => {
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const { user } = useAppSelector((state) => state.auth);
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(user?.profile.avatar);
   const [error, setError] = useState<string>('');
   const [uploading, setUploading] = useState(false);
 
@@ -45,6 +45,8 @@ const ProfilePage = () => {
       if (!response.ok) throw new Error(data.error?.message || 'Upload failed');
 
       setAvatarUrl(data.secure_url);
+      // in ra URL KHI THÀNH CÔNG
+      await userService.updateAvatarURL(data.secure_url)
       console.log('Cloudinary URL:', data.secure_url);
 
       setAvatarUrl(data.secure_url);

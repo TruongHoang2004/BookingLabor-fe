@@ -2,6 +2,8 @@ import { RegisterRequest } from "@/interface/auth";
 import { User } from "@/interface/user";
 import toast from "react-hot-toast";
 import api from "../config";
+import { store } from "@/redux/store";
+import { updateAvatar } from "@/redux/slices/authSlice";
 
 export const userService = {
   async create(userData: RegisterRequest): Promise<User> {
@@ -40,6 +42,16 @@ export const userService = {
       return response.data;
     } catch (error) {
       toast.error("Không thể xóa người dùng");
+      throw error;
+    }
+  },
+  async updateAvatarURL(user_avatar: string): Promise<void> {
+    try {
+      const response = await api.patch('/users/me', {avatar: user_avatar}) 
+      store.dispatch(updateAvatar(user_avatar))
+      toast.success("Cập nhật ảnh đại diện thành công")
+    } catch(error) {
+      toast.error('Cập nhật ảnh không thành công');
       throw error;
     }
   }

@@ -2,10 +2,11 @@
 
 import { Avatar as NextAvatar } from "@nextui-org/react";
 import { Camera } from "lucide-react";
+import { userService } from "@/service/user/user";
 import React, { useRef } from "react";
 
 interface AvatarUploadProps {
-  avatarUrl: string | null;
+  avatarUrl: string | undefined;
   uploading: boolean;
   error: string;
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
