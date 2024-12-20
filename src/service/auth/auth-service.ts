@@ -33,7 +33,7 @@ class AuthService {
 
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
-      console.log(process.env.NEXT_PUBLIC_API_BASE_URL + "/auth/login")
+      console.log(process.env.NEXT_PUBLIC_API_BASE_URL + "/auth/login");
       const response = await api.post<LoginResponse>(
         "/auth/login",
         JSON.stringify(credentials)
@@ -105,7 +105,7 @@ class AuthService {
     return store.getState().auth.refreshToken;
   }
 
-  isTokenExpired(token: string): boolean {
+  isTokenExpired(token: string | null | undefined): boolean {
     if (!token) return true;
 
     try {

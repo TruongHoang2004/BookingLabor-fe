@@ -25,13 +25,13 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
     }
 
     const formatID = (id: number) => {
-        if(id < 10) {
+        if (id < 10) {
             return `A00${id}`
         }
-        if(id >= 10 && id < 100) {
+        if (id >= 10 && id < 100) {
             return `A0${id}`
         }
-        if(id < 10) {
+        if (id < 10) {
             return `A${id}`
         }
     }
@@ -61,36 +61,36 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                 <CardHeader className="flex flex-col bg-slate-200">
                     <p className="font-bold text-emerald-700 text-xl">{formatID(task.id)}</p>
                     <p className="font-semibold text-lg">{task.title}</p>
-                    <p className="truncate mt-2 flex items-center max-w-[290px] bg-emerald-400 rounded-xl p-2 font-bold"><span className="text-emerald-900 font-semibold mr-1 ">Status:</span>{task.task_status}</p>
+                    <p className="flex items-center bg-emerald-400 mt-2 p-2 rounded-xl max-w-[290px] font-bold truncate"><span className="mr-1 font-semibold text-emerald-900">Status:</span>{task.task_status}</p>
                 </CardHeader>
                 <CardBody className="p-0">
-                <div className="w-full h-full relative">
-                    <div className="absolute transform -translate-x-1/2 -translate-y-1/2 top-2/3 left-1/2 bg-gray-200 rounded-lg py-4 pl-2 w-11/12 flex items-center justify-between">
-                        <div className="">
-                            <p className="truncate mb-2  flex items-center max-w-[290px] "><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Duration:</span>{task.estimated_duration} hours</p>
-                            <p className="truncate mb-2  flex items-center max-w-[290px]"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{task.fee_per_hour} VND/h</p>
-                            <p className="truncate  flex items-center max-w-[290px]"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">End date:</span>{task.end_date.replaceAll("T00:00:00.000Z", "")}</p>
-                        </div>
-                        <div>
-                            <Tooltip content="View more details">
-                                <Button onPress={onOpen}  variant="light" className="text-emerald-700 text-lg"><FaList /></Button>
-                            </Tooltip>
+                    <div className="relative w-full h-full">
+                        <div className="top-2/3 left-1/2 absolute flex justify-between items-center bg-gray-200 py-4 pl-2 rounded-lg w-11/12 transform -translate-x-1/2 -translate-y-1/2">
+                            <div className="">
+                                <p className="flex items-center mb-2 max-w-[290px] truncate"><TbChecklist className="mr-1 text-emerald-700 text-xl" /> <span className="mr-1 font-semibold text-emerald-700">Duration:</span>{task.estimated_duration} hours</p>
+                                <p className="flex items-center mb-2 max-w-[290px] truncate"><TbChecklist className="mr-1 text-emerald-700 text-xl" /> <span className="mr-1 font-semibold text-emerald-700">Fee per hour:</span>{task.fee_per_hour} VND/h</p>
+                                <p className="flex items-center max-w-[290px] truncate"><TbChecklist className="mr-1 text-emerald-700 text-xl" /> <span className="mr-1 font-semibold text-emerald-700">End date:</span>{task.end_date.replaceAll("T00:00:00.000Z", "")}</p>
+                            </div>
+                            <div>
+                                <Tooltip content="View more details">
+                                    <Button onPress={onOpen} variant="light" className="text-emerald-700 text-lg"><FaList /></Button>
+                                </Tooltip>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </CardBody>
-                <CardFooter className="flex flex-col mt-3 h-[150px] justify-center items-center">
+                </CardBody>
+                <CardFooter className="flex flex-col justify-center items-center mt-3 h-[150px]">
                     <div>
                         {/* Hiển thị nút nút tương ứng với các trạng thái  */}
                         {task.task_status === 'IN_PROGRESS' ? (
-                            <div><Button color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Completion Confirmation</Button></div>
+                            <div><Button color="success" className="shadow-md mt-2 px-3 py-2 rounded-lg font-semibold text-white">Completion Confirmation</Button></div>
                         ) : (
                             <div></div>
                         )}
                         {task.task_status === 'PENDING' ? (
-                            <div className="flex flex-col gap-y-2 justify-center items-center">
-                                <Button onClick={handleAccept} color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Accept Task</Button>
-                                <Button color="danger" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Decline Task</Button>
+                            <div className="flex flex-col justify-center items-center gap-y-2">
+                                <Button onClick={handleAccept} color="success" className="shadow-md mt-2 px-3 py-2 rounded-lg font-semibold text-white">Accept Task</Button>
+                                <Button color="danger" className="shadow-md mt-2 px-3 py-2 rounded-lg font-semibold text-white">Decline Task</Button>
                             </div>
                         ) : (
                             <div></div>
@@ -118,12 +118,12 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">End Date:</span>{formatDate(task.end_date)}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Status:</span>{task.task_status}</p>
                                 </div>
-                                <p className="font-bold text-sm mb-[-10px]">YOUR CLIENT'S DETAILED ADDRESS</p>
-                                <div className={task.task_status === 'IN_PROGRESS' ? 'block bg-gray-200 rounded-lg p-3 flex flex-col gap-y-2' : 'hidden'}>
+                                <p className="mb-[-10px] font-bold text-sm">YOUR CLIENT'S DETAILED ADDRESS</p>
+                                <div className={task.task_status === 'IN_PROGRESS' ? 'bg-gray-200 rounded-lg p-3 flex flex-col gap-y-2' : 'hidden'}>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">User's ID:</span>{task.user?.id}</p>
-                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">User's Email:</span>{task.user?.email}</p> 
-                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">District:</span>{locations.getDistrictByCode(parseInt(task.district,10))?.name}</p>
-                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Ward:</span>{locations.getWardByCode(parseInt(task.ward,10))?.name}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">User's Email:</span>{task.user?.email}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">District:</span>{locations.getDistrictByCode(parseInt(task.district, 10))?.name}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Ward:</span>{locations.getWardByCode(parseInt(task.ward, 10))?.name}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Detail Address:</span>{task.detail_address}</p>
                                 </div>
                             </ModalBody>

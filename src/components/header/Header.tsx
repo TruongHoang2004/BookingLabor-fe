@@ -12,7 +12,7 @@ import { useAppDispatch } from '../../redux/store';
 import { logout } from '@/redux/slices/authSlice';
 import { Role } from "@/enum/role";
 import HeaderAdmin from "./headerAdmin";
-import Notifications from "./Notification";
+import NotificationListener from "./NotificationListener";
 
 const lobster = Lobster({
     subsets: ['latin'],
@@ -46,17 +46,6 @@ const Header: React.FC = () => {
     const handleLogOut = () => {
         dispatch(logout());
     }
-
-    const notis = [
-        { text: 'Random Text 12345678910', date: "2 hours" },
-        { text: 'Random Text 12345678sadadas dadsdadsdas dasdadsasd ádasdasdawdas dasdawdawdd asdwd910sss', date: "1 days" },
-        { text: 'Random Text 12345678910 dadsdadsasdasdas dasdadasdasd ádaasdawdadasdas', date: "3 days" },
-        { text: 'Random Text 12345678910', date: "4 days" },
-        { text: 'Random Text 12345678910 dadsdadsadadsasdasdas dasddasdasd wdadasdas dadsadadsasdasdas', date: "5 days" },
-        { text: 'Random Text 12345678910', date: "7 days" },
-        { text: 'Random Text 12345678910', date: "10 days" },
-        { text: 'Random Text 12345678910', date: "10 days" },
-    ]
 
     if (user?.role === Role.ADMIN) {
         return (
@@ -136,7 +125,8 @@ const Header: React.FC = () => {
                             </PopoverContent>
                         </Popover>
                         <Divider orientation="vertical" className="bg-lime-500" />
-                        <Notifications />
+                        {/* <NotificationComponent /> */}
+                        <NotificationListener />
                         <Divider orientation="vertical" className="bg-lime-500" />
                         <p onClick={handleLogOut} className="hover:underline no-underline cursor-pointer">Log Out</p>
                     </div>
@@ -144,7 +134,7 @@ const Header: React.FC = () => {
                 {/* Nếu login vào rồi thì hiển thị giao diện này và không hiển thị giao diện mặc định nữa ~ Giao diện khi màn nhỏ đi*/}
                 <div className={`${isLoggedIn ? 'sm:block 1100:hidden' : 'hidden'}`}>
                     <div className="flex items-center gap-x-5">
-                        <Notifications />
+                        <NotificationListener />
                         <Dropdown>
                             <DropdownTrigger>
                                 <Button
@@ -173,7 +163,7 @@ const Header: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </header>
+        </header >
     )
 }
 
