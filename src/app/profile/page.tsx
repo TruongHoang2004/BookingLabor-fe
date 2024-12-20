@@ -23,6 +23,7 @@ const ProfilePage = () => {
 
     setUploading(true);
     setError('');
+    setAvatarUrl(undefined);
 
     try {
       const formData = new FormData();
@@ -57,6 +58,8 @@ const ProfilePage = () => {
       setUploading(false);
     }
   };
+
+
   const paymentOptions = [
     { value: 'credit_card', label: 'Credit Card' },
     { value: 'pay_pal', label: 'PayPal' },
@@ -70,13 +73,13 @@ const ProfilePage = () => {
         <div className="bg-white shadow-sm mt-2 p-10 rounded-md w-full">
           <HeaderProfile />
           <div className="flex justify-center shadow-sm p-6 rounded-lg">
-
             <div className="flex justify-center shadow-sm p-6 rounded-lg">
               <AvatarUpload
                 avatarUrl={avatarUrl}
                 uploading={uploading}
                 error={error}
                 onFileChange={handleFileChange}
+                setAvatarUrl={setAvatarUrl}
               />
             </div>
           </div>

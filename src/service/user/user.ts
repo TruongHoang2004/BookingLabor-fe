@@ -47,10 +47,10 @@ export const userService = {
   },
   async updateAvatarURL(user_avatar: string): Promise<void> {
     try {
-      const response = await api.patch('/users/me', {avatar: user_avatar}) 
+      await api.patch('/users/me', { avatar: user_avatar })
       store.dispatch(updateAvatar(user_avatar))
       toast.success("Cập nhật ảnh đại diện thành công")
-    } catch(error) {
+    } catch (error) {
       toast.error('Cập nhật ảnh không thành công');
       throw error;
     }

@@ -1,23 +1,35 @@
 'use client';
-
 import { Avatar as NextAvatar } from "@nextui-org/react";
 import { Camera } from "lucide-react";
-import { userService } from "@/service/user/user";
 import React, { useRef } from "react";
+import { userService } from "@/service/user/user";
+import toast from "react-hot-toast";
 
 interface AvatarUploadProps {
   avatarUrl: string | undefined;
   uploading: boolean;
   error: string;
   onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setAvatarUrl: (url: string | undefined) => void;
 }
 
-const AvatarUpload = ({ avatarUrl, uploading, error, onFileChange }: AvatarUploadProps) => {
+const AvatarUpload = ({ avatarUrl, uploading, error, onFileChange, setAvatarUrl }: AvatarUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const triggerFileInput = () => {
     fileInputRef.current?.click();
   };
+
+  const deleteAvatar = async () => {
+    try {
+      await userService.updateAvatarURL('');
+      setAvatarUrl(undefined);
+    } catch (error) {
+      toast.error('Xóa ảnh không thành công');
+      throw error;
+    }
+
+  }
 
   return (
     <div className="space-y-4">
@@ -46,6 +58,15 @@ const AvatarUpload = ({ avatarUrl, uploading, error, onFileChange }: AvatarUploa
       </div>
       {uploading && <p className="text-gray-500 text-sm">Uploading...</p>}
       {error && <p className="text-red-500 text-sm">{error}</p>}
+      {avatarUrl !== undefined && (
+        <button
+          onClick={deleteAvatar}
+          className="flex justify-center w-[125px] mt-2 bg-red-500 hover:bg-red-700 text-white text-sm font-medium py-1 px-3 rounded-full"
+          type="button"
+        >
+          Xóa avatar
+        </button>
+      )}
     </div>
   );
 };

@@ -1,6 +1,4 @@
 'use client';
-import AvatarUpload from "@/components/profile/avatar";
-import React, { useState } from "react";
 import Reviews from "@/components/profile/review";
 import EditableField from "@/components/profile/editable";
 import EditableTextarea from "@/components/profile/editabletext";
@@ -11,12 +9,7 @@ import { useAppSelector } from '@/redux/store';
 import { Input } from '@nextui-org/react';
 
 const TaskerProfilePage = () => {
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const { user } = useAppSelector((state) => state.auth);
-  const handleFileSelect = (file: File) => {
-    const imageUrl = URL.createObjectURL(file);
-    setAvatarUrl(imageUrl);
-  };
 
   return (
     <ProtectedRoute>
@@ -24,10 +17,7 @@ const TaskerProfilePage = () => {
         <div className="bg-white shadow-sm mt-2 p-10 rounded-md w-full">
           <HeaderProfile />
           <div className="flex justify-center shadow-sm p-6 rounded-lg">
-            <AvatarUpload
-              avatarUrl={avatarUrl}
-              onFileSelect={handleFileSelect}
-            />
+
           </div>
           {/* Main Content */}
           <div className="gap-8 grid grid-cols-1 md:grid-cols-2 bg-white shadow-sm p-12 rounded-md">
