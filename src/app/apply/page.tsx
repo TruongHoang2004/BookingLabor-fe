@@ -111,7 +111,10 @@ export default function TaskerApplyTask() {
          </div>
         </div>
     ): (
-        <div className='w-full text-center text-3xl font-bold text-emerald-700 py-20'>YOUR ARE NOT ALLOWED TO APPLY FOR THIS TASK</div>
+        <div className='w-full text-center text-3xl font-bold text-emerald-700 py-20 flex flex-col items-center gap-y-5'>
+            YOUR ARE NOT ALLOWED TO APPLY FOR THIS TASK
+            <Image src="/img/sad.png" alt='bg' width={200} height={200}></Image>    
+        </div>
     )}
     </ProtectedRoute>
     );
