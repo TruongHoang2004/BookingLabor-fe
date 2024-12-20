@@ -1,3 +1,7 @@
+'use client'
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+//import { UrlObject } from 'url';
 import { Task } from "@/interface/task";
 import { Card, CardBody, CardHeader, CardFooter, Tooltip, Button } from "@nextui-org/react";
 import {
@@ -14,16 +18,48 @@ import { BiSolidCheckCircle } from "react-icons/bi";
 import { locationService } from "@/service/location/location1";
 import { taskService } from "@/service/task/task";
 import toast from "react-hot-toast";
+//import { start } from "repl";
+
 
 const locations = new locationService()
 
 export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Task; isAccepted: boolean; setIsAccepted: React.Dispatch<React.SetStateAction<boolean>>; }) {
+    const [isMounted, setIsMounted] = useState(false);
+    const router = useRouter();
 
+    useEffect(() => {
+        setIsMounted(true); // Ensure this runs only on the client
+    }, []);
+
+    const handleAccept = async () => {
+        if (!isMounted) return;
+
+        try {
+            const queryParams = new URLSearchParams({
+                taskId: task.id.toString(),
+                title: task.title,
+                district: task.district,
+                ward: task.ward,
+                detail_address: task.detail_address,
+                start_date: new Date(task.start_date).toISOString(),
+                end_date: new Date(task.end_date).toISOString(),
+                fee_per_hour: task.fee_per_hour.toString(),
+                estimated_duration: task.estimated_duration.toString(),
+                description: task.description
+            }).toString();
+
+            console.log('Query params:', queryParams); // Debug log
+
+            await router.push(`/order?${queryParams}`);
+        } catch (error) {
+            console.error('Navigation error:', error);
+            toast.error('Failed to navigate to order page');
+        }
+    };
     const getImageSrc = () => {
         const randomIndex = 1;
         return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
     }
-
 
 
     const formatID = (id: number) => {
@@ -44,16 +80,19 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
         return date.toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
     };
 
-    const handleAccept = async () => {
-        try {
-            await taskService.acceptTask(task.id); // Gọi hàm service với task.id
-            toast.success("Xác nhận thành công!"); // Thông báo thành công
-            setIsAccepted(!isAccepted)
-        } catch (error) {
-            toast.error("Xác nhận thất bại!"); // Thông báo lỗi
-            console.error("Lỗi khi xác nhận:", error);
-        }
-    };
+
+
+
+    // const handleAccept = async () => {
+    //     try {
+    //         await taskService.acceptTask(task.id); // Gọi hàm service với task.id
+    //         toast.success("Xác nhận thành công!"); // Thông báo thành công
+    //         setIsAccepted(!isAccepted)
+    //     } catch (error) {
+    //         toast.error("Xác nhận thất bại!"); // Thông báo lỗi
+    //         console.error("Lỗi khi xác nhận:", error);
+    //     }
+    // };
 
     const handleTaskerRejectTask = async () => {
         try {
