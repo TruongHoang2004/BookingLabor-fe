@@ -1,3 +1,4 @@
+import { Review } from "./review";
 import { Skill } from "./skill";
 import { User, Tasker } from "@/interface/user";
 
@@ -64,6 +65,7 @@ export interface Task {
   skill: Skill | null; // Nested skill object
   tasker: Tasker | null;
   taskers: Tasker[] | null;
+  review?: Review;
 }
 
 export interface TaskFormDetails {

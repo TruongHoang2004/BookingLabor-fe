@@ -97,10 +97,10 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
     const handleTaskerRejectTask = async () => {
         try {
             await taskService.TaskerRejectTask(task.id);
-            toast.success("Hủy công việc thành công");
+            // toast.success("Hủy công việc thành công");
             setIsAccepted(!isAccepted)
         } catch (error) {
-            toast.error("Hủy công việc thất bại");
+            //toast.error("Hủy công việc thất bại");
             console.error("Lỗi khi hủy công việc:", error);
         }
     };

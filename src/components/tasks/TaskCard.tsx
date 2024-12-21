@@ -42,9 +42,9 @@ export default function TaskCard({ task }: { task: Task }) {
     const handleApply = async () => {
         try {
             await taskService.applyTask(task.id); // Gọi hàm service với task.id
-            toast.success("Ứng tuyển thành công!"); // Thông báo thành công
+            //toast.success("Ứng tuyển thành công!"); // Thông báo thành công
         } catch (error) {
-            toast.error("Ứng tuyển thất bại!"); // Thông báo lỗi
+            //toast.error("Ứng tuyển thất bại!"); // Thông báo lỗi
             console.error("Lỗi khi ứng tuyển:", error);
         }
     };

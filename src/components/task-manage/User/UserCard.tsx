@@ -285,10 +285,16 @@ export default function UserCard({
                                 Confirm Completion
                             </Button>
                         )}
-                        {userCard.task_status === 'COMPLETED' && (
+                        {userCard.task_status === 'COMPLETED' && !userCard.review ? (
                             <Button onClick={handleRouteToReview} color="success" className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">
                                 Review Tasker
                             </Button>
+                        ) : (
+                            <div>
+                                <Button color="success" className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">
+                                    See Review Details
+                                </Button>
+                            </div>
                         )}
                     </div>
                 </CardFooter>
