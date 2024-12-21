@@ -111,20 +111,19 @@ export default function TaskInformation() {
                             isReadOnly
                             type='text'
                             //key="outside-left"
+                            color='default'
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Title</span>}
-                            variant="bordered"
                             labelPlacement='outside'
                             value={title}
                             fullWidth
                             className='text-black label-text-color-100'
-
                         />
                         <Input
                             isReadOnly
                             type='text'
                             //key="outside-left"
+                            color='default'
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>District</span>}
-                            variant="bordered"
                             labelPlacement='outside'
                             value={districtName}
                             fullWidth
@@ -134,7 +133,7 @@ export default function TaskInformation() {
                             type='text'
                             //key="outside-left"
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Ward</span>}
-                            variant="bordered"
+                            color='default'
                             labelPlacement='outside'
                             value={wardName}
                             fullWidth
@@ -144,7 +143,7 @@ export default function TaskInformation() {
                             type='text'
                             //key="outside-left"
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Specific Address</span>}
-                            variant="bordered"
+                            color='default'
                             labelPlacement='outside'
                             value={detail_address}
                             fullWidth
@@ -154,7 +153,7 @@ export default function TaskInformation() {
                             type='text'
                             //key="outside-left"
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Start Date</span>}
-                            variant="bordered"
+                            color='default'
                             labelPlacement='outside'
                             value={start_date}
                             fullWidth
@@ -164,7 +163,7 @@ export default function TaskInformation() {
                             type='text'
                             //key="outside-left"
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>End Date</span>}
-                            variant="bordered"
+                            color='default'
                             labelPlacement='outside'
                             value={end_date}
                             fullWidth
@@ -174,7 +173,7 @@ export default function TaskInformation() {
                             type='text'
                             //key="outside-left"
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Duration</span>}
-                            variant="bordered"
+                            color='default'
                             labelPlacement='outside'
                             value={estimated_duration}
                             fullWidth
@@ -184,7 +183,7 @@ export default function TaskInformation() {
                             type='text'
                             //key="outside-left"
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Estimated Fee</span>}
-                            variant="bordered"
+                            color='default'
                             labelPlacement='outside'
                             value={fee_per_hour}
                             fullWidth
@@ -195,7 +194,7 @@ export default function TaskInformation() {
                             type='text'
                             //key="outside-left"
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Description</span>}
-                            variant="bordered"
+                            color='default'
                             labelPlacement='outside'
                             value={description}
                             fullWidth
@@ -274,6 +273,7 @@ export default function TaskInformation() {
                         marginBottom: '10px',
                         border: '0px solid #ccc',
                     }}>
+                        
                         <Image
                             src="/img/QR_Code/QR_Code.jpg"
                             alt="QR Code"
