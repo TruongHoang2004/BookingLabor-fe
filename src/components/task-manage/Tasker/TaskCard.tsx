@@ -113,7 +113,7 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                 <CardHeader className="flex flex-col bg-slate-200">
                     <p className="font-bold text-emerald-700 text-xl">{formatID(task.id)}</p>
                     <p className="font-semibold text-lg">{task.title}</p>
-                    <p className="truncate mt-2 flex items-center max-w-[290px] bg-emerald-400 rounded-xl p-2 font-bold"><span className="text-emerald-900 font-semibold mr-1 ">Status:</span>{task.task_status}</p>
+                    <p className="flex items-center bg-emerald-400 mt-2 p-2 rounded-xl max-w-[290px] font-bold truncate"><span className="mr-1 font-semibold text-emerald-900">Status:</span>{task.task_status}</p>
                 </CardHeader>
                 <CardBody className="p-0">
                     <div className="w-full h-full relative">
@@ -135,7 +135,7 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                     <div>
                         {/* Hiển thị nút nút tương ứng với các trạng thái  */}
                         {task.task_status === 'IN_PROGRESS' ? (
-                            <div><Button color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Completion Confirmation</Button></div>
+                            <div><Button color="success" className="shadow-md mt-2 px-3 py-2 rounded-lg font-semibold text-white">Completion Confirmation</Button></div>
                         ) : (
                             <div></div>
                         )}
@@ -170,8 +170,8 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">End Date:</span>{formatDate(task.end_date)}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Status:</span>{task.task_status}</p>
                                 </div>
-                                <p className="font-bold text-sm mb-[-10px]">YOUR CLIENT'S DETAILED ADDRESS</p>
-                                <div className={task.task_status === 'IN_PROGRESS' ? 'block bg-gray-200 rounded-lg p-3 flex flex-col gap-y-2' : 'hidden'}>
+                                <p className="mb-[-10px] font-bold text-sm">YOUR CLIENT'S DETAILED ADDRESS</p>
+                                <div className={task.task_status === 'IN_PROGRESS' ? 'bg-gray-200 rounded-lg p-3 flex flex-col gap-y-2' : 'hidden'}>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">User's ID:</span>{task.user?.id}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">User's Email:</span>{task.user?.email}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">District:</span>{locations.getDistrictByCode(parseInt(task.district, 10))?.name}</p>
