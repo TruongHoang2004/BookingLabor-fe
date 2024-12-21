@@ -3,6 +3,7 @@
 import React, { CSSProperties } from 'react';
 import { RadioGroup, Radio, cn, RadioProps } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
+import { useRouter } from 'next/navigation';
 
 interface CustomRadioProps extends RadioProps {
     children: React.ReactNode;
@@ -10,7 +11,6 @@ interface CustomRadioProps extends RadioProps {
 
 export const CustomRadio = (props: CustomRadioProps) => {
     const { children, ...otherProps } = props;
-
     return (
         <Radio
             {...otherProps}
@@ -31,6 +31,7 @@ export const CustomRadio = (props: CustomRadioProps) => {
 };
 
 export default function PaymentandBooking() {
+    const router = useRouter();
     return (
         <div style={rightStyles}>
             <div style={sidebarStyles}>
@@ -51,7 +52,11 @@ export default function PaymentandBooking() {
 
                 <div className="flex flex-wrap gap-4 items-center">
 
-                    <Button color="primary" variant="ghost">
+                    <Button 
+                        color="primary" 
+                        variant="ghost" 
+                        onClick={() => router.push('/payment')}
+                    >
                         Booking
                     </Button>
 

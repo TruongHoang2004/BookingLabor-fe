@@ -23,12 +23,13 @@ import toast from "react-hot-toast";
 import { locationService } from "@/service/location/location1";
 import { District, Ward } from "@/interface/location1";
 
-const locations = new locationService();
+const locations = new locationService()
 
 export default function TaskFormPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const [task, setTask] = useState(searchParams.get('task') ?? ""); // title
+    //const skillParams = 1;
     const [districts, setDistricts] = useState<District[]>([]); // district
     const [wards, setWards] = useState<Ward[]>([]); // ward
     const [selectedDistrict, setSelectedDistrict] = useState(0);
@@ -42,7 +43,7 @@ export default function TaskFormPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const [skills, setSkills] = useState<Skill[]>([])
-    const [chosenSkillId, setChosenSkillID] = useState(0);
+    const [chosenSkillId, setChosenSkillID] = useState(1);
 
     const fetchSkills = async () => {
         const response = await SkillService.getAllSkills();

@@ -8,14 +8,10 @@ import { becomtaskerService } from '@/service/becometasker/becometasker';
 import { SkillService } from '@/service/skill/skill';
 import { useAppSelector } from '@/redux/store';
 import { Skill } from '@/interface/skill';
+import { locationService } from '@/service/location/location1';
+import { District } from '@/interface/location1';
 
-
-interface District {
-    name: string;
-    code: number;
-    division_type: string;
-    codename: string;
-}
+const locations = new locationService();
 
 const BecomeTaskerForm: React.FC = () => {
     const [formData] = useState<TaskerForm>({
@@ -71,9 +67,8 @@ const BecomeTaskerForm: React.FC = () => {
     }, [isTasker, router]);
     const fetchDistricts = async () => {
         try {
-            const response = await fetch('https://provinces.open-api.vn/api/p/01?depth=2');
-            const data = await response.json();
-            setDistricts(data.districts);
+            const data = locations.getAllDistricts();
+            setDistricts(data);
         } catch (err) {
             console.error(err);
         }

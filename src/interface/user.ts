@@ -12,6 +12,7 @@ export interface Profile {
   description: string | null;
   create_at: string;
   updated_at: string;
+  avatar?: string;
 }
 
 export interface Tasker {

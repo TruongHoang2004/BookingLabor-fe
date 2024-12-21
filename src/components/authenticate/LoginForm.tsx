@@ -5,6 +5,7 @@ import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Button } from "
 import { Eye, EyeOff } from 'lucide-react';
 import Background from '../layout-background';
 import { authService } from '@/service/auth/auth-service';
+import toast from 'react-hot-toast';
 
 
 const LoginForm: React.FC = () => {
@@ -24,6 +25,7 @@ const LoginForm: React.FC = () => {
       const password = formData.password;
       await authService.login({ email, password });
       const response = await authService.login({ email, password });
+      toast.success("Đăng nhập thành công");
       if (response.user.role === 'ADMIN') {
         router.push('/admin');
       } else {
