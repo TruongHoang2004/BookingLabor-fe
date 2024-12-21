@@ -2,21 +2,33 @@
 import React, { useEffect, useState } from 'react';
 import { useAppSelector } from '@/redux/store';
 import { Bell } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { Notification } from '@/interface/notification';
+import { notificationService } from '@/service/notification/notification';
 
 const NotificationListener = () => {
-    interface Notification {
-        id: number;
-        message: string;
-        timestamp: string;
-        read: boolean;
-    }
-
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [hasUnread, setHasUnread] = useState(false);
     const user = useAppSelector((state) => state.auth.user);
 
+    // Fetch initial notifications
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                const data = await notificationService.getAllNotification();
+                setNotifications(data);
+                setHasUnread(data.some(notif => !notif.isRead));
+            } catch (error) {
+                console.error('Failed to fetch notifications:', error);
+            }
+        };
+
+        if (user?.id) {
+            fetchNotifications();
+        }
+    }, [user?.id]);
+
+    // SSE Connection
     useEffect(() => {
         if (!user?.id) return;
 
@@ -26,20 +38,22 @@ const NotificationListener = () => {
         );
 
         eventSource.onopen = () => {
-            toast.success('LOL');
             console.log('Connected to notification server');
         };
 
         eventSource.onmessage = (event) => {
             const data = JSON.parse(event.data);
-            toast.success(data.message);
             if (data.message) {
-                setNotifications(prev => [{
+                const newNotification: Notification = {
                     id: Date.now(),
                     message: data.message,
-                    timestamp: new Date().toLocaleTimeString(),
-                    read: false
-                }, ...prev].slice(0, 10));
+                    isRead: false,
+                    created_at: new Date().toISOString(),
+                    type: data.type || 'SYSTEM',
+                    link: data.link
+                };
+
+                setNotifications(prev => [newNotification, ...prev]);
                 setHasUnread(true);
             }
         };
@@ -52,16 +66,44 @@ const NotificationListener = () => {
         return () => eventSource.close();
     }, [user?.id]);
 
-    const handleMarkAllAsRead = () => {
-        setNotifications(prev =>
-            prev.map(notif => ({ ...notif, read: true }))
-        );
-        setHasUnread(false);
+    const handleMarkAllAsRead = async () => {
+        try {
+            await notificationService.markAllAsRead();
+            setNotifications(prev =>
+                prev.map(notif => ({ ...notif, isRead: true }))
+            );
+            setHasUnread(false);
+        } catch (error) {
+            console.error('Failed to mark all as read:', error);
+        }
     };
 
-    const handleClearAll = () => {
-        setNotifications([]);
-        setHasUnread(false);
+    const handleClearAll = async () => {
+        try {
+            await notificationService.clearAll();
+            setNotifications([]);
+            setHasUnread(false);
+        } catch (error) {
+            console.error('Failed to clear all notifications:', error);
+        }
+    };
+
+    const handleNotificationClick = async (notification: Notification) => {
+        if (!notification.isRead) {
+            try {
+                await notificationService.markAsRead(notification);
+                setNotifications(prev =>
+                    prev.map(n => n.id === notification.id ? { ...n, isRead: true } : n)
+                );
+                setHasUnread(notifications.some(n => !n.isRead && n.id !== notification.id));
+            } catch (error) {
+                console.error('Failed to mark notification as read:', error);
+            }
+        }
+
+        if (notification.link) {
+            window.location.href = notification.link;
+        }
     };
 
     return (
@@ -106,13 +148,15 @@ const NotificationListener = () => {
                                 {notifications.map((notif) => (
                                     <div
                                         key={notif.id}
+                                        onClick={() => handleNotificationClick(notif)}
                                         className={`p-4 hover:bg-gray-50 transition-colors duration-150 cursor-pointer
-                                            ${!notif.read ? 'bg-blue-50 hover:bg-blue-100' : ''}
+                                            ${!notif.isRead ? 'bg-blue-50 hover:bg-blue-100' : ''}
+                                            ${notif.link ? 'cursor-pointer' : 'cursor-default'}
                                         `}
                                     >
                                         <div className="font-medium text-gray-900 text-sm">{notif.message}</div>
                                         <div className="mt-1 text-gray-500 text-xs">
-                                            {notif.timestamp}
+                                            {new Date(notif.created_at || '').toLocaleTimeString()}
                                         </div>
                                     </div>
                                 ))}

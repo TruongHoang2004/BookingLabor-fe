@@ -10,7 +10,7 @@ import { User } from "./user";
 //   data?: string;
 // }
 export interface Notification {
-  id?: number;
+  id: number;
   message: string;
   link?: string;
   isRead: boolean;
