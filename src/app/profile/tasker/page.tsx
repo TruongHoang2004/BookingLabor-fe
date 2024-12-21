@@ -157,6 +157,55 @@ const fetchSkills = async () => {
           <div className="gap-8 grid grid-cols-1 md:grid-cols-2 bg-white shadow-sm p-12 rounded-md">
             {/* Left Column */}
             <div className="space-y-6">
+              <div className="flex space-x-24">
+                <Input
+                  type="text"
+                  label="First Name"
+                  isDisabled
+                  defaultValue={user?.profile?.first_name || ''}
+                />
+                <Input
+                  type="text"
+                  label="Last Name"
+                  isDisabled
+                  defaultValue={user?.profile?.last_name || ''}
+                />
+              </div>
+              <Input
+                type="email"
+                label="Email"
+                isDisabled
+                defaultValue={user?.email || ''}
+              />
+              <Input
+                type="mobile"
+                label="Phone"
+                isDisabled
+                defaultValue={user?.profile.phone_number || ''}
+              />
+              <div className="flex items-center space-x-2">
+                <Select
+                  label="Skills"
+                  defaultSelectedKeys={user?.tasker?.skills.map(skill => skill.id.toString())}
+                  value={Array.from(new Set(taskerData.skillIds.map(String)))}
+                  isRequired
+                  selectionMode='multiple'
+                  variant="faded"
+                  isDisabled={!editStatus.skills}
+                  onChange={(e) => handleSkillChange(e.target.value)}
+                  className="flex-1 max-w-xl"
+                >
+                    {skills.map(skill => (
+                    <SelectItem key={skill.id} value={skill.id}>{skill.name}</SelectItem>
+                    ))}
+                </Select>
+                <Button
+                  isIconOnly 
+                  onClick={() => setEditStatus(prev => ({ ...prev, skills: !prev.skills }))}
+                >
+                  {editStatus.skills ? <Save size={16} /> : <Edit3 size={16} />}
+                </Button>
+              </div>
               <div className="flex items-center space-x-2">
               <Select
                     label="Work Area"
@@ -167,7 +216,7 @@ const fetchSkills = async () => {
                     variant="faded"
                     isDisabled={!editStatus.workArea}
                     onChange={(e) => handleWorkAreaChange(e.target.value)}
-                    className="flex-1 text-lg"
+                    className="flex-1 max-w-xl"
                 >
                     {districts.map((district) => (
                         <SelectItem key={district.code} value={district.code}>
@@ -181,31 +230,12 @@ const fetchSkills = async () => {
                 >
                   {editStatus.workArea ? <Save size={16} /> : <Edit3 size={16} />}
                 </Button>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Select
-                  label="Skills"
-                  defaultSelectedKeys={user?.tasker?.skills.map(skill => skill.id.toString())}
-                  value={Array.from(new Set(taskerData.skillIds.map(String)))}
-                  isRequired
-                  selectionMode='multiple'
-                  variant="faded"
-                  isDisabled={!editStatus.skills}
-                  onChange={(e) => handleSkillChange(e.target.value)}
-                  className="flex-1 text-lg"
-                  >
-                      {skills.map(skill => (
-                      <SelectItem key={skill.id} value={skill.id}>{skill.name}</SelectItem>
-                      ))}
-                </Select>
-                <Button
-                  isIconOnly 
-                  onClick={() => setEditStatus(prev => ({ ...prev, skills: !prev.skills }))}
-                >
-                  {editStatus.skills ? <Save size={16} /> : <Edit3 size={16} />}
-                </Button>
-              </div>
-              <div className="flex items-center space-x-2">
+              </div>   
+            </div>
+            {/* Right Column */}
+            
+            <div className="space-y-6">
+            <div className="flex items-center space-x-2">
               <Textarea
                       label="Experience"
                       placeholder="Describe your experience"
@@ -220,10 +250,7 @@ const fetchSkills = async () => {
                 >
                   {editStatus.experience ? <Save size={16} /> : <Edit3 size={16} />}
                 </Button>
-              </div>              
-            </div>
-            {/* Right Column */}
-            <div className="space-y-6">
+              </div>           
               <Input
                 isDisabled
                 type="text"

@@ -85,13 +85,6 @@ const ProfilePage = () => {
                 defaultValue={user?.profile.phone_number || ''}
                 onChange={handleChange}
               />
-              <EditableField
-                type="text"
-                label="Date of Birth"
-                field="birth_date"
-                defaultValue={user?.profile.birth_date || ''}
-                onChange={handleChange}
-              />
             </div>
             {/* Right Column */}
             <div className="space-y-6">
@@ -103,9 +96,10 @@ const ProfilePage = () => {
                 onChange={handleChange}
               />
               <EditableField
-                type="link"
-                label="Social Media"
-                field="social_media"
+                type="date"
+                label="Date of Birth"
+                field="birth_date"
+                defaultValue={user?.profile.birth_date || ''}
                 onChange={handleChange}
               />
               <EditableTextarea
