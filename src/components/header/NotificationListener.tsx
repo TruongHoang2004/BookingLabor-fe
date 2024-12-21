@@ -22,10 +22,11 @@ const NotificationListener = () => {
 
         const BACK_END_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
         const eventSource = new EventSource(
-            `${BACK_END_URL}/notifications/sse/${user.id}`
+            `${BACK_END_URL}notifications/sse/${user.id}`
         );
 
         eventSource.onopen = () => {
+            toast.success('LOL');
             console.log('Connected to notification server');
         };
 
