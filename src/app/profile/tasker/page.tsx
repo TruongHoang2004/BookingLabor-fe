@@ -1,5 +1,4 @@
 'use client';
-import AvatarUpload from "@/components/profile/avatar";
 import React, { useState } from "react";
 import { Button, Select, SelectItem, Textarea } from "@nextui-org/react";
 import { ProtectedRoute } from "@/components/protectedRoute";
@@ -14,6 +13,7 @@ import { SkillService } from "@/service/skill/skill";
 import { useRouter } from 'next/navigation';
 import { Kanit} from 'next/font/google'
 import { Save, Edit3 } from 'react-feather';
+import { Avatar as NextAvatar } from "@nextui-org/react";
 
 const kanit = Kanit({
   subsets: ['latin'],
@@ -22,8 +22,8 @@ const kanit = Kanit({
 })
 const TaskerProfilePage = () => {
   const router = useRouter();
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const { user } = useAppSelector((state) => state.auth);
+  const avatarUrl = user?.profile.avatar;
   const locations = new locationService();
   const [taskerData, setTaskerData] = useState<TaskerForm>({
     work_area: user?.tasker?.work_area?.split(',').map(code => parseInt(code.trim())) || [],
@@ -82,12 +82,6 @@ const fetchSkills = async () => {
     } 
     
   }, [user?.tasker?.work_area]);
-  const handleFileSelect = (file: File) => {
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setAvatarUrl(imageUrl);
-    }
-  };
     
   const handleSubmit = async () => {
     try {
@@ -148,11 +142,12 @@ const fetchSkills = async () => {
           </div>
           </div>
           <div className="flex justify-center shadow-sm p-6 rounded-lg">
-            <AvatarUpload
-              avatarUrl={avatarUrl}
-              onFileSelect={handleFileSelect}
-            />
-          </div>
+              <NextAvatar
+                className="w-32 h-32"
+                showFallback
+                src={avatarUrl || undefined}
+              />
+          </div> 
           {/* Main Content */}
           <div className="gap-8 grid grid-cols-1 md:grid-cols-2 bg-white shadow-sm p-12 rounded-md">
             {/* Left Column */}

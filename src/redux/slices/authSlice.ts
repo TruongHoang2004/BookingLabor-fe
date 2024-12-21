@@ -64,7 +64,12 @@ const authSlice = createSlice({
       console.log("Login failed");
       state.isAuthenticated = false;
     },
-
+    updateAvatar: (state, action: PayloadAction<string>) => {
+      if(state.user) {
+        state.user.profile.avatar = action.payload;
+        localStorage.setItem("user", JSON.stringify(state.user));
+      }
+    },
     initializeAuth: (state) => {
       try {
         const storedUser = localStorage.getItem("user");
@@ -91,6 +96,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logout, initializeAuth, loginFailure, setisTaskers, updateUser, updateTasker } =
+
+export const { setCredentials, logout, initializeAuth, loginFailure, setisTaskers, updateUser, updateTasker,updateAvatar } =
   authSlice.actions;
 export default authSlice.reducer;
