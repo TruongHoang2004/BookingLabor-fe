@@ -255,8 +255,8 @@ const fetchSkills = async () => {
               <Input
                 isDisabled
                 type="text"
-                label="Average Rating"
-                defaultValue={user?.tasker?.avg_rating.toString() || ''}
+                label="Total Rating"
+                defaultValue={user?.tasker?.rating_sum.toString() || ''}
               />
               <Input
                 isDisabled
