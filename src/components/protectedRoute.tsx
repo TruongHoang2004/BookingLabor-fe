@@ -27,7 +27,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     else {
       const path = window.location.pathname;
       if (!isTasker) {
-        if (['/tasks', '/taskmanage'].includes(path)) {
+        if (['/tasks', '/taskmanage', '/apply'].includes(path)) {
           router.replace('/becometasker');
         }
       }

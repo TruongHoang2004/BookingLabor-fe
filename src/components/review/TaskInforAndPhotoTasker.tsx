@@ -1,7 +1,11 @@
 'use client'
-import React, { CSSProperties, useState, useRef } from 'react';
+import React, { CSSProperties, useState, useRef, useEffect } from 'react';
 import { Input, Textarea, Button } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
+import { useSearchParams } from 'next/navigation';
+import { locationService } from "@/service/location/location1";
+
+const locations = new locationService();
 
 
 const TaskInforAndPhotoTasker: React.FC = () => {
@@ -36,6 +40,56 @@ const TaskInforAndPhotoTasker: React.FC = () => {
             setImages(newImages);
         }
     };
+
+    const searchParams = useSearchParams();
+    const [districtName, setDistrictName] = useState('');
+    const [wardName, setWardName] = useState('');
+    const formatDate = (dateString: string): string => {
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
+    };
+
+
+
+
+
+    useEffect(() => {
+        const getLocationNames = async () => {
+            try {
+                const districtCode = parseInt(searchParams.get('district') || '0');
+                const wardCode = parseInt(searchParams.get('ward') || '0');
+
+                const districtData = locations.getDistrictByCode(districtCode);
+                const wardData = locations.getWardByCode(wardCode);
+
+                if (districtData) {
+                    setDistrictName(districtData.name);
+                }
+                if (wardData) {
+                    setWardName(wardData.name);
+                }
+            } catch (error) {
+                //toast.error("Error loading location data");
+                console.error(error);
+            }
+        };
+
+        getLocationNames();
+    }, [searchParams]);
+
+
+    //const taskID = parseInt(searchParams.get('taskId') || '0', 10);
+
+    const title = searchParams.get('title') || '';
+    //const district = searchParams.get('district') || '';
+    // const ward = searchParams.get('ward') || '';
+    const detail_address = searchParams.get('detail_address') || '';
+    const start_date = formatDate(searchParams.get('start_date') || '');
+    const end_date = formatDate(searchParams.get('end_date') || '');
+    const fee_per_hour = searchParams.get('fee_per_hour') || '';
+    const estimated_duration = searchParams.get('estimated_duration') || '';
+    const description = searchParams.get('description') || '';
+
     return (
         <div style={containerStyles}>
             <div style={leftStyles}>
@@ -68,7 +122,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Title</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="Cleaning"
+                            value={title}
                             fullWidth
                             className='text-black label-text-color-100'
 
@@ -80,7 +134,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>District</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="Cau Giay"
+                            value={districtName}
                             fullWidth
                         />
                         <Input
@@ -90,7 +144,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Ward</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="Mai Dich"
+                            value={wardName}
                             fullWidth
                         />
                         <Input
@@ -100,7 +154,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Specific Address</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="32 Ngo 59 Pham Van Dong"
+                            value={detail_address}
                             fullWidth
                         />
                         <Input
@@ -110,7 +164,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Start Date</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="12/12/2024"
+                            value={start_date}
                             fullWidth
                         />
                         <Input
@@ -120,7 +174,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>End Date</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="14/12/2024"
+                            value={end_date}
                             fullWidth
                         />
                         <Input
@@ -130,7 +184,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Duration</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="3 hours"
+                            value={estimated_duration}
                             fullWidth
                         />
                         <Input
@@ -140,7 +194,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Estimated Fee</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="$50"
+                            value={fee_per_hour}
                             fullWidth
                         />
 
@@ -151,7 +205,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Description</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="Clean all the house"
+                            value={description}
                             fullWidth
                         />
                     </div>
@@ -209,7 +263,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                 <h2 style={headerStyles}>Rating Tasker</h2>
 
                 {/* Review */}
-                <div
+                {/* <div
                     style={{
                         width: '300px',
                         height: '250px',
@@ -218,7 +272,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                         fontSize: '15px',
                         fontWeight: 300,
 
-                       
+
                         lineHeight: '36px',
 
                         borderRadius: '10px',
@@ -232,9 +286,9 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                         //marginRight: '0px',
                         padding: '10px',
                     }}
-                >
+                > */}
 
-                    <div style={{
+                {/* <div style={{
                         width: '80px',
                         height: '80px',
                         borderRadius: '50%',
@@ -262,21 +316,22 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                     <p style={{ margin: '5px 0', color: 'black', }}><strong>Email:</strong> baychobochay@example.com</p>
                     <p style={{ margin: '5px 0', color: 'black', }} ><strong>Phone:</strong> (+000) 782 321 589</p>
                     <p style={{ margin: '5px 0', color: 'black', }}><strong>Gender:  </strong>
-                        Male</p>
-                </div>
+                        Male</p> */}
+                {/* </div> */}
 
                 <div
                     style={{
                         width: '300px',
                         padding: '15px',
                         //margin: '20px auto',
-                        background: '#e5e7eb',
+                        background: '#CAE5E8',
                         borderRadius: '10px',
                         boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
                         textAlign: 'center',
                         fontFamily: 'Arial, sans-serif',
                         //marginRight: '30px',
                         color: 'black',
+
 
                     }}
                 >
@@ -313,6 +368,26 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                     }}>Your rating: {rating} {rating > 0 ? 'star' : ''}</p>
 
 
+                </div>
+
+                <h2 style={MidStyles}> Your review</h2>
+
+                <div style={{
+                    width: "80%",
+                    color: 'black',
+                }} >
+
+                    <Textarea
+
+                        variant="bordered"
+                        placeholder="Write your review about task and tasker here."
+                        disableAnimation
+                        disableAutosize
+                        classNames={{
+                            base: "80%",
+                            input: "resize-y min-h-[40px]",
+                        }}
+                    />
                 </div>
                 <div className="flex flex-wrap gap-4 items-center">
 

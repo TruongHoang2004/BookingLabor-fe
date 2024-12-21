@@ -6,10 +6,12 @@ import { Edit3, Save } from 'react-feather';
 interface EditableFieldProps {
   label: string;
   type: string;
+  field: string; // Add this line
   defaultValue?: string;
+  onChange?: (field: string, value: string) => void; // Modify this line
 }
 
-const EditableTextarea: React.FC<EditableFieldProps> = ({ label, type, defaultValue }) => {
+const EditableTextarea: React.FC<EditableFieldProps> = ({ label, type, field, defaultValue, onChange }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [value, setValue] = useState(defaultValue || '');
 
@@ -19,6 +21,10 @@ const EditableTextarea: React.FC<EditableFieldProps> = ({ label, type, defaultVa
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setValue(e.target.value);
+    if (onChange) {
+      onChange(field, e.target.value); // Modify this line
+      console.log(e.target.value);
+    }
   };
 
   return (

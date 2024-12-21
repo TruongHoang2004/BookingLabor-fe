@@ -1,11 +1,83 @@
 'use client'
-import React, { CSSProperties } from 'react';
+import React, { CSSProperties, useEffect, useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useSearchParams } from 'next/navigation';
 import { Input, Textarea } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
-
+import { locationService } from "@/service/location/location1";
+import { taskService } from '@/service/task/task';
+import toast from 'react-hot-toast';
+const locations = new locationService()
 
 export default function TaskInformation() {
+
+    const searchParams = useSearchParams();
+    const [districtName, setDistrictName] = useState('');
+    const [wardName, setWardName] = useState('');
+    const formatDate = (dateString: string): string => {
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
+    };
+
+
+
+
+
+    useEffect(() => {
+        const getLocationNames = async () => {
+            try {
+                const districtCode = parseInt(searchParams.get('district') || '0');
+                const wardCode = parseInt(searchParams.get('ward') || '0');
+
+                const districtData = locations.getDistrictByCode(districtCode);
+                const wardData = locations.getWardByCode(wardCode);
+
+                if (districtData) {
+                    setDistrictName(districtData.name);
+                }
+                if (wardData) {
+                    setWardName(wardData.name);
+                }
+            } catch (error) {
+                //toast.error("Error loading location data");
+                console.error(error);
+            }
+        };
+
+        getLocationNames();
+    }, [searchParams]);
+
+
+    const taskID = parseInt(searchParams.get('taskId') || '0', 10);
+
+    const title = searchParams.get('title') || '';
+    //const district = searchParams.get('district') || '';
+    // const ward = searchParams.get('ward') || '';
+    const detail_address = searchParams.get('detail_address') || '';
+    const start_date = formatDate(searchParams.get('start_date') || '');
+    const end_date = formatDate(searchParams.get('end_date') || '');
+    const fee_per_hour = searchParams.get('fee_per_hour') || '';
+    const estimated_duration = searchParams.get('estimated_duration') || '';
+    const description = searchParams.get('description') || '';
+
+
+
+    const router = useRouter();
+
+    const handleConfirmPayment = async () => {
+        try {
+            //console.log("Task ID: ", taskID);
+            await taskService.acceptTask(taskID); // Gọi hàm service với task.id
+            toast.success("Xác nhận thành công!"); // Thông báo thành công
+            router.push('/taskmanage/tasker'); // Chuyển hướng về trang danh sách tasker
+            //setIsAccepted(!isAccepted)
+        } catch (error) {
+            toast.error("Xác nhận thất bại!"); // Thông báo lỗi
+            console.error("Lỗi khi xác nhận:", error);
+        }
+    };
+
     return (
         <div className="container" style={containerStyles}>
 
@@ -42,7 +114,7 @@ export default function TaskInformation() {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Title</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="Cleaning"
+                            value={title}
                             fullWidth
                             className='text-black label-text-color-100'
 
@@ -54,7 +126,7 @@ export default function TaskInformation() {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>District</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="Cau Giay"
+                            value={districtName}
                             fullWidth
                         />
                         <Input
@@ -64,7 +136,7 @@ export default function TaskInformation() {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Ward</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="Mai Dich"
+                            value={wardName}
                             fullWidth
                         />
                         <Input
@@ -74,7 +146,7 @@ export default function TaskInformation() {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Specific Address</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="32 Ngo 59 Pham Van Dong"
+                            value={detail_address}
                             fullWidth
                         />
                         <Input
@@ -84,7 +156,7 @@ export default function TaskInformation() {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Start Date</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="12/12/2024"
+                            value={start_date}
                             fullWidth
                         />
                         <Input
@@ -94,7 +166,7 @@ export default function TaskInformation() {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>End Date</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="14/12/2024"
+                            value={end_date}
                             fullWidth
                         />
                         <Input
@@ -104,7 +176,7 @@ export default function TaskInformation() {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Duration</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="3 hours"
+                            value={estimated_duration}
                             fullWidth
                         />
                         <Input
@@ -114,7 +186,7 @@ export default function TaskInformation() {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Estimated Fee</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="$50"
+                            value={fee_per_hour}
                             fullWidth
                         />
 
@@ -125,7 +197,7 @@ export default function TaskInformation() {
                             label={<span style={{ color: 'rgb(3 26 11)', fontWeight: 'bold' }}>Description</span>}
                             variant="bordered"
                             labelPlacement='outside'
-                            defaultValue="Clean all the house"
+                            value={description}
                             fullWidth
                         />
                     </div>
@@ -135,7 +207,7 @@ export default function TaskInformation() {
             </div>
 
             <div className="sidebar" style={sidebarStyles}>
-                <h2 style={headerStyles}>Tasker Information</h2>
+                <h2 style={headerStyles}>Payment</h2>
 
                 {/* Tasker Information */}
                 <div
@@ -149,8 +221,8 @@ export default function TaskInformation() {
                         fontFamily: 'Inter',
                         lineHeight: '24px',
                         borderRadius: '10px',
-                        border: '1px solid #ccc',
-                        background: '#CAE5E8',
+                        //border: '1px solid #ccc',
+                        //background: '',
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -161,7 +233,7 @@ export default function TaskInformation() {
                     }}
                 >
 
-                    <div style={{
+                    {/* <div style={{
                         width: '80px',
                         height: '80px',
                         borderRadius: '50%',
@@ -184,12 +256,37 @@ export default function TaskInformation() {
                                 objectFit: 'contain'
                             }}
                         />
-                    </div>
-                    <h2 style={{ margin: '5px 0', color: 'black', }}>Lê Văn Bảy</h2>
+                    </div> */}
+                    {/* <h2 style={{ margin: '5px 0', color: 'black', }}>Lê Văn Bảy</h2>
                     <p style={{ margin: '5px 0', color: 'black', }}><strong>Email:</strong> baychobochay@example.com</p>
                     <p style={{ margin: '5px 0', color: 'black', }} ><strong>Phone:</strong> (+000) 782 321 589</p>
                     <p style={{ margin: '5px 0', color: 'black', }}><strong>Gender:  </strong>
-                        Male</p>
+                        Male</p> */}
+
+                    <div style={{
+                        width: '250px',
+                        height: '250px',
+                        borderRadius: '10px',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginBottom: '10px',
+                        border: '0px solid #ccc',
+                    }}>
+                        <Image
+                            src="/img/QR_Code/QR_Code.jpg"
+                            alt="QR Code"
+                            // width={1000}
+                            // height={200}
+                            style={{
+                                width: '100%',
+                                height: 'auto',
+                                objectFit: 'contain'
+                            }}
+                        />
+                    </div>
+
                 </div>
 
 
@@ -198,8 +295,8 @@ export default function TaskInformation() {
 
                 <div className="flex flex-wrap gap-4 items-center">
 
-                    <Button color="primary" variant="ghost">
-                        Booking
+                    <Button onClick={handleConfirmPayment} color="primary" variant="ghost">
+                        Confirm Payment
                     </Button>
 
                 </div>

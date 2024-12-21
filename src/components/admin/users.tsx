@@ -3,7 +3,6 @@ import React from "react";
 import { User as UserType } from "@/interface/user";  
 import { User as UserComponent } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { locationService } from "@/service/location/location";
 import {
     Avatar,
     Card,
@@ -18,11 +17,14 @@ import {
     useDisclosure
 } from "@nextui-org/react";
 import { Phone, Mail, MapPin,  CalendarDaysIcon } from "lucide-react";
+import { locationService } from "@/service/location/location1";
 
 interface UserCardProps {
     user: UserType;
     onView: (id: number) => void;
 }
+
+const locations = new locationService();
 
 const UserCard: React.FC<UserCardProps> = ({
     user,
@@ -32,11 +34,19 @@ const UserCard: React.FC<UserCardProps> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDistrictNames = async () => {
+    const fetchDistrictNames = () => {
       try {
-        if (user.tasker?.work_area) {
-          const names = await locationService.getDistrict(user.tasker.work_area);
-          setDistrictNames(names);
+        const works_area = user.tasker?.work_area;
+        const works_area_arr = works_area?.split(",")
+        const district_name_arr: string[] = [];
+        if (works_area_arr) {
+            works_area_arr.forEach(area => {
+                const d = locations.getDistrictByCode(parseInt(area,10));
+                if(d) {
+                    district_name_arr.push(d.name);
+                }
+            });
+            setDistrictNames(district_name_arr.join(","))
         }
       } catch (error) {
         console.error('Error fetching district names:', error);
