@@ -1,9 +1,10 @@
 'use client';
 
-import { Button } from "@nextui-org/react";
+import { Button} from "@nextui-org/react";
 import { Kanit } from 'next/font/google'
-import { useRouter, usePathname } from "next/navigation";
-
+import { useRouter } from "next/navigation";
+import { Profile } from "@/interface/user";
+import { userService } from "@/service/user/user";
 
 const kanit = Kanit({
   subsets: ['latin'],
@@ -11,11 +12,31 @@ const kanit = Kanit({
   display: 'swap',
 })
 
-const HeaderProfile: React.FC = () => {
-  const router = useRouter();
-  const pathname = usePathname();
+interface HeaderProfileProps {
+  formdata: Profile;
+}
 
-  const isTaskerProfile = pathname === '/profile/tasker';
+export default function HeaderProfile({formdata} : HeaderProfileProps )  {
+  const router = useRouter();
+  const onSaveChanges = async () => {
+    // console.log(formdata, taskerData);
+    try {
+      await userService.updateMe(formdata);
+      router.refresh();
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
+  const onDeleteProfile = async () => {
+    try {
+      await userService.deleteMe();
+      router.push('/');
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
   return (
     <div className="w-full bg-white rounded-lg shadow-sm p-4">
       {/* Title and Buttons Section */}
@@ -24,21 +45,21 @@ const HeaderProfile: React.FC = () => {
           MY PROFILE
         </h1>
         <div className="flex flex-wrap gap-8">
-        <Button
+          <Button
             radius="md"
             color="success"
             variant="solid"
             className={`${kanit.className} text-lg text-white`}
-            onClick={() => router.push(isTaskerProfile ? '/profile' : '/profile/tasker')}
+            onClick={() => router.push('/profile/tasker')}
           >
-            {isTaskerProfile ? 'Change to Customer Profile' : 'Change to Tasker Profile'}
+            Change to Tasker Profile
           </Button>
           <Button
             radius="md"
             color="success"
             variant="solid"
             className={`${kanit.className} text-lg text-white`}
-            onClick={() => router.push('./')}
+            onClick={onSaveChanges}
           >
             Save Changes
           </Button>
@@ -47,6 +68,7 @@ const HeaderProfile: React.FC = () => {
             color="danger"
             variant="bordered"
             className={`${kanit.className} text-lg text-red-600`}
+            onClick={onDeleteProfile}
           >
             Delete Profile
           </Button>
@@ -57,5 +79,3 @@ const HeaderProfile: React.FC = () => {
     </div>
   );
 };
-
-export default HeaderProfile;

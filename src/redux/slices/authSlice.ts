@@ -1,6 +1,7 @@
 import { AuthState, LoginResponse } from "@/interface/auth";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
+import { Profile } from "@/interface/user";
+import { Tasker } from "@/interface/user";
 const initialState: AuthState = {
   user: null,
   accessToken: null,
@@ -27,6 +28,19 @@ const authSlice = createSlice({
       localStorage.setItem("isTasker", state.isTasker.toString());
       localStorage.setItem("accessToken", token.access_token);
       localStorage.setItem("refreshToken", token.refresh_token);
+    },
+    updateUser: (state, action: PayloadAction<Profile>) => {
+      if (state.user) {
+        state.user.profile = action.payload;
+        localStorage.setItem("user", JSON.stringify(state.user));
+      }
+
+    },
+    updateTasker: (state, action: PayloadAction<Tasker>) => {
+      if (state.user) {
+        state.user.tasker = action.payload;
+        localStorage.setItem("user", JSON.stringify(state.user));
+      }
     },
     setisTaskers: (state, action: PayloadAction<boolean>) => {
       state.isTasker = action.payload;
@@ -77,6 +91,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, logout, initializeAuth, loginFailure, setisTaskers } =
+export const { setCredentials, logout, initializeAuth, loginFailure, setisTaskers, updateUser, updateTasker } =
   authSlice.actions;
 export default authSlice.reducer;

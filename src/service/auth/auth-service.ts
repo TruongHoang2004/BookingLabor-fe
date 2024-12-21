@@ -39,8 +39,8 @@ class AuthService {
         JSON.stringify(credentials)
       );
       const LoginResponse = response.data;
-      store.dispatch(setCredentials(LoginResponse));
       toast.success("Đăng nhập thành công");
+      store.dispatch(setCredentials(LoginResponse));
       return response.data;
     } catch (error) {
       console.log(error);
