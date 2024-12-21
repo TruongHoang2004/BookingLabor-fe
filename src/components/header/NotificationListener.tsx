@@ -4,6 +4,7 @@ import { useAppSelector } from '@/redux/store';
 import { Bell } from 'lucide-react';
 import { Notification } from '@/interface/notification';
 import { notificationService } from '@/service/notification/notification';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const NotificationListener = () => {
     const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -108,63 +109,108 @@ const NotificationListener = () => {
 
     return (
         <div className="relative z-10">
-            <button
+            <motion.button
                 onClick={() => setIsOpen(!isOpen)}
-                className="relative hover:bg-gray-100 p-2 rounded-full transition-all duration-200 hover:scale-110"
+                className="relative hover:bg-gray-100 p-2 rounded-full transition-all duration-200"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
             >
                 <Bell className="w-6 h-6" />
                 {hasUnread && (
-                    <span className="top-1 right-1 absolute bg-red-500 rounded-full w-2 h-2 animate-ping" />
+                    <motion.span
+                        className="top-1 right-1 absolute bg-red-500 rounded-full w-2 h-2"
+                        initial={{ scale: 0 }}
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{
+                            repeat: Infinity,
+                            duration: 2,
+                            times: [0, 0.5, 1]
+                        }}
+                    />
                 )}
-            </button>
+            </motion.button>
 
-            {isOpen && (
-                <div className="right-0 absolute border-gray-200 bg-white slide-in-from-top-2 shadow-2xl mt-2 border rounded-lg w-80 max-h-96 animate-in duration-200 overflow-hidden fade-in">
-                    <div className="top-0 sticky flex justify-between items-center border-gray-200 bg-white shadow-sm p-4 border-b">
-                        <h3 className="font-semibold text-lg">Notifications</h3>
-                        <div className="space-x-2">
-                            <button
-                                onClick={handleMarkAllAsRead}
-                                className="font-medium text-blue-500 text-sm hover:text-blue-600 transition-colors"
-                            >
-                                Mark all as read
-                            </button>
-                            <button
-                                onClick={handleClearAll}
-                                className="font-medium text-gray-500 text-sm hover:text-gray-600 transition-colors"
-                            >
-                                Clear all
-                            </button>
-                        </div>
-                    </div>
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        className="right-0 absolute border-gray-200 bg-white shadow-2xl mt-2 border rounded-lg w-80 max-h-96 overflow-hidden"
+                        initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                    >
+                        <motion.div
+                            className="top-0 sticky flex justify-between items-center border-gray-200 bg-white shadow-sm p-4 border-b"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.1 }}
+                        >
+                            <h3 className="font-semibold text-lg">Notifications</h3>
+                            <div className="space-x-2">
+                                <motion.button
+                                    onClick={handleMarkAllAsRead}
+                                    className="font-medium text-blue-500 text-sm hover:text-blue-600 transition-colors"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    Mark all as read
+                                </motion.button>
+                                <motion.button
+                                    onClick={handleClearAll}
+                                    className="font-medium text-gray-500 text-sm hover:text-gray-600 transition-colors"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    Clear all
+                                </motion.button>
+                            </div>
+                        </motion.div>
 
-                    <div className="max-h-[calc(24rem-4rem)] overflow-y-auto">
-                        {notifications.length === 0 ? (
-                            <div className="p-8 text-center text-gray-500">
-                                No notifications
-                            </div>
-                        ) : (
-                            <div className="divide-y divide-gray-100">
-                                {notifications.map((notif) => (
-                                    <div
-                                        key={notif.id}
-                                        onClick={() => handleNotificationClick(notif)}
-                                        className={`p-4 hover:bg-gray-50 transition-colors duration-150 cursor-pointer
-                                            ${!notif.isRead ? 'bg-blue-50 hover:bg-blue-100' : ''}
-                                            ${notif.link ? 'cursor-pointer' : 'cursor-default'}
-                                        `}
-                                    >
-                                        <div className="font-medium text-gray-900 text-sm">{notif.message}</div>
-                                        <div className="mt-1 text-gray-500 text-xs">
-                                            {new Date(notif.created_at || '').toLocaleTimeString()}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
+                        <motion.div
+                            className="max-h-[calc(24rem-4rem)] overflow-y-auto"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.2 }}
+                        >
+                            {notifications.length === 0 ? (
+                                <motion.div
+                                    className="p-8 text-center text-gray-500"
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.3 }}
+                                >
+                                    No notifications
+                                </motion.div>
+                            ) : (
+                                <div className="divide-y divide-gray-100">
+                                    <AnimatePresence>
+                                        {notifications.map((notif, index) => (
+                                            <motion.div
+                                                key={notif.id}
+                                                onClick={() => handleNotificationClick(notif)}
+                                                className={`p-4 transition-colors duration-150
+                                                    ${!notif.isRead ? 'bg-blue-50 hover:bg-blue-100' : 'hover:bg-gray-50'}
+                                                    ${notif.link ? 'cursor-pointer' : 'cursor-default'}
+                                                `}
+                                                initial={{ opacity: 0, x: -20 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                exit={{ opacity: 0, x: 20 }}
+                                                transition={{ delay: index * 0.1 }}
+                                                whileHover={{ scale: 1.02 }}
+                                            >
+                                                <div className="font-medium text-gray-900 text-sm">{notif.message}</div>
+                                                <div className="mt-1 text-gray-500 text-xs">
+                                                    {new Date(notif.created_at || '').toLocaleTimeString()}
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </AnimatePresence>
+                                </div>
+                            )}
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
