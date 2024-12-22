@@ -13,13 +13,13 @@ import { useRouter } from "next/navigation";
 
 export default function TasksPage() {
     const { isAuthenticated, user } = useAppSelector((state) => state.auth);
+    const [isReloaded, setIsReloaded] = useState(false)
     const router = useRouter();
     const [tasksList, setTasksList] = useState<Task[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [currentTaskList, setCurrentTaskList] = useState<Task[]>();
     const status = ["POSTED", "PENDING", "IN_PROGRESS", "COMPLETED", "WAITING" ,"CANCELLED","PAYMENT_CONFIRM","ALL"];
-
 
     const handleSelectedStatus = (status: string) => {
         if(status === "ALL") {
@@ -52,7 +52,8 @@ export default function TasksPage() {
     };
 
     fetchTasks();
-}, []);
+    handleSelectedStatus("ALL")
+}, [isReloaded]);
 
     if (isLoading) return <div><LoadingSpinner/></div>;
     if (error) return <div>Error: {error}</div>;
@@ -83,6 +84,8 @@ export default function TasksPage() {
                           <TaskCard
                               task={task}
                               onView={handleView}
+                              isReloaded={isReloaded}
+                              setIsReloaded={setIsReloaded}
                           />
                       </div>
                   ))}

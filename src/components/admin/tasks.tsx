@@ -23,11 +23,15 @@ const locations = new locationService();
 interface TaskCardProps {
     task: Task;
     onView: (id: number) => void;
+    isReloaded: boolean; 
+    setIsReloaded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({
     task,
     onView,
+    isReloaded,
+    setIsReloaded
 }) => {
     const [districtNames, setDistrictNames] = useState<string>('');
     const [isLoading, setIsLoading] = useState(true);
@@ -67,6 +71,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
 
     const hanldeTaskerAcceptForTaskerByAdmin = async () => {
         await taskService.confirmPaymentForAdmin(task.id);
+        setIsReloaded(!isReloaded)
     }
 
     return (
