@@ -293,7 +293,7 @@ const TaskerProfilePage = () => {
                   <div className="mt-2 flex items-center">
                     <span className="text-yellow-500">{Array(review.rating).fill('★').join('')}</span>
                     <span className="ml-2 text-gray-500">{review.rating}/5</span>
-                    <span className="ml-4 text-gray-500">{review.image}</span>
+                    {/* <span className="ml-4 text-gray-500">{review.image}</span> */}
                   </div>
                 </div>
               ))
