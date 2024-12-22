@@ -25,7 +25,14 @@ class AuthService {
 
       return response.data;
     } catch (error) {
-      toast.error("Đăng ký thất bại");
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
+        const message = error.response.data.message;
+        if (message.includes("email")) {
+          toast.error("Email đã được sử dụng.");
+        } else if (message.includes("phone_number")) {
+          toast.error("Số điện thoại đã được sử dụng.");
+        }
+      }
       console.log(error);
       throw error;
     }
