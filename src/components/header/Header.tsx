@@ -7,13 +7,12 @@ import { useRouter } from "next/navigation";
 import { Divider, Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem } from "@nextui-org/react";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
 import Image from "next/image";
-import { FaBell } from "react-icons/fa6";
-import { Badge } from "@nextui-org/react";
 import { useAppSelector } from '@/redux/store';
 import { useAppDispatch } from '../../redux/store';
 import { logout } from '@/redux/slices/authSlice';
 import { Role } from "@/enum/role";
 import HeaderAdmin from "./headerAdmin";
+import NotificationListener from "./NotificationListener";
 
 const lobster = Lobster({
     subsets: ['latin'],
@@ -47,17 +46,6 @@ const Header: React.FC = () => {
     const handleLogOut = () => {
         dispatch(logout());
     }
-
-    const notis = [
-        { text: 'Random Text 12345678910', date: "2 hours" },
-        { text: 'Random Text 12345678sadadas dadsdadsdas dasdadsasd ádasdasdawdas dasdawdawdd asdwd910sss', date: "1 days" },
-        { text: 'Random Text 12345678910 dadsdadsasdasdas dasdadasdasd ádaasdawdadasdas', date: "3 days" },
-        { text: 'Random Text 12345678910', date: "4 days" },
-        { text: 'Random Text 12345678910 dadsdadsadadsasdasdas dasddasdasd wdadasdas dadsadadsasdasdas', date: "5 days" },
-        { text: 'Random Text 12345678910', date: "7 days" },
-        { text: 'Random Text 12345678910', date: "10 days" },
-        { text: 'Random Text 12345678910', date: "10 days" },
-    ]
 
     if (user?.role === Role.ADMIN) {
         return (
@@ -137,29 +125,8 @@ const Header: React.FC = () => {
                             </PopoverContent>
                         </Popover>
                         <Divider orientation="vertical" className="bg-lime-500" />
-                        <Popover placement="bottom">
-                            <PopoverTrigger>
-                                <div className="mt-1">
-                                    <Badge content={notis.length} color="danger">
-                                        <FaBell className="text-2xl text-emerald-700 hover:text-2xl cursor-pointer" />
-                                    </Badge>
-                                </div>
-                            </PopoverTrigger>
-                            <PopoverContent>
-                                <div className="flex flex-col gap-y-2 px-2 py-2 max-w-[400px] max-h-[400px] overflow-y-auto">
-                                    <p className="mb-3 font-semibold text-emerald-800 text-xl">Notifications</p>
-                                    {notis.map((noti, index) => (
-                                        <div key={index} className="flex items-start gap-x-3 border-emerald-800 pb-2 border-b">
-                                            <Image src="/img/header/clipboard.png" width={40} height={40} alt="noti"></Image>
-                                            <div className="cursor-pointer">
-                                                <p className="font-semibold text-emerald-800">{noti.text}</p>
-                                                <p className="text-[10px]">{noti.date} ago</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </PopoverContent>
-                        </Popover>
+                        {/* <NotificationComponent /> */}
+                        <NotificationListener />
                         <Divider orientation="vertical" className="bg-lime-500" />
                         <p onClick={handleLogOut} className="hover:underline no-underline cursor-pointer">Log Out</p>
                     </div>
@@ -167,28 +134,7 @@ const Header: React.FC = () => {
                 {/* Nếu login vào rồi thì hiển thị giao diện này và không hiển thị giao diện mặc định nữa ~ Giao diện khi màn nhỏ đi*/}
                 <div className={`${isLoggedIn ? 'sm:block 1100:hidden' : 'hidden'}`}>
                     <div className="flex items-center gap-x-5">
-                        <Popover placement="bottom">
-                            <PopoverTrigger>
-                                <div className="mt-1">
-                                    <Badge content={notis.length} color="danger">
-                                        <FaBell className="text-2xl text-emerald-700 hover:text-2xl cursor-pointer" />
-                                    </Badge>
-                                </div>
-                            </PopoverTrigger>
-                            <PopoverContent>
-                                <div className="flex flex-col gap-y-2 px-2 py-2 max-w-[350px] max-h-[400px] overflow-x-hidden overflow-y-auto">
-                                    {notis.map((noti, index) => (
-                                        <div key={index} className="flex items-start gap-x-3 border-emerald-800 pb-2 border-b cursor-pointer">
-                                            <Image src="/img/header/clipboard.png" width={30} height={40} alt="noti"></Image>
-                                            <div>
-                                                <p className="font-semibold text-ellipsis text-emerald-800 text-xs">{noti.text}</p>
-                                                <p className="font-semibold text-[8px]">{noti.date} ago</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </PopoverContent>
-                        </Popover>
+                        <NotificationListener />
                         <Dropdown>
                             <DropdownTrigger>
                                 <Button
@@ -217,7 +163,7 @@ const Header: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </header>
+        </header >
     )
 }
 

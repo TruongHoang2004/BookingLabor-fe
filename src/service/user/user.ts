@@ -38,6 +38,15 @@ export const userService = {
       throw error;
     }
   },
+  async getTasker(): Promise<Tasker> {
+    try {
+      const response = await api.get<Tasker>("/taskers/me");
+      return response.data;
+    } catch (error) {
+      toast.error("Không thể lấy thông tin tasker");
+      throw error;
+    }
+  },
   async deleteUser(userId: number): Promise<User> {
     try {
       const response = await api.delete<User>(`/users/${userId}`);

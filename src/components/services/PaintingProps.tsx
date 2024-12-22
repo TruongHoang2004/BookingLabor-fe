@@ -17,6 +17,7 @@ const PaintingProps: React.FC = () => {
             { icon: FaPaintRoller, text: "Ceiling Painting" },
             { icon: FaPaintRoller, text: "Furniture Painting" }
         ],
+        skillID: 6
     }
     return (
         <ServiceProps {... data}/>

@@ -22,6 +22,7 @@ const AssemblyProps:React.FC = () => {
             { icon: FaHammer, text: "Table Assembly" },
             { icon: FaHammer, text: "Disassemble Furniture" },
         ],
+        skillID: 3
     }
     return (
         <ServiceProps {... data}/>

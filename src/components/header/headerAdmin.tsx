@@ -144,9 +144,9 @@ const HeaderAdmin: React.FC = () => {
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu aria-label="Action event example" onAction={(key) => handleEvent(key.toString())}>
-                                <DropdownItem key="dashboard">Dashboard</DropdownItem>
+                                <DropdownItem key="tasks">Task Management</DropdownItem>
                                 <DropdownItem key="users">User Management</DropdownItem>
-                                <DropdownItem key="profile">My Profile</DropdownItem>
+                                <DropdownItem key="skills">Skill Management</DropdownItem>
                                 <DropdownItem key="logout">Log Out</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>

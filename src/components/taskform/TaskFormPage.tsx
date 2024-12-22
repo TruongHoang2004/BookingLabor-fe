@@ -28,6 +28,8 @@ const locations = new locationService()
 export default function TaskFormPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const skillIdParam = searchParams.get('skillID');
+    const initialSkillId = skillIdParam ? parseInt(skillIdParam, 10) : 1;
     const [task, setTask] = useState(searchParams.get('task') ?? ""); // title
     //const skillParams = 1;
     const [districts, setDistricts] = useState<District[]>([]); // district
@@ -43,7 +45,8 @@ export default function TaskFormPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
     const [skills, setSkills] = useState<Skill[]>([])
-    const [chosenSkillId, setChosenSkillID] = useState(1);
+    const [chosenSkillId, setChosenSkillID] = useState(initialSkillId);
+    console.log(chosenSkillId)
 
     const fetchSkills = async () => {
         const response = await SkillService.getAllSkills();
@@ -226,11 +229,14 @@ export default function TaskFormPage() {
                                 <Select
                                     labelPlacement="outside"
                                     label="Select your Skill for this Task"
+                                    defaultSelectedKeys="1"
                                     placeholder="Choose Skill"
                                     isRequired
                                     variant="faded"
                                     isLoading={isLoading}
+                                    value={chosenSkillId.toString()}
                                     onChange={(e) => handleSkillChange(e.target.value)}
+                                    {...(skillIdParam && { defaultSelectedKeys: new Set([initialSkillId.toString()]) })}
                                 >
                                     {skills.map((skill) => (
                                         <SelectItem key={skill.id} value={skill.id}>

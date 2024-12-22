@@ -34,7 +34,8 @@ export default function UserCard({
 
 }) {
     const getImageSrc = () => {
-        return `/img/taskmanage/task-manage-bg6.jpg`
+        const Index = userCard.skill?.id;
+        return Index?  `/img/taskmanage/task-manage-${Index}.jpg` : '/img/taskmanage/default-task.jpg';
     }
 
     const [isMounted, setIsMounted] = useState(false);

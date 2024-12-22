@@ -57,8 +57,8 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
         }
     };
     const getImageSrc = () => {
-        const randomIndex = 1;
-        return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
+        const Index = task.skill?.id;
+        return Index?  `/img/taskmanage/task-manage-${Index}.jpg` : '/img/taskmanage/default-task.jpg';
     }
 
 
@@ -160,6 +160,7 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                         </span>
                         {task.task_status === "WAITING" ? "COMPLETED" : task.task_status}
                     </p>
+
                 </CardHeader>
                 <CardBody className="p-0">
                     <div className="w-full h-full relative">
@@ -182,7 +183,6 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                         {/* Hiển thị nút nút tương ứng với các trạng thái  */}
                         {task.task_status === 'IN_PROGRESS' ? (
                             <div><Button onClick={handleTaskerCompleteTask} color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Completion Confirmation</Button></div>
-
                         ) : (
                             <div></div>
                         )}
@@ -222,6 +222,7 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                             <ModalBody className="flex flex-col gap-y-4">
                                 <div className="flex flex-col gap-y-3">
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Description:</span>{task.description}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Skill:</span>{task.skill?.name}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Estimated Duration:</span>{task.estimated_duration}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Fee per hour:</span>{task.fee_per_hour}VND /h</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Start Date:</span>{formatDate(task.start_date)}</p>
@@ -229,6 +230,7 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Status:</span>{task.task_status}</p>
                                 </div>
                                 <p className="font-bold text-sm mb-[-10px]">YOUR CLIENT'S DETAILED ADDRESS</p>
+
                                 <div className={task.task_status === 'IN_PROGRESS' ? 'bg-gray-200 rounded-lg p-3 flex flex-col gap-y-2' : 'hidden'}>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">User's ID:</span>{task.user?.id}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">User's Email:</span>{task.user?.email}</p>

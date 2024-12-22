@@ -34,7 +34,7 @@ const RegisterForm: React.FC = () => {
     return phonePattern.test(phone);
   };
 
-  const isAtLeast16 = (birthDate: string): boolean => {
+  const isAtLeast18 = (birthDate: string): boolean => {
     const today = new Date();
     const birth = new Date(birthDate);
     let age = today.getFullYear() - birth.getFullYear();
@@ -53,36 +53,36 @@ const RegisterForm: React.FC = () => {
       const { email, password, confirmPassword, ...registerData } = formData;
 
       if (!isValidVietnamesePhone(formData.phone_number)) {
-        toast.error('Please enter a valid Vietnamese phone number', { duration: 2000 });
+        toast.error('Số điện thoại không phải của Việt Nam', { duration: 2000 });
         return;
       }
 
       if (!isValidGmail(formData.email)) {
-        toast.error('Please enter a valid Gmail address', { duration: 2000 });
+        toast.error('Hãy nhập 1 email hợp lệ', { duration: 2000 });
         return;
       }
       if (password.length < 8) {
-        toast.error('Password must be at least 8 characters long', { duration: 2000 });
+        toast.error('Mật khẩu phải dài hơn 8 ký tự', { duration: 2000 });
         return;
       }
 
-      if (!isAtLeast16(formData.date_of_birth)) {
-        toast.error('You must be at least 18 years old to register', { duration: 2000 });
+      if (!isAtLeast18(formData.date_of_birth)) {
+        toast.error('Bạn phải trên 18 tuổi', { duration: 2000 });
         return;
       }
 
       if (!/[A-Z]/.test(password)) {
-        toast.error('Password must contain at least one uppercase letter', { duration: 2000 });
+        toast.error('Mật khẩu phải có 1 ký tự viết hoa', { duration: 2000 });
         return;
       }
 
       if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-        toast.error('Password must contain at least one special character', { duration: 2000 });
+        toast.error('Mật khẩu phải có 1 ký tự đặc biết', { duration: 2000 });
         return;
       }
 
       if (password !== confirmPassword) {
-        toast.error('Passwords do not match', { duration: 2000 });
+        toast.error('Mật khẩu không trùng khớp', { duration: 2000 });
         return;
       }
 
