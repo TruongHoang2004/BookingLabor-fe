@@ -18,9 +18,16 @@ import { locationService } from "@/service/location/location1";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 //import TaskCard from "../Tasker/TaskCard";
-
+import { ReviewService } from "@/service/review/review";
+import { Review } from "@/interface/review";
+import { Tasker } from "@/interface/user";
+import { FaStar } from "react-icons/fa";
 
 const location = new locationService();
+interface TaskerWithReview {
+    tasker: Tasker,
+    reviews: Review[]
+}
 
 export default function UserCard({
     userCard,
@@ -50,14 +57,28 @@ export default function UserCard({
     const [taskDetailVisible, setTaskDetailVisible] = useState(false);
     const [choseTaskerVisible, setChoseTaskerVisible] = useState(false);
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+    const [allTaskerReviews, setAllTaskerReviews] = useState<TaskerWithReview[]>([]);
 
     const handleChoseTasker = () => {
         setTaskDetailVisible(false);
         setChoseTaskerVisible(true);
     }
 
+    const fetchAllReviews = async () => {
+        const tmp_arr: TaskerWithReview[] = [];
+        if(userCard.taskers){
+            for(let i = 0; i< userCard.taskers.length; i++){
+                const tasker = userCard.taskers[i];
+                const reviews = await ReviewService.getReviewbyTaskerID(tasker.id);
+                tmp_arr.push({tasker: tasker, reviews: reviews});
+            }
+        }
+        setAllTaskerReviews(tmp_arr);
+    }
 
-
+    useEffect(() => {
+        fetchAllReviews();
+    }, [])
     const formatID = (id: number) => {
         if (id < 10) {
             return `A00${id}`
@@ -127,7 +148,7 @@ export default function UserCard({
             setTaskChosen(!isTaskerChosen); // Cập nhật lại trạng thái
         }
         catch (error) {
-            toast.error("Xác nhận thất bại!"); // Thông báo lỗi
+            //toast.error("Xác nhận thất bại!"); // Thông báo lỗi
             console.error("Lỗi khi xác nhận:", error);
         }
     };
@@ -158,6 +179,37 @@ export default function UserCard({
         }
     };
 
+    const handleRouteToReviewDetails = async () => {
+        if (!isMounted) return;
+
+        try {
+            const queryParams = new URLSearchParams({
+                taskId: userCard.id.toString(),
+                title: userCard.title,
+                district: userCard.district,
+                ward: userCard.ward,
+                detail_address: userCard.detail_address,
+                start_date: new Date(userCard.start_date).toISOString(),
+                end_date: new Date(userCard.end_date).toISOString(),
+                fee_per_hour: userCard.fee_per_hour.toString(),
+                estimated_duration: userCard.estimated_duration.toString(),
+                description: userCard.description,
+                rating: userCard.review?.rating.toString() || '0',
+                comment: userCard.review?.comment || '',
+            }).toString();
+
+            console.log('Query params:', queryParams); // Debug log
+
+            await router.push(`/reviewTasker/reviewdetails?${queryParams}`);
+        } catch (error) {
+            console.error('Navigation error:', error);
+            toast.error('Failed to navigate to order page');
+        }
+
+
+    };
+
+
 
 
     const renderModalContent = (onClose: () => void) => {
@@ -184,24 +236,35 @@ export default function UserCard({
         if (!taskDetailVisible && choseTaskerVisible) {
             return (
                 <ScrollShadow className="flex flex-col gap-y-5 max-h-[400px] p-4">
-                    {userCard.taskers && userCard.taskers.map((tasker) => (
-                        <div key={tasker.id}>
+                    {allTaskerReviews.map((taskerwithReviews) => (
+                        <div key={taskerwithReviews.tasker.id}>
                             <div className="flex items-center gap-x-3">
-                                <Avatar isBordered name={`T${tasker.id}`} size='sm' />
-                                <p className="font-semibold">Tasker's ID: {tasker.id}</p>
+                                <Avatar isBordered name={`T${taskerwithReviews.tasker.id}`} size='sm' />
+                                <p className="font-semibold">Tasker's ID: {taskerwithReviews.tasker.id}</p>
                             </div>
                             <div className="flex flex-col gap-y-2 mt-3 bg-gray-200 rounded-xl p-3">
                                 <div className="flex jsutify-start gap-x-2">
                                     <span className="text-emerald-700 font-semibold mr-1">Skill:</span>
                                     <div>
-                                        {tasker.skills.map((s) => (
+                                        {taskerwithReviews.tasker.skills.map((s) => (
                                             <p key={s.id} className="mb-1 flex items-center"><BiSolidCheckCircle className="text-emerald-500 flex-shrink-0 mr-1" />{s.name}</p>
                                         ))}
                                     </div>
                                 </div>
-                                <p><span className="text-emerald-700 font-semibold mr-1">Experience:</span>{tasker.experience}</p>
+                                <p><span className="text-emerald-700 font-semibold mr-1">Experience:</span>{taskerwithReviews.tasker.experience}</p>
+                                <p><span className="text-emerald-700 font-semibold mr-1">Completed Task:</span>{taskerwithReviews.tasker.completed_tasks}</p>
+                                <p><span className="text-emerald-700 font-semibold mr-1">Average Rating:</span>{(taskerwithReviews.tasker.rating_sum / taskerwithReviews.tasker.rating_count).toFixed(2)}</p>
+                                <span className="text-emerald-700 font-semibold mr-1">All Reviews: </span>
+                                <div className="overflow-y-auto flex items-center  w-full gap-x-3 py-3">
+                                    {taskerwithReviews.reviews.map((review: Review) => (
+                                        <div key={review.id} className="flex flex-col gap-x-2 rounded-lg bg-slate-300 p-3 h-24">
+                                            <p className="flex items-center"><span className="text-emerald-700 font-semibold mr-1">Rating:</span>{review.rating}<FaStar className="text-yellow-500"/></p>
+                                            <p><span className="text-emerald-700 font-semibold mr-1">Comment:</span>{review.comment}</p>
+                                        </div>
+                                    ))} 
+                                </div>
                             </div>
-                            <Button onPress={onClose} className="bg-emerald-700 mt-3 font-semibold text-white" onClick={() => { chooseTasker(userCard.id, tasker.id) }}>Choose this Tasker</Button>
+                            <Button onPress={onClose} className="bg-emerald-700 mt-3 font-semibold text-white" onClick={() => { chooseTasker(userCard.id, taskerwithReviews.tasker.id) }}>Choose this Tasker</Button>
                             <Divider className="mt-5" />
                         </div>
                     ))}
@@ -260,13 +323,13 @@ export default function UserCard({
 
                     <div>
                         {/* Hiển thị nút nút tương ứng với các trạng thái  */}
-                        {/* {userCard.task_status === 'IN_PROGRESS' ? (
-                            <div><Button color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Completion Confirmation</Button></div>
+                        {userCard.task_status === 'IN_PROGRESS' ? (
+                            <div className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">Waiting for Tasker's Completion Confirmation</div>
                         ) : (
                             <div></div>
-                        )} */}
+                        )}
                         {userCard.task_status === 'PENDING' ? (
-                            <div className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">Waiting for Tasker's Final Confirmation</div>
+                            <div className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">Waiting for Tasker's Consent</div>
                         ) : (
                             <div></div>
                         )}
@@ -285,11 +348,23 @@ export default function UserCard({
                             <Button onClick={handleTaskerComfirmCompletion} color="success" className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">
                                 Confirm Completion
                             </Button>
+
                         )}
-                        {userCard.task_status === 'COMPLETED' && (
+                        {userCard.task_status === 'COMPLETED' && !userCard.review ? (
                             <Button onClick={handleRouteToReview} color="success" className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">
                                 Review Tasker
                             </Button>
+                        ) : (
+                            <div>
+                            </div>
+                        )}
+                        {userCard.task_status === 'COMPLETED' && userCard.review ? (
+                            <Button onClick={handleRouteToReviewDetails} color="success" className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">
+                                See Review Details
+                            </Button>
+                        ) : (
+                            <div>
+                            </div>
                         )}
                     </div>
                 </CardFooter>

@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import EditableField from "@/components/profile/editable";
 import EditableSelect from "@/components/profile/editableselect";
 import EditableTextarea from "@/components/profile/editabletext";
-import ChangePassword from "@/components/profile/changepassword";
 import HeaderProfile from "@/components/profile/headerprofile";
 import { useAppSelector } from '@/redux/store';
 import { ProtectedRoute } from "@/components/protectedRoute";
@@ -124,7 +123,6 @@ const ProfilePage = () => {
                 isDisabled
                 defaultValue={user?.email || ''}
               />
-              <ChangePassword />
               <EditableField
                 type="mobile"
                 label="Phone"
@@ -142,12 +140,11 @@ const ProfilePage = () => {
                 defaultValue={user?.profile.gender.toString() || Gender.UNKNOWN} 
                 onChange={handleChange}
               />
-              <EditableField
+              <Input
                 type="date"
                 label="Date of Birth"
-                field="birth_date"
+                isDisabled
                 defaultValue={user?.profile.birth_date || ''}
-                onChange={handleChange}
               />
               <EditableTextarea
                 type='text'

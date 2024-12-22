@@ -4,9 +4,8 @@ import { Lobster } from 'next/font/google'
 import { Kanit } from 'next/font/google'
 import { IoMenu } from "react-icons/io5";
 import { useRouter } from "next/navigation";
-import { Divider, Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem } from "@nextui-org/react";
+import { Divider, Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem, Avatar } from "@nextui-org/react";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
-import Image from "next/image";
 import { useAppSelector } from '@/redux/store';
 import { useAppDispatch } from '../../redux/store';
 import { logout } from '@/redux/slices/authSlice';
@@ -97,7 +96,7 @@ const Header: React.FC = () => {
                     <div className={`${kanit.className} lg:text-lg sm:text-sm font-normal flex h-5 items-center space-x-4 justify-between gap-x-2`}>
                         <p onClick={() => router.push('/services')} className="hover:underline no-underline cursor-pointer">Services</p>
                         <Divider orientation="vertical" className="bg-lime-500" />
-                        <p onClick={() => router.push('/tasks')} className="hover:underline no-underline cursor-pointer">View Tasks</p>
+                        <p onClick={() => router.push('/taskmanage')} className="hover:underline no-underline cursor-pointer">Task Manage</p>
                         <Divider orientation="vertical" className="bg-lime-500" />
                         <Popover placement="bottom">
                             <PopoverTrigger>
@@ -106,7 +105,7 @@ const Header: React.FC = () => {
                             <PopoverContent>
                                 <div className="flex flex-col gap-y-5 px-1 py-2">
                                     <div className="flex gap-x-3">
-                                        <Image src="/img/header/cool-ava.jpg" width={60} height={30} className="rounded" alt="ava" />
+                                        <Avatar src={user?.profile.avatar ? user?.profile.avatar : "/img/header/cool-ava.jpg"} size="lg" className="rounded" alt="ava" />
                                         <div>
                                             <p className="font-semibold text-lg">{`${user?.profile?.first_name ?? ''} ${user?.profile?.last_name ?? ''}`.trim()}</p>
                                             <p className="font-medium text-emerald-600 t">{user?.email}</p>
@@ -114,7 +113,7 @@ const Header: React.FC = () => {
                                     </div>
                                     <div className="flex justify-center items-center space-x-2 h-5">
                                         {isTasker ? (
-                                            <p onClick={() => router.push('/taskmanage')} className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold hover:underline no-underline cursor-pointer">Task Manage</p>
+                                            <p onClick={() => router.push('/tasks')} className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold hover:underline no-underline cursor-pointer">View Task</p>
                                         ) : (
                                             <p onClick={() => router.push('/becometasker')} className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold hover:underline no-underline cursor-pointer">Register as a Tasker</p>
                                         )}
@@ -148,13 +147,14 @@ const Header: React.FC = () => {
                                 onAction={(key) => handleEvent(key.toString())}
                             >
                                 <DropdownItem key="services">Services</DropdownItem>
-                                <DropdownItem key="tasks">View Tasks</DropdownItem>
+                                {isTasker ? 
+                                (<DropdownItem key="tasks">View Tasks</DropdownItem>
+                                ) 
+                                :
+                                (<DropdownItem key="becometasker">Become Tasker</DropdownItem>)
+                                }
+                                <DropdownItem key="taskmanage">Task Manage</DropdownItem>
                                 <DropdownItem key="profile">My Profile</DropdownItem>
-                                {isTasker ? (
-                                    <DropdownItem key="taskmanage">Task Manage</DropdownItem>
-                                ) : (
-                                    <DropdownItem key="becometasker">Become Tasker</DropdownItem>
-                                )}
                                 <DropdownItem key="logout">
                                     Log Out
                                 </DropdownItem>

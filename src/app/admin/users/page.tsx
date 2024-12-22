@@ -30,7 +30,7 @@ const UsersPage = () => {
             setUsersList(Array.isArray(response) ? response : [response]);
             setIsLoading(false);
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Failed to fetch tasks');
+            setError(err instanceof Error ? err.message : 'Failed to fetch users');
             setIsLoading(false);
         }
     };

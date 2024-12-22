@@ -28,15 +28,6 @@ export default function HeaderProfile({formdata} : HeaderProfileProps )  {
       console.error(error);
     }
   }
-  const onDeleteProfile = async () => {
-    try {
-      await userService.deleteMe();
-      router.push('/');
-    }
-    catch (error) {
-      console.error(error);
-    }
-  }
   return (
     <div className="w-full bg-white rounded-lg shadow-sm p-4">
       {/* Title and Buttons Section */}
@@ -62,15 +53,6 @@ export default function HeaderProfile({formdata} : HeaderProfileProps )  {
             onClick={onSaveChanges}
           >
             Save Changes
-          </Button>
-          <Button
-            radius="md"
-            color="danger"
-            variant="bordered"
-            className={`${kanit.className} text-lg text-red-600`}
-            onClick={onDeleteProfile}
-          >
-            Delete Profile
           </Button>
           
         </div>

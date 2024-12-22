@@ -6,7 +6,7 @@ interface BackgroundProps {
 }
 
 const Background: React.FC<BackgroundProps> = ({
-    imageUrl = '/img/back.png'
+    imageUrl = '/img/login.jpg'
 }) => {
     return (
         <div

@@ -166,8 +166,8 @@ const UserCard: React.FC<UserCardProps> = ({
                                                         <p>{user.tasker.completed_tasks || 0}</p>
                                                     </div>
                                                     <div>
-                                                        <h4 className="text-gray-500">Rating</h4>
-                                                        <p>{user.tasker.rating_sum?.toFixed(1) || 'No ratings'}</p>
+                                                        <h4 className="text-gray-500"> Average Rating</h4>
+                                                        <p>{user.tasker.rating_count ? (user.tasker.rating_sum / user.tasker.rating_count).toFixed(2) : 'No ratings'}</p>
                                                     </div>
                                                     <div>
                                                         <h4 className="text-gray-500">Rating Count</h4>
@@ -198,7 +198,10 @@ const UserCard: React.FC<UserCardProps> = ({
             <CardFooter>
                 <div className="flex items-center gap-1">
                     <div className="text-small text-default-500">Role: {user.role}</div>
-                    {user.tasker && <div className="text-small text-default-500">TASKER</div>}
+                    {user.role !== "ADMIN" && user.tasker && (
+                        <div className="text-small text-default-500">TASKER</div>
+                        )}
+
                 </div>
             </CardFooter>
         </Card>

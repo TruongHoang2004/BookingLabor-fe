@@ -1,12 +1,12 @@
 'use client'
 import TaskCompleted from "@/components/review/TaskCompleted";
-import TaskInforAndPhotoTasker from "@/components/review/TaskInforAndPhotoTasker";
+import ReviewDetails from "@/components/review/SeeReview";
 
 export default function Page() {
     return (
         <div className="bg-gray-200">
             <TaskCompleted />
-            < TaskInforAndPhotoTasker />
+            < ReviewDetails />
         </div>
 
 
