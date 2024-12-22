@@ -6,7 +6,7 @@ import ServiceProps from './ServiceProps';
 
 const CleaningProps: React.FC = () => {
     const data = {
-        imageSrc: '/img/services_img/service_cleaning1.jpeg',
+        imageSrc: '/img/services_img/service_cleaning1.jpg',
         title: 'Cleaning',
         description: 'Taskers will make your home sparkle!',
         services: [

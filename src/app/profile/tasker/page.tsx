@@ -89,14 +89,6 @@ const TaskerProfilePage = () => {
       console.error(error);
     }
   };
-  const handleDetele = async () => {
-    try {
-      await userService.deleteTasker();
-      router.push('/');
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const fetchReviews = async () => {
     try {
@@ -143,15 +135,6 @@ const TaskerProfilePage = () => {
                   onClick={handleSubmit}
                 >
                   Save Changes
-                </Button>
-                <Button
-                  radius="md"
-                  color="danger"
-                  variant="bordered"
-                  className={`${kanit.className} text-lg text-red-600`}
-                  onClick={handleDetele}
-                >
-                  Delete Profile
                 </Button>
               </div>
             </div>
