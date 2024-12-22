@@ -7,6 +7,8 @@ import { Image } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { locationService } from "@/service/location/location1";
 import { taskService } from '@/service/task/task';
+import { parse } from 'path';
+import { useAppSelector } from '@/redux/store';
 const locations = new locationService()
 
 export default function TaskInformation() {
@@ -18,11 +20,7 @@ export default function TaskInformation() {
         const date = new Date(dateString);
         return date.toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
     };
-
-
-
-
-
+      const { user } = useAppSelector((state) => state.auth);
     useEffect(() => {
         const getLocationNames = async () => {
             try {
@@ -59,7 +57,11 @@ export default function TaskInformation() {
     const fee_per_hour = searchParams.get('fee_per_hour') || '';
     const estimated_duration = searchParams.get('estimated_duration') || '';
     const description = searchParams.get('description') || '';
-
+    let total_fee;
+    if(fee_per_hour && estimated_duration) {
+        total_fee = parseInt(fee_per_hour,10) * parseInt(estimated_duration)
+        total_fee = total_fee * 0.05; 
+    }
 
 
     const router = useRouter();
@@ -211,7 +213,7 @@ export default function TaskInformation() {
                 <div
                     style={{
                         width: '80%',
-                        height: '250px',
+                        // height: '250px',
                         textAlign: 'center',
                         color: 'black',
                         fontSize: '15px',
@@ -230,43 +232,13 @@ export default function TaskInformation() {
                         padding: '10px',
                     }}
                 >
-
-                    {/* <div style={{
-                        width: '80px',
-                        height: '80px',
-                        borderRadius: '50%',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginBottom: '10px',
-                        border: '2px solid #ccc',
-
-                    }}>
-                        <Image
-                            src="https://b.fssta.com/uploads/application/soccer/headshots/885.vresize.350.350.medium.19.png"
-                            alt="Tasker"
-                            width={80}
-                            height={80}
-                            style={{
-                                width: '100%',
-                                height: 'auto',
-                                objectFit: 'contain'
-                            }}
-                        />
-                    </div> */}
-                    {/* <h2 style={{ margin: '5px 0', color: 'black', }}>Lê Văn Bảy</h2>
-                    <p style={{ margin: '5px 0', color: 'black', }}><strong>Email:</strong> baychobochay@example.com</p>
-                    <p style={{ margin: '5px 0', color: 'black', }} ><strong>Phone:</strong> (+000) 782 321 589</p>
-                    <p style={{ margin: '5px 0', color: 'black', }}><strong>Gender:  </strong>
-                        Male</p> */}
-
                     <div style={{
                         width: '250px',
-                        height: '250px',
+                        // height: '250px',
                         borderRadius: '10px',
                         overflow: 'hidden',
                         display: 'flex',
+                        flexDirection: 'column',
                         alignItems: 'center',
                         justifyContent: 'center',
                         marginBottom: '10px',
@@ -284,6 +256,9 @@ export default function TaskInformation() {
                                 objectFit: 'contain'
                             }}
                         />
+                        <p>We will take 5% of the total value of each of your orders.</p>
+                        <p>Total fee: {total_fee}</p>
+                        <p>Transfer details: A{taskID}-T{user?.tasker?.id}</p>
                     </div>
 
                 </div>
@@ -293,7 +268,6 @@ export default function TaskInformation() {
 
 
                 <div className="flex flex-wrap gap-4 items-center">
-
                     <Button onClick={handleConfirmPayment} color="primary" variant="ghost">
                         Confirm Payment
                     </Button>
