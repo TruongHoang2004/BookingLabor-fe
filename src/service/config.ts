@@ -28,7 +28,8 @@ api.interceptors.request.use(
     if (
       config.url?.includes("/auth/login") ||
       config.url?.includes("/auth/refresh") ||
-      config.url?.includes("/auth/register")
+      config.url?.includes("/auth/register") ||
+      config.url?.includes("/auth/otp")
     ) {
       console.log(config);
       return config;

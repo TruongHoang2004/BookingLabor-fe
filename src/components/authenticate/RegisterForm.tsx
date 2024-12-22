@@ -4,11 +4,9 @@ import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Button, Select, SelectItem, useDisclosure, } from "@nextui-org/react";
 import { Eye, EyeOff } from 'lucide-react';
 import Background from '../layout-background';
-import { authService } from '@/service/auth/auth-service';
 import { RegisterRequest } from '@/interface/auth';
 import { Gender } from '@/enum/gender';
 import toast from 'react-hot-toast';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
 import { EmailVerify } from '@/service/auth/emailVerify';
 import { OTPRequest } from '@/interface/auth';
 import OTPVerification from './OtpForm';
@@ -116,15 +114,7 @@ const RegisterForm: React.FC = () => {
         toast.error('Mật khẩu không trùng khớp', { duration: 2000 });
         return;
       }
-
-      /*
-      await authService.register({
-        ...registerData,
-        email,
-        password
-      });
-      */
-      //router.push('/login');
+      
       const otp: OTPRequest = { email: formData.email };
       const response = await EmailVerify.getOTP(otp);
       console.log(response)
@@ -275,6 +265,8 @@ const RegisterForm: React.FC = () => {
               onResendOTP={handleResendOTP}
               onVerifyOTP={handleVerifyOTP}
               email={formData.email}
+              formData={formData}
+              be_otp={OTP}
             />
             <p onClick={() => router.push('/')} className="flex items-center gap-2 text-gray-600 text-sm cursor-pointer">
               <svg

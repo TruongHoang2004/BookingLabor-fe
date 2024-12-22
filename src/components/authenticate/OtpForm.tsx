@@ -3,6 +3,10 @@ import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextu
 import { Button } from "@nextui-org/react";
 import { Input } from "@nextui-org/react";
 import { Clock } from 'lucide-react';
+import { RegisterRequest } from '@/interface/auth';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import { authService } from '@/service/auth/auth-service';
 
 interface OTPVerificationProps {
     isOpen: boolean;
@@ -10,6 +14,8 @@ interface OTPVerificationProps {
     onResendOTP: () => Promise<void>;
     onVerifyOTP: (otp: string) => Promise<void>;
     email: string;
+    formData: RegisterRequest & { confirmPassword: string }
+    be_otp: string;
 }
 
 const OTPVerification: React.FC<OTPVerificationProps> = ({
@@ -17,13 +23,15 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
     onOpenChange,
     onResendOTP,
     onVerifyOTP,
-    email
+    email,
+    formData,
+    be_otp
 }) => {
     const [otp, setOtp] = useState<string>('');
     const [timeLeft, setTimeLeft] = useState<number>(300);
     const [isExpired, setIsExpired] = useState<boolean>(false);
     const inputRef = useRef<HTMLInputElement>(null);
-
+    const router = useRouter();
     // Timer effect
     useEffect(() => {
         if (!isOpen) return;
@@ -81,8 +89,13 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
 
     const handleVerify = async (): Promise<void> => {
         try {
-            await onVerifyOTP(otp);
+            if(parseInt(otp,10) === parseInt(be_otp)) {
+                toast.success('VALID OTP')
+                await authService.register(formData)
+                router.push('/login');
+            }
         } catch (error) {
+            toast.error('Failed to Register')
             console.error('Error verifying OTP:', error);
         }
     };
@@ -150,7 +163,7 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
                                 variant="light"
                                 fullWidth
                                 onClick={handleResend}
-                                disabled={!isExpired && timeLeft > 0}
+                                //disabled={!isExpired && timeLeft > 0}
                             >
                                 Resend OTP
                             </Button>
