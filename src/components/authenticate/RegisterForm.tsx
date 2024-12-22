@@ -1,13 +1,16 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Button, Select, SelectItem } from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Button, Select, SelectItem, useDisclosure, } from "@nextui-org/react";
 import { Eye, EyeOff } from 'lucide-react';
 import Background from '../layout-background';
-import { authService } from '@/service/auth/auth-service';
 import { RegisterRequest } from '@/interface/auth';
 import { Gender } from '@/enum/gender';
 import toast from 'react-hot-toast';
+import { EmailVerify } from '@/service/auth/emailVerify';
+import { OTPRequest } from '@/interface/auth';
+import OTPVerification from './OtpForm';
+
 
 const RegisterForm: React.FC = () => {
   const [formData, setFormData] = useState<RegisterRequest & { confirmPassword: string }>({
@@ -20,9 +23,11 @@ const RegisterForm: React.FC = () => {
     gender: Gender.UNKNOWN,
     date_of_birth: ''
   });
-
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [OTP, setOTP] = useState('');
+
   const router = useRouter();
   const isValidGmail = (email: string): boolean => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -47,10 +52,23 @@ const RegisterForm: React.FC = () => {
     return age >= 18;
   };
 
+  const handleResendOTP = async () => {
+    try {
+      const otp: OTPRequest = { email: formData.email };
+      const response = await EmailVerify.getOTP(otp);
+      setOTP(response);
+      toast.success("New OTP sent successfully");
+    } catch (error) {
+      console.error('Error getting new OTP:', error);
+      toast.error("Failed to get new OTP");
+    }
+  };
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { email, password, confirmPassword, ...registerData } = formData;
+      const { password, confirmPassword } = formData;
 
       if (!isValidVietnamesePhone(formData.phone_number)) {
         toast.error('Số điện thoại không phải của Việt Nam', { duration: 2000 });
@@ -85,16 +103,15 @@ const RegisterForm: React.FC = () => {
         toast.error('Mật khẩu không trùng khớp', { duration: 2000 });
         return;
       }
-
-      await authService.register({
-        ...registerData,
-        email,
-        password
-      });
-
-      router.push('/login');
+      
+      const otp: OTPRequest = { email: formData.email };
+      const response = await EmailVerify.getOTP(otp);
+      console.log(response)
+      setOTP(response);
+      toast.success("OTP Retrieved")
     } catch (error) {
       console.error('Error registering:', error);
+      toast.error("Can not get OTP")
     }
   };
 
@@ -222,6 +239,7 @@ const RegisterForm: React.FC = () => {
 
           <CardFooter className="flex flex-col gap-4 px-8 py-4 border-t">
             <Button
+              onPress={onOpen}
               type="submit"
               color="primary"
               variant="solid"
@@ -230,7 +248,14 @@ const RegisterForm: React.FC = () => {
             >
               Register
             </Button>
-
+            <OTPVerification
+              isOpen={isOpen}
+              onOpenChange={onOpenChange}
+              onResendOTP={handleResendOTP}
+              email={formData.email}
+              formData={formData}
+              be_otp={OTP}
+            />
             <p onClick={() => router.push('/')} className="flex items-center gap-2 text-gray-600 text-sm cursor-pointer">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

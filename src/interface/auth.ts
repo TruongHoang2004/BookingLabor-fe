@@ -24,7 +24,9 @@ export interface LoginResponse {
   user: User;
   token: TokenResponse;
 }
-
+export interface OTPRequest {
+  email: string;
+}
 export interface RegisterRequest {
   first_name: string;
   last_name: string;
