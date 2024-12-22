@@ -43,4 +43,14 @@ export const SkillService = {
       throw error;
     }
   },
+  async getSkillById(skillId: number): Promise<Skill> {
+    try {
+      const response = await api.get<Skill>(`/skills/${skillId}`);
+      return response.data;
+      
+    } catch (error) {
+      toast.error("Failed to fetch skill");
+      throw error;
+    }
+  }
 };

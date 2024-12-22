@@ -163,7 +163,7 @@ const UserCard: React.FC<UserCardProps> = ({
                                                     </div>
                                                     <div>
                                                         <h4 className="text-gray-500">Rating</h4>
-                                                        <p>{user.tasker.avg_rating?.toFixed(1) || 'No ratings'}</p>
+                                                        <p>{user.tasker.rating_sum?.toFixed(1) || 'No ratings'}</p>
                                                     </div>
                                                     <div>
                                                         <h4 className="text-gray-500">Rating Count</h4>
