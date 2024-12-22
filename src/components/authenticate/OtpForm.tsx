@@ -1,13 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
 import { Button } from "@nextui-org/react";
 import { Input } from "@nextui-org/react";
 import { Clock } from 'lucide-react';
 
-const OTPVerification = ({ isOpen, onOpenChange, onResendOTP, email }) => {
-    const [otp, setOtp] = useState(['', '', '', '', '', '']);
-    const [timeLeft, setTimeLeft] = useState(300); // 300 seconds = 5 minutes
-    const [isExpired, setIsExpired] = useState(false);
+interface OTPVerificationProps {
+    isOpen: boolean;
+    onOpenChange: () => void;
+    onResendOTP: () => Promise<void>;
+    onVerifyOTP: (otp: string) => Promise<void>;
+    email: string;
+}
+
+const OTPVerification: React.FC<OTPVerificationProps> = ({
+    isOpen,
+    onOpenChange,
+    onResendOTP,
+    onVerifyOTP,
+    email
+}) => {
+    const [otp, setOtp] = useState<string>('');
+    const [timeLeft, setTimeLeft] = useState<number>(300);
+    const [isExpired, setIsExpired] = useState<boolean>(false);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     // Timer effect
     useEffect(() => {
@@ -18,7 +33,7 @@ const OTPVerification = ({ isOpen, onOpenChange, onResendOTP, email }) => {
                 if (prevTime <= 1) {
                     clearInterval(timer);
                     setIsExpired(true);
-                    setOtp(['', '', '', '', '', '']); // Clear OTP when expired
+                    setOtp('');
                     return 0;
                 }
                 return prevTime - 1;
@@ -33,44 +48,42 @@ const OTPVerification = ({ isOpen, onOpenChange, onResendOTP, email }) => {
         if (isOpen) {
             setTimeLeft(300);
             setIsExpired(false);
-            setOtp(['', '', '', '', '', '']);
+            setOtp('');
+            // Focus input when modal opens
+            setTimeout(() => {
+                if (inputRef.current) {
+                    inputRef.current.focus();
+                }
+            }, 100);
         }
     }, [isOpen]);
 
-    // Handle OTP input
-    const handleChange = (element: HTMLInputElement, index: number) => {
+    // Handle input change
+    const handleChange = (value: string): void => {
         if (isExpired) return;
 
-        if (isNaN(Number(element.value))) return false;
-
-        setOtp([...otp.map((d, idx) => (idx === index ? element.value : d))]);
-
-        // Focus next input
-        if (element.value && index < 5) {
-            const nextInput = element.parentElement?.nextElementSibling?.querySelector('input');
-            if (nextInput) nextInput.focus();
-        }
+        // Only allow numbers and limit to 6 digits
+        const numericValue = value.replace(/[^0-9]/g, '').slice(0, 6);
+        setOtp(numericValue);
     };
 
-    // Handle backspace
-    const handleBackspace = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
-        if (e.key === 'Backspace' && !otp[index] && index > 0) {
-            const prevInput = e.currentTarget.parentElement?.previousElementSibling?.querySelector('input');
-            if (prevInput) {
-                prevInput.focus();
-                setOtp([...otp.map((d, idx) => (idx === index - 1 ? '' : d))]);
-            }
-        }
-    };
-
-    const handleResend = async () => {
+    const handleResend = async (): Promise<void> => {
         try {
             await onResendOTP();
             setTimeLeft(300);
             setIsExpired(false);
-            setOtp(['', '', '', '', '', '']);
+            setOtp('');
+            inputRef.current?.focus();
         } catch (error) {
             console.error('Error resending OTP:', error);
+        }
+    };
+
+    const handleVerify = async (): Promise<void> => {
+        try {
+            await onVerifyOTP(otp);
+        } catch (error) {
+            console.error('Error verifying OTP:', error);
         }
     };
 
@@ -97,23 +110,22 @@ const OTPVerification = ({ isOpen, onOpenChange, onResendOTP, email }) => {
                                 </span>
                             </div>
 
-                            <div className="flex justify-center gap-2 mb-4">
-                                {otp.map((digit, index) => (
-                                    <div key={index} className="w-12">
-                                        <Input
-                                            size="lg"
-                                            maxLength={1}
-                                            value={digit}
-                                            onChange={(e) => handleChange(e.target, index)}
-                                            onKeyDown={(e) => handleBackspace(e, index)}
-                                            className="text-center text-xl"
-                                            disabled={isExpired}
-                                            classNames={{
-                                                input: "text-center"
-                                            }}
-                                        />
-                                    </div>
-                                ))}
+                            <div className="flex justify-center mb-4">
+                                <div className="w-48">
+                                    <Input
+                                        ref={inputRef}
+                                        size="lg"
+                                        maxLength={6}
+                                        value={otp}
+                                        onChange={(e) => handleChange(e.target.value)}
+                                        className="text-center text-xl"
+                                        disabled={isExpired}
+                                        placeholder="Enter 6-digit OTP"
+                                        classNames={{
+                                            input: "text-center"
+                                        }}
+                                    />
+                                </div>
                             </div>
 
                             {isExpired && (
@@ -127,7 +139,8 @@ const OTPVerification = ({ isOpen, onOpenChange, onResendOTP, email }) => {
                                 color="primary"
                                 variant="solid"
                                 fullWidth
-                                disabled={otp.some(digit => !digit) || isExpired}
+                                disabled={otp.length !== 6 || isExpired}
+                                onPress={handleVerify}
                             >
                                 Verify OTP
                             </Button>

@@ -66,6 +66,18 @@ const RegisterForm: React.FC = () => {
     }
   };
 
+  const handleVerifyOTP = async (otpValue: string) => {
+    try {
+      // Call your API to verify OTP
+      // await verifyOTP(otpValue);
+      toast.success("OTP verified successfully");
+      // onClose();
+    } catch (error) {
+      console.error('Error verifying OTP:', error);
+      toast.error("Failed to verify OTP");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -261,6 +273,7 @@ const RegisterForm: React.FC = () => {
               isOpen={isOpen}
               onOpenChange={onOpenChange}
               onResendOTP={handleResendOTP}
+              onVerifyOTP={handleVerifyOTP}
               email={formData.email}
             />
             <p onClick={() => router.push('/')} className="flex items-center gap-2 text-gray-600 text-sm cursor-pointer">
