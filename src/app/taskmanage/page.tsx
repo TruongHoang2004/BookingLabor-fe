@@ -11,7 +11,7 @@ export default function UsersView() {
         <ProtectedRoute>
             <div className="flex flex-col p-4 w-full">
                 <div className='w-full flex justify-center font-bold text-3xl text-emerald-700 mt-10'>
-                    <p>Manages your posted And on-going Tasks</p>
+                    <p>Manage your posted and on-going tasks</p>
                 </div>
                 <div className="flex items-center justify-end gap-x-10 mb-8 w-full mt-10 pr-10">
                     <div className="w-48">

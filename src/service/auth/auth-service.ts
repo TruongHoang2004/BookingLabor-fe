@@ -25,7 +25,14 @@ class AuthService {
 
       return response.data;
     } catch (error) {
-      toast.error("Đăng ký thất bại");
+      if (axios.isAxiosError(error) && error.response?.data?.message) {
+        const message = error.response.data.message;
+        if (message.includes("email")) {
+          toast.error("Email đã được sử dụng.");
+        } else if (message.includes("phone_number")) {
+          toast.error("Số điện thoại đã được sử dụng.");
+        }
+      }
       console.log(error);
       throw error;
     }
@@ -33,14 +40,13 @@ class AuthService {
 
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
-      console.log(process.env.NEXT_PUBLIC_API_BASE_URL + "/auth/login")
+      console.log(process.env.NEXT_PUBLIC_API_BASE_URL + "/auth/login");
       const response = await api.post<LoginResponse>(
         "/auth/login",
         JSON.stringify(credentials)
       );
       const LoginResponse = response.data;
       store.dispatch(setCredentials(LoginResponse));
-      toast.success("Đăng nhập thành công");
       return response.data;
     } catch (error) {
       console.log(error);
@@ -61,7 +67,7 @@ class AuthService {
     }
 
     this.refreshPromise = api
-      .post<TokenResponse>("/auth/refresh", { refreshToken })
+      .post<TokenResponse>("/auth/refresh", { refresh_token: refreshToken })
       .then((response) => {
         const { access_token, refresh_token } = response.data;
         store.dispatch(
@@ -105,7 +111,7 @@ class AuthService {
     return store.getState().auth.refreshToken;
   }
 
-  isTokenExpired(token: string): boolean {
+  isTokenExpired(token: string | null | undefined): boolean {
     if (!token) return true;
 
     try {

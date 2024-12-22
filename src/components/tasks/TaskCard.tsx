@@ -16,18 +16,18 @@ import toast from "react-hot-toast";
 
 export default function TaskCard({ task }: { task: Task }) {
     const getImageSrc = () => {
-        const randomIndex = 1;
-        return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
+        const Index = task.skill?.id;
+        return Index?  `/img/taskmanage/task-manage-${Index}.jpg` : '/img/taskmanage/default-task.jpg';
     }
 
     const formatID = (id: number) => {
-        if(id < 10) {
+        if (id < 10) {
             return `A00${id}`
         }
-        if(id >= 10 && id < 100) {
+        if (id >= 10 && id < 100) {
             return `A0${id}`
         }
-        if(id < 10) {
+        if (id < 10) {
             return `A${id}`
         }
     }
@@ -36,7 +36,7 @@ export default function TaskCard({ task }: { task: Task }) {
         const date = new Date(dateString);
         return date.toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
     };
-    
+
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     const handleApply = async () => {
@@ -62,9 +62,9 @@ export default function TaskCard({ task }: { task: Task }) {
                     <div className="relative w-full h-full">
                         <div className="top-2/3 left-1/2 absolute flex justify-between items-center bg-gray-200 py-4 pl-2 rounded-lg w-11/12 transform -translate-x-1/2 -translate-y-1/2">
                             <div>
-                                <p className="truncate mb-2  flex items-center max-w-[290px] "><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Duration:</span>{task.estimated_duration} hours</p>
-                                <p className="truncate mb-2  flex items-center max-w-[290px]"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{task.fee_per_hour} VND/h</p>
-                                <p className="truncate  flex items-center max-w-[290px]"><TbChecklist className="text-emerald-700 mr-1 text-xl"/> <span className="text-emerald-700 font-semibold mr-1">End date:</span>{task.end_date.replaceAll("T00:00:00.000Z", "")}</p>
+                                <p className="truncate mb-2  flex items-center max-w-[290px] "><TbChecklist className="text-emerald-700 mr-1 text-xl" /> <span className="text-emerald-700 font-semibold mr-1">Duration:</span>{task.estimated_duration} hours</p>
+                                <p className="truncate mb-2  flex items-center max-w-[290px]"><TbChecklist className="text-emerald-700 mr-1 text-xl" /> <span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{task.fee_per_hour} VND/h</p>
+                                <p className="truncate  flex items-center max-w-[290px]"><TbChecklist className="text-emerald-700 mr-1 text-xl" /> <span className="text-emerald-700 font-semibold mr-1">End date:</span>{task.end_date.replaceAll("T00:00:00.000Z", "")}</p>
                             </div>
                             <div>
                                 <Tooltip content="View more details">
@@ -90,13 +90,14 @@ export default function TaskCard({ task }: { task: Task }) {
                             </ModalHeader>
                             <ModalBody>
                                 <div className="flex flex-col gap-y-3">
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Skill:</span>{task.skill?.name}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Description:</span>{task.description}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Estimated Duration:</span>{task.estimated_duration}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Fee per hour:</span>{task.fee_per_hour}VND /h</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Start Date:</span>{formatDate(task.start_date)}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">End Date:</span>{formatDate(task.end_date)}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Status:</span>{task.task_status}</p>
-                              </div>
+                                </div>
                             </ModalBody>
                             <ModalFooter>
                                 <Button color="danger" variant="light" onPress={onClose}>

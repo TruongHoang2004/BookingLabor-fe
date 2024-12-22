@@ -21,6 +21,7 @@ const MovingProps: React.FC = () => {
             { icon: FaBoxOpen, text: "Rearrange Furniture" },
             { icon: FaBoxOpen, text: "Full Service Help Moving" },
         ],
+        skillID: 2
     }
     return (
         <ServiceProps {... data}/>

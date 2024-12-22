@@ -8,33 +8,59 @@ import { becomtaskerService } from '@/service/becometasker/becometasker';
 import { SkillService } from '@/service/skill/skill';
 import { useAppSelector } from '@/redux/store';
 import { Skill } from '@/interface/skill';
+import { locationService } from '@/service/location/location1';
+import { District } from '@/interface/location1';
 
-
-interface District {
-    name: string;
-    code: number;
-    division_type: string;
-    codename: string;
-}
-
+const locations = new locationService();
+const ALL_SKILLS_ID = -1;
+const ALL_DISTRICTS_ID = -1;
 const BecomeTaskerForm: React.FC = () => {
     const [formData] = useState<TaskerForm>({
         skillIds: [],
         work_area: [],
         experience: ''
     });
-
+    
+    const [districts, setDistricts] = useState<District[]>([]);
+    const [chosenDistricts, setChosenDistricts] = useState<number[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [skills, setSkills] = useState<Skill[]>([])
+    const [chosenSkillId, setChosenSkillID] = useState<number[]>([]);
+    const [experience, setExperience] = useState("")
+    const { isTasker } = useAppSelector((state) => state.auth);
     const router = useRouter();
     const handleSkillChange = (skillID: string) => {
-        //setChosenSkillID(parseInt(skillID, 10))
-        const arr: number[] = skillID.split(',').map(Number)
-        setChosenSkillID(arr);
-    }
+        const selectedIds = skillID.split(',').map(Number);
+        
+        if (selectedIds.includes(ALL_SKILLS_ID)) {
+            // If "all" is selected, include all skill IDs except the "all" option
+            const allSkillIds = skills
+                .filter(skill => skill.id !== ALL_SKILLS_ID)
+                .map(skill => skill.id);
+            setChosenSkillID(allSkillIds);
+        } else {
+            setChosenSkillID(selectedIds);
+        }
+    };
+    console.log(chosenSkillId)
+
 
     const handleWorkAreaChange = (work_area: string) => {
-        const arr: number[] = work_area.split(',').map(Number)
-        setChosenDistricts(arr)
-    };
+        const selectedIds = work_area.split(',').map(Number);
+        
+        if (selectedIds.includes(ALL_DISTRICTS_ID)) {
+            // If "all" is selected, include all skill IDs except the "all" option
+            const allDistrictIds = districts
+            .filter(district => district.code !== ALL_DISTRICTS_ID)
+            .map(district => district.code);
+        setChosenDistricts(allDistrictIds);
+    } else {
+        setChosenDistricts(selectedIds);
+    }
+};
+    //     const arr: number[] = work_area.split(',').map(Number)
+    //     setChosenDistricts(arr)
+    // };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -48,14 +74,6 @@ const BecomeTaskerForm: React.FC = () => {
         console.log(response);
         //console.log(isTasker)
     };
-
-    const [districts, setDistricts] = useState<District[]>([]);
-    const [chosenDistricts, setChosenDistricts] = useState<number[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [skills, setSkills] = useState<Skill[]>([])
-    const [chosenSkillId, setChosenSkillID] = useState<number[]>([]);
-    const [experience, setExperience] = useState("")
-    const { isTasker } = useAppSelector((state) => state.auth);
 
     useEffect(() => {
         fetchDistricts();
@@ -71,20 +89,21 @@ const BecomeTaskerForm: React.FC = () => {
     }, [isTasker, router]);
     const fetchDistricts = async () => {
         try {
-            const response = await fetch('https://provinces.open-api.vn/api/p/01?depth=2');
-            const data = await response.json();
-            setDistricts(data.districts);
+            const data = locations.getAllDistricts();
+            const allOption = { code: ALL_DISTRICTS_ID, name: "Select All", division_type: "", codename: "", province_code: 0, wards: [] };
+            setDistricts([allOption, ...data]);
         } catch (err) {
             console.error(err);
         }
     };
 
 
-    const fetchSkills = async () => {
-        const response = await SkillService.getAllSkills();
-        setSkills(response)
-    }
-
+        const fetchSkills = async () => {
+            const response = await SkillService.getAllSkills();
+            const allOption = { id: ALL_SKILLS_ID, name: "Select All", description: "" };
+            setSkills([allOption, ...response]);
+        };
+        console.log(chosenDistricts)
     return (
         <div className="relative flex justify-center items-center min-h-screen">
             <Background imageUrl='./img/becometasker.jpg' />
@@ -100,7 +119,7 @@ const BecomeTaskerForm: React.FC = () => {
                         <Select
                             label="Choose your job"
                             placeholder="Select your skill"
-                            value={Array.from(new Set(formData.skillIds.map(String)))}
+                            value={Array.from(new Set(chosenSkillId.map(String)))}
                             isRequired
                             selectionMode='multiple'
                             onChange={(e) => handleSkillChange(e.target.value)}

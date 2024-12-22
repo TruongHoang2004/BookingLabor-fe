@@ -19,6 +19,7 @@ const CleaningProps: React.FC = () => {
             { icon: LiaBroomSolid, text: "Laundry Help" },
             { icon: LiaBroomSolid, text: "Spring Cleaning" },
         ],
+        skillID: 1
     }
     return (
         <ServiceProps {... data}/>

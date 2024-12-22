@@ -12,6 +12,7 @@ export interface Profile {
   description: string | null;
   create_at: string;
   updated_at: string;
+  avatar?: string;
 }
 
 export interface Tasker {
@@ -19,7 +20,7 @@ export interface Tasker {
   work_area: string;
   experience: string;
   completed_tasks: number;
-  avg_rating: number;
+  rating_sum: number;
   rating_count: number;
   skills: Skill[];
 }
