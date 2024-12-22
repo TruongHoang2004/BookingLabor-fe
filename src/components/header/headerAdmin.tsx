@@ -5,10 +5,6 @@ import { Kanit } from 'next/font/google'
 import { IoMenu } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { Divider, Dropdown, DropdownTrigger, Button, DropdownMenu, DropdownItem } from "@nextui-org/react";
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/react";
-import Image from "next/image";
-import { FaBell } from "react-icons/fa6";
-import { Badge } from "@nextui-org/react";
 import { useAppSelector } from '@/redux/store';
 import { useAppDispatch } from '../../redux/store';
 import { logout } from '@/redux/slices/authSlice';
@@ -86,57 +82,11 @@ const HeaderAdmin: React.FC = () => {
                         <Divider orientation="vertical" className="bg-lime-500" />
                         <p onClick={() => router.push('/admin/skills')} className="hover:underline no-underline cursor-pointer">Skill Management</p>
                         <Divider orientation="vertical" className="bg-lime-500" />
-                        <Popover placement="bottom">
-                            <PopoverTrigger>
-                                <div className="mt-1">
-                                    <Badge content={notis.length} color="danger">
-                                        <FaBell className="text-2xl text-emerald-700 hover:text-2xl cursor-pointer" />
-                                    </Badge>
-                                </div>
-                            </PopoverTrigger>
-                            <PopoverContent>
-                                <div className="flex flex-col gap-y-2 px-2 py-2 max-w-[400px] max-h-[400px] overflow-y-auto">
-                                    <p className="mb-3 font-semibold text-emerald-800 text-xl">Notifications</p>
-                                    {notis.map((noti, index) => (
-                                        <div key={index} className="flex items-start gap-x-3 border-emerald-800 pb-2 border-b">
-                                            <Image src="/img/header/clipboard.png" width={40} height={40} alt="noti"></Image>
-                                            <div className="cursor-pointer">
-                                                <p className="font-semibold text-emerald-800">{noti.text}</p>
-                                                <p className="text-[10px]">{noti.date} ago</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </PopoverContent>
-                        </Popover>
-                        <Divider orientation="vertical" className="bg-lime-500" />
                         <p onClick={handleLogOut} className="hover:underline no-underline cursor-pointer">Log Out</p>
                     </div>
                 </div>
                 <div className={`${isLoggedIn ? 'sm:block 1100:hidden' : 'hidden'}`}>
                     <div className="flex items-center gap-x-5">
-                        <Popover placement="bottom">
-                            <PopoverTrigger>
-                                <div className="mt-1">
-                                    <Badge content={notis.length} color="danger">
-                                        <FaBell className="text-2xl text-emerald-700 hover:text-2xl cursor-pointer" />
-                                    </Badge>
-                                </div>
-                            </PopoverTrigger>
-                            <PopoverContent>
-                                <div className="flex flex-col gap-y-2 px-2 py-2 max-w-[350px] max-h-[400px] overflow-x-hidden overflow-y-auto">
-                                    {notis.map((noti, index) => (
-                                        <div key={index} className="flex items-start gap-x-3 border-emerald-800 pb-2 border-b cursor-pointer">
-                                            <Image src="/img/header/clipboard.png" width={30} height={40} alt="noti"></Image>
-                                            <div>
-                                                <p className="font-semibold text-ellipsis text-emerald-800 text-xs">{noti.text}</p>
-                                                <p className="font-semibold text-[8px]">{noti.date} ago</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </PopoverContent>
-                        </Popover>
                         <Dropdown>
                             <DropdownTrigger>
                                 <Button className="bg-white font-semibold">
@@ -144,9 +94,9 @@ const HeaderAdmin: React.FC = () => {
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu aria-label="Action event example" onAction={(key) => handleEvent(key.toString())}>
-                                <DropdownItem key="tasks">Task Management</DropdownItem>
-                                <DropdownItem key="users">User Management</DropdownItem>
-                                <DropdownItem key="skills">Skill Management</DropdownItem>
+                                <DropdownItem key="tasks">Task</DropdownItem>
+                                <DropdownItem key="users">User</DropdownItem>
+                                <DropdownItem key="skills">Skill</DropdownItem>
                                 <DropdownItem key="logout">Log Out</DropdownItem>
                             </DropdownMenu>
                         </Dropdown>
