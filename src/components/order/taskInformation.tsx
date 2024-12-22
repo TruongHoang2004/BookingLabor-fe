@@ -7,7 +7,6 @@ import { Image } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { locationService } from "@/service/location/location1";
 import { taskService } from '@/service/task/task';
-import { parse } from 'path';
 import { useAppSelector } from '@/redux/store';
 const locations = new locationService()
 
@@ -60,7 +59,7 @@ export default function TaskInformation() {
     let total_fee;
     if(fee_per_hour && estimated_duration) {
         total_fee = parseInt(fee_per_hour,10) * parseInt(estimated_duration)
-        total_fee = total_fee * 0.05; 
+        total_fee = (total_fee * 0.05).toFixed(2); 
     }
 
 
@@ -218,7 +217,7 @@ export default function TaskInformation() {
                         color: 'black',
                         fontSize: '15px',
                         fontWeight: 300,
-                        fontFamily: 'Inter',
+                        // fontFamily: 'Inter',
                         lineHeight: '24px',
                         borderRadius: '10px',
                         //border: '1px solid #ccc',
@@ -234,7 +233,6 @@ export default function TaskInformation() {
                 >
                     <div style={{
                         width: '250px',
-                        // height: '250px',
                         borderRadius: '10px',
                         overflow: 'hidden',
                         display: 'flex',
@@ -242,23 +240,24 @@ export default function TaskInformation() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         marginBottom: '10px',
-                        border: '0px solid #ccc',
+                        border: '1px solid #ccc',
+                        backgroundColor: '#fff',
+                        padding: '10px',
+                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                     }}>
-                        
                         <Image
                             src="/img/QR_Code/QR_Code.jpg"
                             alt="QR Code"
-                            // width={1000}
-                            // height={200}
                             style={{
                                 width: '100%',
                                 height: 'auto',
-                                objectFit: 'contain'
+                                objectFit: 'contain',
+                                marginBottom: '10px',
                             }}
                         />
-                        <p>We will take 5% of the total value of each of your orders.</p>
-                        <p>Total fee: {total_fee}</p>
-                        <p>Transfer details: A{taskID}-T{user?.tasker?.id}</p>
+                       
+                        <p style={{ margin: '5px 0', fontWeight: 'bold', color: '#333' }}>Total fee: {total_fee} VND</p>
+                        <p style={{ margin: '5px 0', fontWeight: 'bold', color: '#333' }}>Transfer details: A{taskID}-T{user?.tasker?.id}</p>
                     </div>
 
                 </div>
@@ -315,7 +314,7 @@ const leftStyles: CSSProperties = {
 const sidebarStyles: CSSProperties = {
 
     flex: '1 1 400px',
-    height: '410px',
+    height: '550px',
     marginBottom: '20px',
 
     backgroundColor: '#f0f0f0',
