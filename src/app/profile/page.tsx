@@ -142,12 +142,11 @@ const ProfilePage = () => {
                 defaultValue={user?.profile.gender.toString() || Gender.UNKNOWN} 
                 onChange={handleChange}
               />
-              <EditableField
+              <Input
                 type="date"
                 label="Date of Birth"
-                field="birth_date"
+                isDisabled
                 defaultValue={user?.profile.birth_date || ''}
-                onChange={handleChange}
               />
               <EditableTextarea
                 type='text'

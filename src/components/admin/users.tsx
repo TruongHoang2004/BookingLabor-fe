@@ -198,7 +198,10 @@ const UserCard: React.FC<UserCardProps> = ({
             <CardFooter>
                 <div className="flex items-center gap-1">
                     <div className="text-small text-default-500">Role: {user.role}</div>
-                    {user.tasker && <div className="text-small text-default-500">TASKER</div>}
+                    {user.role !== "ADMIN" && user.tasker && (
+                        <div className="text-small text-default-500">TASKER</div>
+                        )}
+
                 </div>
             </CardFooter>
         </Card>
