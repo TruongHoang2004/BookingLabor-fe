@@ -3,7 +3,7 @@ import React, { CSSProperties, useState, useEffect } from 'react';
 import { Input, Textarea, Button } from "@nextui-org/react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { locationService } from "@/service/location/location1";
-import { reviewService } from '@/service/review/review';
+import { ReviewService } from '@/service/review/review';
 import { ReviewRequest } from '@/interface/review';
 
 const locations = new locationService();
@@ -116,7 +116,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
             comment: comment,
         };
         console.log(reviewForm);
-        const response = await reviewService.createReview(reviewForm);
+        const response = await ReviewService.createReview(reviewForm);
         router.push('/taskmanage');
         console.log(response);
     }

@@ -7,7 +7,6 @@ import { Image } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { locationService } from "@/service/location/location1";
 import { taskService } from '@/service/task/task';
-import toast from 'react-hot-toast';
 const locations = new locationService()
 
 export default function TaskInformation() {

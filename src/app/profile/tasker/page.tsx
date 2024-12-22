@@ -14,6 +14,8 @@ import { useRouter } from 'next/navigation';
 import { Kanit } from 'next/font/google'
 import { Save, Edit3 } from 'react-feather';
 import { Avatar as NextAvatar } from "@nextui-org/react";
+import { ReviewService } from '@/service/review/review';
+import { Review } from '@/interface/review';
 
 const kanit = Kanit({
   subsets: ['latin'],
@@ -36,10 +38,9 @@ const TaskerProfilePage = () => {
     experience: false
   });
   const [skills, setSkills] = useState<Skill[]>([])
-  // const [AreaOptions, setAreaOptions] = useState<{ value: string; label: string }[]>([]);
   const [districts, setDistricts] = useState<District[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const handleSkillChange = (skillID: string) => {
-    //setChosenSkillID(parseInt(skillID, 10))
     const arr: number[] = skillID.split(',').map(Number)
     setTaskerData((prev) => ({ ...prev, skillIds: arr }));
   };
@@ -69,18 +70,14 @@ const TaskerProfilePage = () => {
     fetchDistricts();
     fetchSkills()
   }, []);
-  // React.useEffect(() => {
-  //   fetchArea();
-  // }, []);
+
   React.useEffect(() => {
-    // console.log(user?.tasker?.work_area);
     if (user?.tasker?.work_area) {
       const districtCodes = user.tasker.work_area.split(',').map(code => parseInt(code.trim()));
       districtCodes
         .map(code => locations.getDistrictByCode(code)?.name || '')
         .filter(name => name !== '');
     }
-
   }, [user?.tasker?.work_area]);
 
   const handleSubmit = async () => {
@@ -100,6 +97,24 @@ const TaskerProfilePage = () => {
       console.error(error);
     }
   };
+
+  const fetchReviews = async () => {
+    try {
+      if (user?.tasker?.id !== undefined) {
+        const response = await ReviewService.getReviewbyTaskerID(user.tasker.id);
+        setReviews(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  React.useEffect(() => {
+    if (user?.tasker?.id) {
+      fetchReviews();
+    }
+  }, [user?.tasker?.id]);
+
   return (
     <ProtectedRoute>
       <div className="flex flex-col items-center bg-gray-100 p-4 min-h-screen">
@@ -228,7 +243,6 @@ const TaskerProfilePage = () => {
               </div>
             </div>
             {/* Right Column */}
-
             <div className="space-y-6">
               <div className="flex items-center space-x-2">
                 <Textarea
@@ -255,8 +269,8 @@ const TaskerProfilePage = () => {
               <Input
                 isDisabled
                 type="text"
-                label="Total Rating"
-                defaultValue={user?.tasker?.rating_sum.toString() || ''}
+                label="Average Rating"
+                defaultValue={user?.tasker?.rating_count ? (user.tasker.rating_sum / user.tasker.rating_count).toFixed(2) : 'N/A'}
               />
               <Input
                 isDisabled
@@ -267,8 +281,28 @@ const TaskerProfilePage = () => {
             </div>
           </div>
         </div>
+        <div className="bg-white shadow-sm mt-8 p-10 rounded-md w-full">
+          <h2 className={`${kanit.className} text-2xl text-green-500 font-semibold mb-4`}>
+            Reviews
+          </h2>
+          <div className="space-y-6">
+            {reviews ? (
+              reviews.map((review) => (
+                <div key={review.id} className="p-4 border rounded-md shadow-sm">
+                  <p className="mt-4">{review.comment}</p>
+                  <div className="mt-2 flex items-center">
+                    <span className="text-yellow-500">{Array(review.rating).fill('★').join('')}</span>
+                    <span className="ml-2 text-gray-500">{review.rating}/5</span>
+                    {/* <span className="ml-4 text-gray-500">{review.image}</span> */}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500">No reviews available.</p>
+            )}
+          </div>
+        </div>
       </div>
-
     </ProtectedRoute>
   );
 };
