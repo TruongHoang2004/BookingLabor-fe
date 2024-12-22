@@ -12,8 +12,6 @@ import { FaList } from "react-icons/fa";
 import { TbChecklist } from "react-icons/tb";
 import { BiSolidCheckCircle } from "react-icons/bi";
 import { taskService } from "@/service/task/task";
-import toast from "react-hot-toast";
-
 export default function TaskCard({ task }: { task: Task }) {
     const getImageSrc = () => {
         const randomIndex = 1;

@@ -6,3 +6,8 @@ export interface Review {
     comment: string;
     task: Task;
 }
+export interface ReviewRequest {
+    rating: number;
+    comment: string;
+    task_id: number;
+}

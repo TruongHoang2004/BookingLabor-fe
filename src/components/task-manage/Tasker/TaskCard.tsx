@@ -105,6 +105,47 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
         }
     };
 
+    const handleTaskerCompleteTask = async () => {
+        try {
+            await taskService.TaskerCompleteTask(task.id);
+            // toast.success("Hoàn thành công việc thành công");
+            setIsAccepted(!isAccepted)
+        } catch (error) {
+            // toast.error("Hoàn thành công việc thất bại");
+            console.error("Lỗi khi hoàn thành công việc:", error);
+        }
+    }
+
+    const handleRouteToReviewDetails = async () => {
+        if (!isMounted) return;
+
+        try {
+            const queryParams = new URLSearchParams({
+                taskId: task.id.toString(),
+                title: task.title,
+                district: task.district,
+                ward: task.ward,
+                detail_address: task.detail_address,
+                start_date: new Date(task.start_date).toISOString(),
+                end_date: new Date(task.end_date).toISOString(),
+                fee_per_hour: task.fee_per_hour.toString(),
+                estimated_duration: task.estimated_duration.toString(),
+                description: task.description,
+                rating: task.review?.rating.toString() || '0',
+                comment: task.review?.comment || '',
+            }).toString();
+
+            console.log('Query params:', queryParams); // Debug log
+
+            await router.push(`/reviewTasker/reviewdetails?${queryParams}`);
+        } catch (error) {
+            console.error('Navigation error:', error);
+            toast.error('Failed to navigate to order page');
+        }
+
+
+    };
+
 
     return (
         <div>
@@ -113,7 +154,12 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                 <CardHeader className="flex flex-col bg-slate-200">
                     <p className="font-bold text-emerald-700 text-xl">{formatID(task.id)}</p>
                     <p className="font-semibold text-lg">{task.title}</p>
-                    <p className="truncate mt-2 flex items-center max-w-[290px] bg-emerald-400 rounded-xl p-2 font-bold"><span className="text-emerald-900 font-semibold mr-1 ">Status:</span>{task.task_status}</p>
+                    <p className="truncate mt-2 flex items-center max-w-[290px] bg-emerald-400 rounded-xl p-2 font-bold">
+                        <span className="text-emerald-900 font-semibold mr-1">
+                            Status:
+                        </span>
+                        {task.task_status === "WAITING" ? "COMPLETED" : task.task_status}
+                    </p>
                 </CardHeader>
                 <CardBody className="p-0">
                     <div className="w-full h-full relative">
@@ -135,7 +181,8 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                     <div>
                         {/* Hiển thị nút nút tương ứng với các trạng thái  */}
                         {task.task_status === 'IN_PROGRESS' ? (
-                            <div><Button color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Completion Confirmation</Button></div>
+                            <div><Button onClick={handleTaskerCompleteTask} color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Completion Confirmation</Button></div>
+
                         ) : (
                             <div></div>
                         )}
@@ -147,6 +194,17 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                         ) : (
                             <div></div>
                         )}
+                        {task.task_status === 'WAITING' || task.task_status === 'COMPLETED' ? (
+                            <div><Button color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">You Have Completed This Task</Button></div>
+                        ) : (
+                            <div></div>
+                        )}
+                        {task.task_status === 'COMPLETED' && task.review ? (
+                            <div className="flex justify-center"><Button onClick={handleRouteToReviewDetails} color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">See Review About You</Button></div>
+                        ) : (
+                            <div></div>
+                        )}
+
 
                     </div>
                 </CardFooter>

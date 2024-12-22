@@ -3,13 +3,13 @@ import React, { CSSProperties, useState, useEffect } from 'react';
 import { Input, Textarea, Button } from "@nextui-org/react";
 import { useRouter, useSearchParams } from 'next/navigation';
 import { locationService } from "@/service/location/location1";
-import { reviewService } from '@/service/review/review';
-import { ReviewRequest } from '@/interface/review';
+
+
 
 const locations = new locationService();
 
 
-const TaskInforAndPhotoTasker: React.FC = () => {
+const ReviewDetails: React.FC = () => {
     const [uploadedImages, setUploadedImages] = useState<File[]>([]);
 
     const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,8 +37,6 @@ const TaskInforAndPhotoTasker: React.FC = () => {
 
 
 
-    const [rating, setRating] = useState(0); // Đánh giá mặc định là 0
-    const [comment, setComment] = useState("")
 
 
 
@@ -76,53 +74,22 @@ const TaskInforAndPhotoTasker: React.FC = () => {
         getLocationNames();
     }, [searchParams]);
     const router = useRouter();
-    const taskID = parseInt(searchParams.get('taskId') || '0', 10);
+
 
     const title = searchParams.get('title') || '';
-    //const district = searchParams.get('district') || '';
-    // const ward = searchParams.get('ward') || '';
+
     const detail_address = searchParams.get('detail_address') || '';
     const start_date = formatDate(searchParams.get('start_date') || '');
     const end_date = formatDate(searchParams.get('end_date') || '');
     const fee_per_hour = searchParams.get('fee_per_hour') || '';
     const estimated_duration = searchParams.get('estimated_duration') || '';
     const description = searchParams.get('description') || '';
+    const rating = searchParams.get('rating') || 0;
+    const comment = searchParams.get('comment') || '';
 
-    // useEffect(() => {
-    //     // Giả sử bạn lấy giá trị ban đầu từ API hoặc props
-    //     const fetchInitialReview = async () => {
-    //         const review = await reviewService.getReview(taskID); // Lấy dữ liệu từ API
-    //         if (review) {
-    //             setInitialRating(review.rating || 0);
-    //             setInitialComment(review.comment || "");
-    //         }
-    //     };
-
-    //     fetchInitialReview();
-    // }, [taskID]);
-
-
-
-    const handleClick = (index: number) => {
-
-        setRating(index + 1);
-        // Cập nhật đánh giá khi người dùng ấn vào ngôi sao
-    };
-
-    const handleReviewSubmit = async () => {
-        const reviewForm: ReviewRequest = {
-            task_id: taskID,
-            rating: rating,
-            comment: comment,
-        };
-        console.log(reviewForm);
-        const response = await reviewService.createReview(reviewForm);
-        router.push('/taskmanage');
-        console.log(response);
+    const handleRouteToTaskManage = () => {
+        router.push(`/taskmanage`);
     }
-
-
-
 
     return (
         <div style={containerStyles}>
@@ -269,16 +236,16 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                         fontWeight: 300,
                         // fontFamily: 'Inter',
                         lineHeight: '24px'
-                    }}>Rate the Tasker</h3>
+                    }}>Rating of Tasker</h3>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         {[...Array(5)].map((_, index) => (
                             <span
                                 key={index}
-                                onClick={() => handleClick(index)}
+                                // onClick={() => setRating(index + 1)}
                                 style={{
                                     fontSize: '30px',
                                     cursor: 'pointer',
-                                    color: index < rating ? '#FFD700' : '#ccc', // Vàng nếu đã đánh giá, xám nếu chưa
+                                    color: index < parseInt(rating.toString()) ? '#FFD700' : '#ccc', // Vàng nếu đã đánh giá, xám nếu chưa
                                 }}
                             >
                                 ★
@@ -292,7 +259,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                         fontWeight: 300,
                         // fontFamily: 'Inter',
                         lineHeight: '24px'
-                    }}>Your rating: {rating} {rating > 0 ? 'star' : ''}</p>
+                    }}>Tasker's rating: {rating} {parseInt(rating.toString()) > 0 ? 'star' : ''}</p>
 
 
                 </div>
@@ -341,7 +308,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                     </div>
                 </div>
 
-                <h2 style={MidStyles}> Your review</h2>
+                <h2 style={MidStyles}> Tasker's review</h2>
 
                 <div style={{
                     width: "80%",
@@ -358,13 +325,13 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                             input: "resize-y min-h-[40px]",
                         }}
                         value={comment}
-                        onChange={(e) => setComment(e.target.value)}
+                    // onChange={(e) => setComment(e.target.value)}
                     />
                 </div>
                 <div className="flex flex-wrap gap-4 items-center">
 
-                    <Button onClick={handleReviewSubmit} color="primary" variant="solid" className='max-w-xl' size='lg'>
-                        Confirm
+                    <Button onClick={handleRouteToTaskManage} color="primary" variant="solid" className='max-w-xl' size='lg'>
+                        Go back to Task Manage
                     </Button>
 
                 </div>
@@ -453,4 +420,4 @@ const contentStyles: CSSProperties = {
 };
 
 
-export default TaskInforAndPhotoTasker;
+export default ReviewDetails;
