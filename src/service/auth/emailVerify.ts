@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import api from "../config";
 import { OTPRequest } from "@/interface/auth";
 

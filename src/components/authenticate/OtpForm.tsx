@@ -12,7 +12,6 @@ interface OTPVerificationProps {
     isOpen: boolean;
     onOpenChange: () => void;
     onResendOTP: () => Promise<void>;
-    onVerifyOTP: (otp: string) => Promise<void>;
     email: string;
     formData: RegisterRequest & { confirmPassword: string }
     be_otp: string;
@@ -22,7 +21,6 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
     isOpen,
     onOpenChange,
     onResendOTP,
-    onVerifyOTP,
     email,
     formData,
     be_otp
