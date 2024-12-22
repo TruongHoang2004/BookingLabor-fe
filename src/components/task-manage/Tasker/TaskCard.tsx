@@ -229,7 +229,7 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Status:</span>{task.task_status}</p>
                                 </div>
                                 <p className="font-bold text-sm mb-[-10px]">YOUR CLIENT'S DETAILED ADDRESS</p>
-                                <div className={task.task_status === 'IN_PROGRESS' ? 'block bg-gray-200 rounded-lg p-3 flex flex-col gap-y-2' : 'hidden'}>
+                                <div className={task.task_status === 'IN_PROGRESS' ? 'bg-gray-200 rounded-lg p-3 flex flex-col gap-y-2' : 'hidden'}>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">User's ID:</span>{task.user?.id}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">User's Email:</span>{task.user?.email}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">District:</span>{locations.getDistrictByCode(parseInt(task.district, 10))?.name}</p>
