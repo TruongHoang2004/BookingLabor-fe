@@ -69,11 +69,11 @@ export default function TaskInformation() {
         try {
             //console.log("Task ID: ", taskID);
             await taskService.acceptTask(taskID); // Gọi hàm service với task.id
-            toast.success("Xác nhận thành công!"); // Thông báo thành công
+            
             router.push('/taskmanage/tasker'); // Chuyển hướng về trang danh sách tasker
             //setIsAccepted(!isAccepted)
         } catch (error) {
-            toast.error("Xác nhận thất bại!"); // Thông báo lỗi
+           
             console.error("Lỗi khi xác nhận:", error);
         }
     };
