@@ -229,6 +229,7 @@ export default function TaskFormPage() {
                                 <Select
                                     labelPlacement="outside"
                                     label="Select your Skill for this Task"
+                                    defaultSelectedKeys="1"
                                     placeholder="Choose Skill"
                                     isRequired
                                     variant="faded"
