@@ -15,9 +15,10 @@ interface ServiceCardProps {
     title: string;
     description: string;
     services: ServiceItem[];
+    skillID: number
 }
 
-const ServiceProps = ({ imageSrc, title, description, services }: ServiceCardProps) => {
+const ServiceProps = ({ imageSrc, title, description, services, skillID }: ServiceCardProps) => {
     const router = useRouter();
     return (
         <div>
@@ -39,7 +40,7 @@ const ServiceProps = ({ imageSrc, title, description, services }: ServiceCardPro
                     {services.map((service, index) => {
                     const Icon = service.icon;
                     return (
-                        <li onClick={() => router.push(`/create-task?task=${encodeURIComponent(service.text)}`)} key={index} className="flex items-center cursor-pointer hover:underline">
+                        <li onClick={() => router.push(`/create-task?task=${encodeURIComponent(service.text)}&skillID=${skillID}`)} key={index} className="flex items-center cursor-pointer hover:underline">
                         <Icon className="mr-1" /> {service.text}
                         </li>
                     );

@@ -46,7 +46,7 @@ const UserCard: React.FC<UserCardProps> = ({
                     district_name_arr.push(d.name);
                 }
             });
-            setDistrictNames(district_name_arr.join(","))
+            setDistrictNames(district_name_arr.join(", "))
         }
       } catch (error) {
         console.error('Error fetching district names:', error);
@@ -59,6 +59,7 @@ const UserCard: React.FC<UserCardProps> = ({
     fetchDistrictNames();
   }, [user.tasker?.work_area]);
     const {isOpen, onOpen, onClose} = useDisclosure();
+    console.log(user.profile.avatar);
 
     return (
         <Card className="w-full">
@@ -67,7 +68,9 @@ const UserCard: React.FC<UserCardProps> = ({
                 <UserComponent
                     name={user.profile.first_name + " " + user.profile.last_name}
                     description={user.email}
-                    avatarProps={<Avatar name={user.profile.first_name + " " + user.profile.last_name} />}
+                    avatarProps= {{
+                        src: user.profile.avatar,
+                      }}
                 />
                 <div className="flex items-center gap-2">
                     <Button onPress={onOpen}
@@ -92,7 +95,8 @@ const UserCard: React.FC<UserCardProps> = ({
                                         <Avatar 
                                             className="w-20 h-20"
                                             showFallback
-                                            name={user.profile.first_name + " " + user.profile.last_name}
+                                            name={user.profile.first_name + " " + user.profile.last_name} 
+                                            src={user.profile.avatar}
                                         />
                                         <div>
                                             <h3 className="text-sm text-gray-500">Name</h3>
