@@ -1,16 +1,17 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Button, Select, SelectItem, useDisclosure,} from "@nextui-org/react";
+import { Card, CardHeader, CardBody, CardFooter, Divider, Input, Button, Select, SelectItem, useDisclosure, } from "@nextui-org/react";
 import { Eye, EyeOff } from 'lucide-react';
 import Background from '../layout-background';
 import { authService } from '@/service/auth/auth-service';
 import { RegisterRequest } from '@/interface/auth';
 import { Gender } from '@/enum/gender';
 import toast from 'react-hot-toast';
-import {  Modal,  ModalContent,  ModalHeader,  ModalBody,  ModalFooter} from "@nextui-org/modal";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
 import { EmailVerify } from '@/service/auth/emailVerify';
 import { OTPRequest } from '@/interface/auth';
+import OTPVerification from './OtpForm';
 
 
 const RegisterForm: React.FC = () => {
@@ -24,7 +25,7 @@ const RegisterForm: React.FC = () => {
     gender: Gender.UNKNOWN,
     date_of_birth: ''
   });
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [OTP, setOTP] = useState('');
@@ -51,6 +52,18 @@ const RegisterForm: React.FC = () => {
     }
 
     return age >= 18;
+  };
+
+  const handleResendOTP = async () => {
+    try {
+      const otp: OTPRequest = { email: formData.email };
+      const response = await EmailVerify.getOTP(otp);
+      setOTP(response);
+      toast.success("New OTP sent successfully");
+    } catch (error) {
+      console.error('Error getting new OTP:', error);
+      toast.error("Failed to get new OTP");
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -100,11 +113,11 @@ const RegisterForm: React.FC = () => {
       });
       */
       //router.push('/login');
-        const otp: OTPRequest = {email: formData.email};
-        const response = await EmailVerify.getOTP(otp);
-        console.log(response)
-        setOTP(response);
-        toast.success("OTP Retrieved")
+      const otp: OTPRequest = { email: formData.email };
+      const response = await EmailVerify.getOTP(otp);
+      console.log(response)
+      setOTP(response);
+      toast.success("OTP Retrieved")
     } catch (error) {
       console.error('Error registering:', error);
       toast.error("Can not get OTP")
@@ -244,23 +257,12 @@ const RegisterForm: React.FC = () => {
             >
               Register
             </Button>
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-              <ModalContent>
-                {(onClose) => (
-                  <>
-                    <ModalHeader className="flex flex-col gap-1">OTP VERYFICATION</ModalHeader>
-                    <ModalBody>
-                        <Input ></Input>
-                    </ModalBody>
-                    <ModalFooter>
-                      <Button color="danger" variant="light" onPress={onClose}>
-                        Close
-                      </Button>
-                    </ModalFooter>
-                  </>
-                )}
-              </ModalContent>
-            </Modal>
+            <OTPVerification
+              isOpen={isOpen}
+              onOpenChange={onOpenChange}
+              onResendOTP={handleResendOTP}
+              email={formData.email}
+            />
             <p onClick={() => router.push('/')} className="flex items-center gap-2 text-gray-600 text-sm cursor-pointer">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
