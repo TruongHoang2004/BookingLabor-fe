@@ -16,17 +16,22 @@ import {
     useDisclosure
 } from "@nextui-org/react";
 import { Badge, MapPin, Clock } from "lucide-react";
-     
+import { taskService } from "@/service/task/task";     
+
 const locations = new locationService();
 
 interface TaskCardProps {
     task: Task;
     onView: (id: number) => void;
+    isReloaded: boolean; 
+    setIsReloaded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({
     task,
     onView,
+    isReloaded,
+    setIsReloaded
 }) => {
     const [districtNames, setDistrictNames] = useState<string>('');
     const [isLoading, setIsLoading] = useState(true);
@@ -63,6 +68,11 @@ const TaskCard: React.FC<TaskCardProps> = ({
         }
     };
     const {isOpen, onOpen, onClose} = useDisclosure();
+
+    const hanldeTaskerAcceptForTaskerByAdmin = async () => {
+        await taskService.confirmPaymentForAdmin(task.id);
+        setIsReloaded(!isReloaded)
+    }
 
     return (
         
@@ -157,6 +167,12 @@ const TaskCard: React.FC<TaskCardProps> = ({
                                             <p className="text-gray-700">{task.description}</p>
                                         </div>
                                     </div>
+                                    {task.task_status === "PAYMENT_CONFIRM" && (
+                                        <Button color="primary" variant="solid" onClick={hanldeTaskerAcceptForTaskerByAdmin}>
+                                            Cofirm Taskes's Payment
+                                        </Button>
+                                    )}
+                                   
                                 </ModalBody>
                                 <ModalFooter>
                                     <Button color="primary" variant="solid" onPress={onClose}>

@@ -84,12 +84,12 @@ export const taskService = {
 
   async acceptTask(id: number): Promise<void> {
     try {
-      const response = await api.patch(`/tasks/${id}/accept`);
-      toast.success("Ứng tuyển công việc thành công!");
+      const response = await api.patch(`/tasks/${id}/pay`);
+      toast.success("Xác nhận thành công! Admin sẽ kiểm tra và thông báo cho bạn");
       console.log(response.data);
       return response.data;
     } catch (error) {
-      toast.error("Không thể ứng tuyển công việc này");
+      toast.error("Không thể xác nhận! Hãy thử lại sau");
       throw error;
     }
   },
@@ -148,6 +148,16 @@ export const taskService = {
       return response.data;
     } catch (error) {
       toast.error("Không thể xác nhận hoàn thành công việc này");
+      throw error;
+    }
+  },
+  async confirmPaymentForAdmin(task_id: number): Promise<void> {
+    try {
+      const response = await api.patch(`/tasks/${task_id}/accept`);
+      toast.success("Xác nhận thanh toán thành công! Tasker sẽ được thông báo để");
+      console.log(response.data);
+    } catch (error) {
+      toast.error("Không thể xác nhận thanh toán công việc này");
       throw error;
     }
   }

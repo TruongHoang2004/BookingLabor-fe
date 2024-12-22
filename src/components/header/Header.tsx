@@ -26,7 +26,7 @@ const kanit = Kanit({
 })
 // lg: 1024 -> 
 const Header: React.FC = () => {
-    const { isAuthenticated, user, isTasker } = useAppSelector((state) => state.auth);
+    const { isAuthenticated, user } = useAppSelector((state) => state.auth);
     let isLoggedIn = false;
     //const user = {fullname: "jqnwd", email: "aodwnmoiamdio"}
     if (isAuthenticated && user) {
@@ -113,7 +113,7 @@ const Header: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="flex justify-center items-center space-x-2 h-5">
-                                        {isTasker ? (
+                                        {isAuthenticated ? (
                                             <p onClick={() => router.push('/taskmanage')} className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold hover:underline no-underline cursor-pointer">Task Manage</p>
                                         ) : (
                                             <p onClick={() => router.push('/becometasker')} className="bg-emerald-100 px-3 py-1 border border-lime-500 rounded font-semibold hover:underline no-underline cursor-pointer">Register as a Tasker</p>
@@ -150,7 +150,7 @@ const Header: React.FC = () => {
                                 <DropdownItem key="services">Services</DropdownItem>
                                 <DropdownItem key="tasks">View Tasks</DropdownItem>
                                 <DropdownItem key="profile">My Profile</DropdownItem>
-                                {isTasker ? (
+                                {isAuthenticated ? (
                                     <DropdownItem key="taskmanage">Task Manage</DropdownItem>
                                 ) : (
                                     <DropdownItem key="becometasker">Become Tasker</DropdownItem>
