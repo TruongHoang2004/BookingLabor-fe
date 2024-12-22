@@ -27,11 +27,13 @@ const Footer: React.FC = () => {
                 <div>
                     <Image width={180} height={100} src="/img/footer/logo.png" alt="" className="" />
                 </div>
-                <div className="relative h-36">
-                    <p className="text-lg font-light">SIGN UP FOR OUR EMAIL NEWSLETTER</p>
+                <div className="relative h-36 justify-items-center">
+                    <p className="text-lg font-light ">SEND US SOME USEFUL INFORMATIONS</p>
                     <form action="">
                         <input type="text" placeholder="Name" className={`w-36 placeholder-gray-800 py-3 px-2 font-semibold  border-amber-900  bg-[url('../../public/img/footer/2.jpg')] bg-cover bg-no-repeat mr-4 mt-2 rounded-md placeholder:font-light placeholder:text-[15px]`} />
                         <input type="text" placeholder="Email Address" className={`w-36 placeholder-gray-800 py-3 px-2 font-semibold  border-amber-900 bg-[url('../../public/img/footer/2.jpg')] bg-cover bg-no-repeat mr-4 mt-2 rounded-md  placeholder:font-light placeholder:text-[15px]`} />
+                        <input type="text" placeholder="Report" className={`w-36 placeholder-gray-800 py-3 px-2 font-semibold border-amber-900 bg-[url('../../public/img/footer/2.jpg')] bg-cover bg-no-repeat mr-4 mt-2 rounded-md  placeholder:font-light placeholder:text-[15px]`} />
+                        <input type="text" placeholder="Support" className={`w-36 placeholder-gray-800 py-3 px-2 font-semibold border-amber-900 bg-[url('../../public/img/footer/2.jpg')] bg-cover bg-no-repeat mr-4 mt-2 rounded-md  placeholder:font-light placeholder:text-[15px]`} />
                         <button type="submit" className={`border py-1 px-4 border-[#d4cbc1] 2sm:mt-2 x-sm:mt-0 x-sm:absolute x-sm:bottom-3 x-sm:right-4 hover:bg-amber-50 hover:border-2`}>GO</button>
                     </form>
                 </div>
