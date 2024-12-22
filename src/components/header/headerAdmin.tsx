@@ -40,17 +40,6 @@ const HeaderAdmin: React.FC = () => {
         dispatch(logout());
     }
 
-    const notis = [
-        { text: 'Random Text 12345678910', date: "2 hours" },
-        { text: 'Random Text 12345678sadadas dadsdadsdas dasdadsasd ádasdasdawdas dasdawdawdd asdwd910sss', date: "1 days" },
-        { text: 'Random Text 12345678910 dadsdadsasdasdas dasdadasdasd ádaasdawdadasdas', date: "3 days" },
-        { text: 'Random Text 12345678910', date: "4 days" },
-        { text: 'Random Text 12345678910 dadsdadsadadsasdasdas dasddasdasd wdadasdas dadsadadsasdasdas', date: "5 days" },
-        { text: 'Random Text 12345678910', date: "7 days" },
-        { text: 'Random Text 12345678910', date: "10 days" },
-        { text: 'Random Text 12345678910', date: "10 days" },
-    ]
-
     return (
         <header className="border-slate-300 py-4 border-b text-green-950 caret-transparent">
             <div className="flex justify-between items-center m-auto w-10/12">

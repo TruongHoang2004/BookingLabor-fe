@@ -59,7 +59,7 @@ export default function TasksPage() {
     if (error) return <div>Error: {error}</div>;
 
 
-    const handleView = (id: number) => null;
+    const handleView = (id: number) => console.log(id);
 
     return (
         <ProtectedRoute>

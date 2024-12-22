@@ -26,7 +26,7 @@ const kanit = Kanit({
 })
 // lg: 1024 -> 
 const Header: React.FC = () => {
-    const { isAuthenticated, user, isTasker } = useAppSelector((state) => state.auth);
+    const { isAuthenticated, user } = useAppSelector((state) => state.auth);
     let isLoggedIn = false;
     //const user = {fullname: "jqnwd", email: "aodwnmoiamdio"}
     if (isAuthenticated && user) {
