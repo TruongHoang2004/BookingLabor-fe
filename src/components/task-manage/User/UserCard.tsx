@@ -148,7 +148,7 @@ export default function UserCard({
             setTaskChosen(!isTaskerChosen); // Cập nhật lại trạng thái
         }
         catch (error) {
-            toast.error("Xác nhận thất bại!"); // Thông báo lỗi
+            //toast.error("Xác nhận thất bại!"); // Thông báo lỗi
             console.error("Lỗi khi xác nhận:", error);
         }
     };
@@ -178,6 +178,37 @@ export default function UserCard({
             toast.error('Failed to navigate to order page');
         }
     };
+
+    const handleRouteToReviewDetails = async () => {
+        if (!isMounted) return;
+
+        try {
+            const queryParams = new URLSearchParams({
+                taskId: userCard.id.toString(),
+                title: userCard.title,
+                district: userCard.district,
+                ward: userCard.ward,
+                detail_address: userCard.detail_address,
+                start_date: new Date(userCard.start_date).toISOString(),
+                end_date: new Date(userCard.end_date).toISOString(),
+                fee_per_hour: userCard.fee_per_hour.toString(),
+                estimated_duration: userCard.estimated_duration.toString(),
+                description: userCard.description,
+                rating: userCard.review?.rating.toString() || '0',
+                comment: userCard.review?.comment || '',
+            }).toString();
+
+            console.log('Query params:', queryParams); // Debug log
+
+            await router.push(`/reviewTasker/reviewdetails?${queryParams}`);
+        } catch (error) {
+            console.error('Navigation error:', error);
+            toast.error('Failed to navigate to order page');
+        }
+
+
+    };
+
 
 
 
@@ -292,13 +323,13 @@ export default function UserCard({
 
                     <div>
                         {/* Hiển thị nút nút tương ứng với các trạng thái  */}
-                        {/* {userCard.task_status === 'IN_PROGRESS' ? (
-                            <div><Button color="success" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Completion Confirmation</Button></div>
+                        {userCard.task_status === 'IN_PROGRESS' ? (
+                            <div className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">Waiting for Tasker's Completion Confirmation</div>
                         ) : (
                             <div></div>
-                        )} */}
+                        )}
                         {userCard.task_status === 'PENDING' ? (
-                            <div className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">Waiting for Tasker's Final Confirmation</div>
+                            <div className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">Waiting for Tasker's Consent</div>
                         ) : (
                             <div></div>
                         )}
@@ -317,11 +348,23 @@ export default function UserCard({
                             <Button onClick={handleTaskerComfirmCompletion} color="success" className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">
                                 Confirm Completion
                             </Button>
+
                         )}
-                        {userCard.task_status === 'COMPLETED' && (
+                        {userCard.task_status === 'COMPLETED' && !userCard.review ? (
                             <Button onClick={handleRouteToReview} color="success" className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">
                                 Review Tasker
                             </Button>
+                        ) : (
+                            <div>
+                            </div>
+                        )}
+                        {userCard.task_status === 'COMPLETED' && userCard.review ? (
+                            <Button onClick={handleRouteToReviewDetails} color="success" className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">
+                                See Review Details
+                            </Button>
+                        ) : (
+                            <div>
+                            </div>
                         )}
                     </div>
                 </CardFooter>

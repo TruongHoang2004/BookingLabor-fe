@@ -115,7 +115,6 @@ const TaskerProfilePage = () => {
     }
   }, [user?.tasker?.id]);
 
-
   return (
     <ProtectedRoute>
       <div className="flex flex-col items-center bg-gray-100 p-4 min-h-screen">

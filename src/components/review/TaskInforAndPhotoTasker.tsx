@@ -1,46 +1,44 @@
 'use client'
 import React, { CSSProperties, useState, useEffect } from 'react';
 import { Input, Textarea, Button } from "@nextui-org/react";
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { locationService } from "@/service/location/location1";
+import { reviewService } from '@/service/review/review';
+import { ReviewRequest } from '@/interface/review';
 
 const locations = new locationService();
 
 
 const TaskInforAndPhotoTasker: React.FC = () => {
     const [uploadedImages, setUploadedImages] = useState<File[]>([]);
-  
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      const newImages = [...uploadedImages, ...Array.from(files)];
-      setUploadedImages(newImages);
-    }
-  };
 
-  const handleRemoveImage = (index: number) => {
-    setUploadedImages(prev => prev.filter((_, i) => i !== index));
-  };
+    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files) {
+            const newImages = [...uploadedImages, ...Array.from(files)];
+            setUploadedImages(newImages);
+        }
+    };
 
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
+    const handleRemoveImage = (index: number) => {
+        setUploadedImages(prev => prev.filter((_, i) => i !== index));
+    };
 
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const files = Array.from(e.dataTransfer.files);
-    setUploadedImages(prev => [...prev, ...files]);
-  };
+    const handleDragOver = (e: React.DragEvent) => {
+        e.preventDefault();
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        const files = Array.from(e.dataTransfer.files);
+        setUploadedImages(prev => [...prev, ...files]);
+    };
+
+
+
 
     const [rating, setRating] = useState(0); // Đánh giá mặc định là 0
-
-    const handleClick = (index: number) => {
-        setRating(index + 1); // Cập nhật đánh giá khi người dùng ấn vào ngôi sao
-    };
-    // const [images, setImages] = useState<string[]>([
-    //     "https://app.requestly.io/delay/5000/https://nextui.org/images/hero-card-complete.jpeg",
-
-    // ]);
+    const [comment, setComment] = useState("")
 
 
 
@@ -51,8 +49,6 @@ const TaskInforAndPhotoTasker: React.FC = () => {
         const date = new Date(dateString);
         return date.toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
     };
-
-
 
 
 
@@ -79,9 +75,8 @@ const TaskInforAndPhotoTasker: React.FC = () => {
 
         getLocationNames();
     }, [searchParams]);
-
-
-    //const taskID = parseInt(searchParams.get('taskId') || '0', 10);
+    const router = useRouter();
+    const taskID = parseInt(searchParams.get('taskId') || '0', 10);
 
     const title = searchParams.get('title') || '';
     //const district = searchParams.get('district') || '';
@@ -92,6 +87,42 @@ const TaskInforAndPhotoTasker: React.FC = () => {
     const fee_per_hour = searchParams.get('fee_per_hour') || '';
     const estimated_duration = searchParams.get('estimated_duration') || '';
     const description = searchParams.get('description') || '';
+
+    // useEffect(() => {
+    //     // Giả sử bạn lấy giá trị ban đầu từ API hoặc props
+    //     const fetchInitialReview = async () => {
+    //         const review = await reviewService.getReview(taskID); // Lấy dữ liệu từ API
+    //         if (review) {
+    //             setInitialRating(review.rating || 0);
+    //             setInitialComment(review.comment || "");
+    //         }
+    //     };
+
+    //     fetchInitialReview();
+    // }, [taskID]);
+
+
+
+    const handleClick = (index: number) => {
+
+        setRating(index + 1);
+        // Cập nhật đánh giá khi người dùng ấn vào ngôi sao
+    };
+
+    const handleReviewSubmit = async () => {
+        const reviewForm: ReviewRequest = {
+            task_id: taskID,
+            rating: rating,
+            comment: comment,
+        };
+        console.log(reviewForm);
+        const response = await reviewService.createReview(reviewForm);
+        router.push('/taskmanage');
+        console.log(response);
+    }
+
+
+
 
     return (
         <div style={containerStyles}>
@@ -204,90 +235,15 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                         />
                     </div>
 
-                    
 
 
-                    {/* <h2 style={MidStyles}> Your review</h2>
 
-                    <div style={{
-                        width: "80%",
-                        color: 'black',
-                    }} >
 
-                        <Textarea
-
-                            variant="bordered"
-                            placeholder="Write your review about task and tasker here."
-                            disableAnimation
-                            disableAutosize
-                            classNames={{
-                                base: "80%",
-                                input: "resize-y min-h-[40px]",
-                            }}
-                        />
-                    </div> */}
                 </div>
             </div>
 
             <div style={sidebarStyles}>
                 <h2 style={headerStyles}>Rating Tasker</h2>
-                    
-                {/* Review */}
-                {/* <div
-                    style={{
-                        width: '300px',
-                        height: '250px',
-                        textAlign: 'center',
-                        color: 'black',
-                        fontSize: '15px',
-                        fontWeight: 300,
-
-
-                        lineHeight: '36px',
-
-                        borderRadius: '10px',
-                        border: '1px solid #ccc',
-                        background: '#CAE5E8',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginTop: '-15px',
-                        //marginRight: '0px',
-                        padding: '10px',
-                    }}
-                > */}
-
-                {/* <div style={{
-                        width: '80px',
-                        height: '80px',
-                        borderRadius: '50%',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginBottom: '10px',
-                        border: '2px solid #ccc',
-
-                    }}>
-                        <Image
-                            src="https://b.fssta.com/uploads/application/soccer/headshots/885.vresize.350.350.medium.19.png"
-                            alt="Tasker"
-                            width={80}
-                            height={80}
-                            style={{
-                                width: '100%',
-                                height: 'auto',
-                                objectFit: 'contain'
-                            }}
-                        />
-                    </div>
-                    <h2 style={{ margin: '5px 0', color: 'black', }}>Lê Văn Bảy</h2>
-                    <p style={{ margin: '5px 0', color: 'black', }}><strong>Email:</strong> baychobochay@example.com</p>
-                    <p style={{ margin: '5px 0', color: 'black', }} ><strong>Phone:</strong> (+000) 782 321 589</p>
-                    <p style={{ margin: '5px 0', color: 'black', }}><strong>Gender:  </strong>
-                        Male</p> */}
-                {/* </div> */}
 
                 <div
                     style={{
@@ -343,71 +299,47 @@ const TaskInforAndPhotoTasker: React.FC = () => {
 
                 <h2 style={MidStyles}>Photos</h2>
                 <div className="upload-section p-4">
-                        {/* Upload Area */}
-                        <div 
-                            className="border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4"
-                            onDragOver={handleDragOver}
-                            onDrop={handleDrop}
-                        >
-                            <input
+                    {/* Upload Area */}
+                    <div
+                        className="border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4"
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                    >
+                        <input
                             type="file"
                             multiple
                             accept="image/*"
                             onChange={handleImageUpload}
                             className="hidden"
                             id="image-upload"
-                            />
-                            <label 
+                        />
+                        <label
                             htmlFor="image-upload"
                             className="cursor-pointer flex flex-col items-center"
-                            >
+                        >
                             <span>Drag & drop images or click to upload</span>
-                            </label>
-                        </div>
+                        </label>
+                    </div>
 
-                        {/* Preview Area */}
-                        <div className="grid grid-cols-3 gap-4">
-                            {uploadedImages.map((image, index) => (
+                    {/* Preview Area */}
+                    <div className="grid grid-cols-3 gap-4">
+                        {uploadedImages.map((image, index) => (
                             <div key={index} className="relative">
                                 <img
-                                src={URL.createObjectURL(image)}
-                                alt={`Upload ${index + 1}`}
-                                className="w-full h-32 object-cover rounded-lg"
+                                    src={URL.createObjectURL(image)}
+                                    alt={`Upload ${index + 1}`}
+                                    className="w-full h-32 object-cover rounded-lg"
                                 />
                                 <button
-                                onClick={() => handleRemoveImage(index)}
-                                className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6"
+                                    onClick={() => handleRemoveImage(index)}
+                                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6"
                                 >
-                                ×
+                                    ×
                                 </button>
                             </div>
-                            ))}
-                        </div>
-                        </div>
-                    {/* <div style={imageContainerStyles}>
-                        {images.map((src, index) => (
-                            <div key={index} style={{ position: 'relative', marginRight: '10px' }}>
-                                <Image
-                                    width={300}
-                                    height={200}
-                                    alt={`Completion Photo ${index + 1}`}
-                                    src={src}
-                                    style={{ cursor: 'pointer', borderRadius: '8px' }}
-                                    onClick={() => handleImageClick(index)}
-                                /> */}
-                                {/* Hidden File Input */}
-                                {/* <input
-                                    type="file"
-                                    accept="image/*"
-                                    style={{ display: 'none' }}
-                                    ref={el => {
-                                        if (el) fileInputRefs.current[index] = el;
-                                    }}
-                                    onChange={(e) => handleFileChange(e, index)}
-                                />
-                            </div>
                         ))}
-                    </div> */}
+                    </div>
+                </div>
 
                 <h2 style={MidStyles}> Your review</h2>
 
@@ -417,7 +349,6 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                 }} >
 
                     <Textarea
-
                         variant="bordered"
                         placeholder="Write your review about task and tasker here."
                         disableAnimation
@@ -426,11 +357,13 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                             base: "80%",
                             input: "resize-y min-h-[40px]",
                         }}
+                        value={comment}
+                        onChange={(e) => setComment(e.target.value)}
                     />
                 </div>
                 <div className="flex flex-wrap gap-4 items-center">
 
-                    <Button color="primary" variant="solid" className='max-w-xl' size='lg'>
+                    <Button onClick={handleReviewSubmit} color="primary" variant="solid" className='max-w-xl' size='lg'>
                         Confirm
                     </Button>
 

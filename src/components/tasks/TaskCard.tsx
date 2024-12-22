@@ -12,8 +12,6 @@ import { FaList } from "react-icons/fa";
 import { TbChecklist } from "react-icons/tb";
 import { BiSolidCheckCircle } from "react-icons/bi";
 import { taskService } from "@/service/task/task";
-import toast from "react-hot-toast";
-
 export default function TaskCard({ task }: { task: Task }) {
     const getImageSrc = () => {
         const Index = task.skill?.id;
@@ -42,9 +40,9 @@ export default function TaskCard({ task }: { task: Task }) {
     const handleApply = async () => {
         try {
             await taskService.applyTask(task.id); // Gọi hàm service với task.id
-            toast.success("Ứng tuyển thành công!"); // Thông báo thành công
+            //toast.success("Ứng tuyển thành công!"); // Thông báo thành công
         } catch (error) {
-            toast.error("Ứng tuyển thất bại!"); // Thông báo lỗi
+            //toast.error("Ứng tuyển thất bại!"); // Thông báo lỗi
             console.error("Lỗi khi ứng tuyển:", error);
         }
     };

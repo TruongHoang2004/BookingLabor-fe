@@ -1,3 +1,4 @@
+
 import { Task } from '@/interface/task';
 
 export interface Review {
@@ -5,5 +6,11 @@ export interface Review {
     rating: number;
     comment: string;
     task: Task;
-    image: string;
+}
+
+
+export interface ReviewRequest {
+    rating: number;
+    comment: string;
+    task_id: number;
 }
