@@ -19,6 +19,7 @@ const YardWorkProps: React.FC = () => {
             { icon: GiTreeDoor, text: "Lawn Fertilizer Service" },
             { icon: GiTreeDoor, text: "Outdoor Party Setup" },
         ],
+        skillID: 4
     }
     return (
         <div>

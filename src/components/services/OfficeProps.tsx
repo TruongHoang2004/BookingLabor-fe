@@ -17,6 +17,7 @@ const OfficeProps: React.FC = () => {
             { icon: HiMiniBuildingOffice, text: "Office Administration" },
             { icon: HiMiniBuildingOffice, text: "Moving Office Furniture" },
         ],
+        skillID: 5
     }
     return (
         <ServiceProps {... data}/>

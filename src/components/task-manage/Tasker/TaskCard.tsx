@@ -57,8 +57,8 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
         }
     };
     const getImageSrc = () => {
-        const randomIndex = 1;
-        return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
+        const Index = task.skill?.id;
+        return Index?  `/img/taskmanage/task-manage-${Index}.jpg` : '/img/taskmanage/default-task.jpg';
     }
 
 
@@ -164,6 +164,7 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                             <ModalBody className="flex flex-col gap-y-4">
                                 <div className="flex flex-col gap-y-3">
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Description:</span>{task.description}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Skill:</span>{task.skill?.name}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Estimated Duration:</span>{task.estimated_duration}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Fee per hour:</span>{task.fee_per_hour}VND /h</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Start Date:</span>{formatDate(task.start_date)}</p>

@@ -16,8 +16,8 @@ import toast from "react-hot-toast";
 
 export default function TaskCard({ task }: { task: Task }) {
     const getImageSrc = () => {
-        const randomIndex = 1;
-        return `/img/taskmanage/task-manage-bg${randomIndex}.jpg`
+        const Index = task.skill?.id;
+        return Index?  `/img/taskmanage/task-manage-${Index}.jpg` : '/img/taskmanage/default-task.jpg';
     }
 
     const formatID = (id: number) => {
