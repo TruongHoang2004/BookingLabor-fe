@@ -2,7 +2,7 @@ import { District,Ward,City } from "@/interface/location1";
 import toast from "react-hot-toast";
 
 export class locationService {
-    private hostURL: string | undefined = process.env.NEXT_PUBLIC_FRONTEND_BSAE_URL;
+    //private hostURL: string | undefined = process.env.NEXT_PUBLIC_FRONTEND_BSAE_URL;
     private cityData: City | null = null;
 
     constructor() {
@@ -11,7 +11,7 @@ export class locationService {
     
     private async loadCityData() {
         try {
-          const response = await fetch(`${this.hostURL}location.json`);
+          const response = await fetch(`/location.json`);
           this.cityData = await response.json();
         } catch (error) {
           toast.error("Lỗi khi tải dữ liệu thành phố:");
