@@ -92,6 +92,9 @@ const OTPVerification: React.FC<OTPVerificationProps> = ({
                 await authService.register(formData)
                 router.push('/login');
             }
+            else {
+                toast.error('Invalid OTP')
+            }
         } catch (error) {
             toast.error('Failed to Register')
             console.error('Error verifying OTP:', error);
