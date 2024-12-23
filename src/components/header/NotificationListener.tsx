@@ -4,7 +4,6 @@ import { Bell, Trash2, Check, X } from 'lucide-react';
 import { useAppSelector } from '@/redux/store';
 import { useRouter } from 'next/navigation';
 import api from '@/service/config';
-import { User } from '@/interface/user';
 import { Notification } from '@/interface/notification';
 
 // Notification Service
