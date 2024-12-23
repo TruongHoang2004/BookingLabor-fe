@@ -2,11 +2,9 @@
 import React, { CSSProperties, useState, useEffect } from 'react';
 import { Input, Textarea, Button } from "@nextui-org/react";
 import { useRouter, useSearchParams } from 'next/navigation';
-import { locationService } from "@/service/location/location1";
+import { locationService as locations} from "@/service/location/location1";
 import { ReviewService } from '@/service/review/review';
 import { ReviewRequest } from '@/interface/review';
-
-const locations = new locationService();
 
 
 const TaskInforAndPhotoTasker: React.FC = () => {
@@ -58,8 +56,8 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                 const districtCode = parseInt(searchParams.get('district') || '0');
                 const wardCode = parseInt(searchParams.get('ward') || '0');
 
-                const districtData = locations.getDistrictByCode(districtCode);
-                const wardData = locations.getWardByCode(wardCode);
+                const districtData = await locations.getDistrictByCode(districtCode);
+                const wardData = await locations.getWardByCode(wardCode);
 
                 if (districtData) {
                     setDistrictName(districtData.name);

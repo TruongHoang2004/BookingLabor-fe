@@ -8,7 +8,7 @@ import { Skill } from '@/interface/skill';
 import { District } from '@/interface/location';
 import { TaskerForm } from '@/interface/becometasker';
 import { userService } from '@/service/user/user';
-import { locationService } from "@/service/location/location1";
+import { locationService as locations} from "@/service/location/location1";
 import { SkillService } from "@/service/skill/skill";
 import { useRouter } from 'next/navigation';
 import { Kanit } from 'next/font/google'
@@ -26,7 +26,6 @@ const TaskerProfilePage = () => {
   const router = useRouter();
   const { user } = useAppSelector((state) => state.auth);
   const avatarUrl = user?.profile.avatar;
-  const locations = new locationService();
   const [taskerData, setTaskerData] = useState<TaskerForm>({
     work_area: user?.tasker?.work_area?.split(',').map(code => parseInt(code.trim())) || [],
     skillIds: user?.tasker?.skills?.map(skill => skill.id) || [],
@@ -75,8 +74,8 @@ const TaskerProfilePage = () => {
     if (user?.tasker?.work_area) {
       const districtCodes = user.tasker.work_area.split(',').map(code => parseInt(code.trim()));
       districtCodes
-        .map(code => locations.getDistrictByCode(code)?.name || '')
-        .filter(name => name !== '');
+        .map(async code => (await locations.getDistrictByCode(code))?.name || '')
+        .filter(async name => await name !== '');
     }
   }, [user?.tasker?.work_area]);
 

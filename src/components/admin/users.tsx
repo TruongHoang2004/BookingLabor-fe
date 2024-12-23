@@ -17,15 +17,12 @@ import {
     useDisclosure
 } from "@nextui-org/react";
 import { Phone, Mail, MapPin,  CalendarDaysIcon } from "lucide-react";
-import { locationService } from "@/service/location/location1";
+import { locationService as locations} from "@/service/location/location1";
 
 interface UserCardProps {
     user: UserType;
     onView: (id: number) => void;
 }
-
-const locations = new locationService();
-
 const UserCard: React.FC<UserCardProps> = ({
     user,
     onView
@@ -40,10 +37,10 @@ const UserCard: React.FC<UserCardProps> = ({
         const works_area_arr = works_area?.split(",")
         const district_name_arr: string[] = [];
         if (works_area_arr) {
-            works_area_arr.forEach(area => {
-                const d = locations.getDistrictByCode(parseInt(area,10));
+            works_area_arr.forEach(async area => {
+                const d = await locations.getDistrictByCode(parseInt(area,10));
                 if(d) {
-                    district_name_arr.push(d.name);
+                    district_name_arr.push((d).name);
                 }
             });
             setDistrictNames(district_name_arr.join(", "))

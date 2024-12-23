@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { TbChecklist } from "react-icons/tb";
 import { BiSolidCheckCircle } from "react-icons/bi";
 import { taskService } from "@/service/task/task";
-import { locationService } from "@/service/location/location1";
+import { locationService as location} from "@/service/location/location1";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 //import TaskCard from "../Tasker/TaskCard";
@@ -23,7 +23,6 @@ import { Review } from "@/interface/review";
 import { Tasker } from "@/interface/user";
 import { FaStar } from "react-icons/fa";
 
-const location = new locationService();
 interface TaskerWithReview {
     tasker: Tasker,
     reviews: Review[]
@@ -47,9 +46,17 @@ export default function UserCard({
 
     const [isMounted, setIsMounted] = useState(false);
     const router = useRouter();
-
+    const [districtName, setDistrictName] = useState('');
+    const [wardName, setWardName] = useState('');
     useEffect(() => {
         setIsMounted(true); // Ensure this runs only on the client
+        const fetchDistrictAndWard = async () => {
+            const response1 = await location.getDistrictByCode(parseInt(userCard.district, 10))
+            const response2 = await location.getWardByCode(parseInt(userCard.ward, 10))
+            setDistrictName(response1.name)
+            setWardName(response2.name)
+        }
+        fetchDistrictAndWard()
     }, []);
 
 
@@ -219,8 +226,8 @@ export default function UserCard({
                 <div className="flex flex-col gap-y-3">
                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500 flex-shrink-0" /><span className="text-emerald-700 font-semibold mr-2">Description:</span>{userCard.description}</p>
                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500 flex-shrink-0" /><span className="text-emerald-700 font-semibold mr-2">Skill:</span>{userCard.skill?.name}</p>
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">District:</span>{location.getDistrictByCode(parseInt(userCard.district, 10))?.name}</p>
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">Ward:</span>{location.getWardByCode(parseInt(userCard.ward, 10))?.name}</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">District:</span>{districtName}</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">Ward:</span>{wardName}</p>
                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">Estimated Duration:</span>{userCard.estimated_duration} hours</p>
                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{userCard.fee_per_hour}VND /h</p>
                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">Start Date:</span>{userCard.start_date.replaceAll("T00:00:00.000Z", "")}</p>
