@@ -4,24 +4,8 @@ import { Bell, Trash2, Check, X } from 'lucide-react';
 import { useAppSelector } from '@/redux/store';
 import { useRouter } from 'next/navigation';
 import api from '@/service/config';
-
-// Interfaces
-interface User {
-    id: number;
-    name: string;
-    email: string;
-    // ... other user properties
-}
-
-interface Notification {
-    id: number;
-    message: string;
-    link?: string;
-    isRead: boolean;
-    type?: string;
-    user?: User;
-    created_at?: string;
-}
+import { User } from '@/interface/user';
+import { Notification } from '@/interface/notification';
 
 // Notification Service
 const notificationService = {
