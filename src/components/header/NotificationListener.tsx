@@ -1,81 +1,117 @@
-'use client'
 import React, { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
+import { Bell, Trash2, Check, X } from 'lucide-react';
 import { useAppSelector } from '@/redux/store';
-import { Bell } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import api from '@/service/config';
 import { Notification } from '@/interface/notification';
-import { notificationService } from '@/service/notification/notification';
-import { AnimatePresence, motion } from 'framer-motion';
 
+// Notification Service
+const notificationService = {
+    async getAllNotification(): Promise<Notification[]> {
+        const response = await api.get<Notification[]>("/notifications");
+        return response.data;
+    },
+
+    async markAsRead(notification: Notification): Promise<Notification> {
+        const response = await api.patch<Notification>(
+            `/notifications/${notification.id}`,
+            { read: true }
+        );
+        return response.data;
+    },
+
+    async markAllAsRead(): Promise<void> {
+        await api.patch<void>("/notifications/mark-all-as-read");
+    },
+
+    async clearAll(): Promise<void> {
+        await api.delete<void>("/notifications");
+    },
+
+    async deleteNotification(notification: Notification): Promise<void> {
+        await api.delete<void>(`/notifications/${notification.id}`);
+    },
+};
+
+// Main Component
 const NotificationListener = () => {
+    const router = useRouter();
+    const userId = useAppSelector((state) => state.auth.user?.id);
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [isOpen, setIsOpen] = useState(false);
-    const [hasUnread, setHasUnread] = useState(false);
-    const user = useAppSelector((state) => state.auth.user);
+    const [isNewNotification, setIsNewNotification] = useState(false);
 
-    // Fetch initial notifications
+    // Fetch notifications when component mounts
     useEffect(() => {
-        const fetchNotifications = async () => {
-            try {
-                const data = await notificationService.getAllNotification();
-                setNotifications(data);
-                setHasUnread(data.some(notif => !notif.isRead));
-            } catch (error) {
-                console.error('Failed to fetch notifications:', error);
-            }
-        };
-
-        if (user?.id) {
-            fetchNotifications();
+        if (userId) {
+            loadNotifications();
         }
-    }, [user?.id]);
+    }, [userId]);
 
-    // SSE Connection
+    const loadNotifications = async () => {
+        try {
+            const data = await notificationService.getAllNotification();
+            setNotifications(data);
+        } catch (error) {
+            console.error('Failed to load notifications:', error);
+        }
+    };
+
     useEffect(() => {
-        if (!user?.id) return;
+        if (!userId) return;
 
-        const BACK_END_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-        const eventSource = new EventSource(
-            `${BACK_END_URL}notifications/sse/${user.id}`
-        );
+        const socket = io(process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5000');
 
-        eventSource.onopen = () => {
-            console.log('Connected to notification server');
+        socket.off(`notification-${userId}`);
+        socket.on(`notification-${userId}`, (notification) => {
+            setNotifications((prev) => [notification, ...prev]);
+            // Trigger bell animation
+            setIsNewNotification(true);
+            setTimeout(() => setIsNewNotification(false), 2000);
+        });
+
+        return () => {
+            socket.disconnect();
         };
+    }, [userId]);
 
-        eventSource.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            if (data.message) {
-                const newNotification: Notification = {
-                    id: Date.now(),
-                    message: data.message,
-                    isRead: false,
-                    created_at: new Date().toISOString(),
-                    type: data.type || 'SYSTEM',
-                    link: data.link
-                };
-
-                setNotifications(prev => [newNotification, ...prev]);
-                setHasUnread(true);
+    const handleNotificationClick = async (notification: Notification) => {
+        try {
+            if (!notification.isRead) {
+                await notificationService.markAsRead(notification);
+                setNotifications(notifications.map(n =>
+                    n.id === notification.id ? { ...n, isRead: true } : n
+                ));
             }
-        };
 
-        eventSource.onerror = (error) => {
-            console.error('SSE error:', error);
-            eventSource.close();
-        };
+            if (notification.link) {
+                setIsOpen(false);
+                router.push(notification.link);
+            }
+        } catch (error) {
+            console.error('Error handling notification click:', error);
+        }
+    };
 
-        return () => eventSource.close();
-    }, [user?.id]);
+    const handleDeleteNotification = async (event: React.MouseEvent, notification: Notification) => {
+        event.stopPropagation();
+        try {
+            await notificationService.deleteNotification(notification);
+            setNotifications(prev =>
+                prev.filter(n => n.id !== notification.id)
+            );
+        } catch (error) {
+            console.error('Error deleting notification:', error);
+        }
+    };
 
     const handleMarkAllAsRead = async () => {
         try {
             await notificationService.markAllAsRead();
-            setNotifications(prev =>
-                prev.map(notif => ({ ...notif, isRead: true }))
-            );
-            setHasUnread(false);
+            setNotifications(notifications.map(n => ({ ...n, isRead: true })));
         } catch (error) {
-            console.error('Failed to mark all as read:', error);
+            console.error('Error marking all as read:', error);
         }
     };
 
@@ -83,135 +119,137 @@ const NotificationListener = () => {
         try {
             await notificationService.clearAll();
             setNotifications([]);
-            setHasUnread(false);
         } catch (error) {
-            console.error('Failed to clear all notifications:', error);
+            console.error('Error clearing notifications:', error);
         }
     };
 
-    const handleNotificationClick = async (notification: Notification) => {
-        if (!notification.isRead) {
-            try {
-                await notificationService.markAsRead(notification);
-                setNotifications(prev =>
-                    prev.map(n => n.id === notification.id ? { ...n, isRead: true } : n)
-                );
-                setHasUnread(notifications.some(n => !n.isRead && n.id !== notification.id));
-            } catch (error) {
-                console.error('Failed to mark notification as read:', error);
-            }
-        }
-
-        if (notification.link) {
-            window.location.href = notification.link;
-        }
-    };
+    if (!userId) return null;
 
     return (
-        <div className="relative z-10">
-            <motion.button
-                onClick={() => setIsOpen(!isOpen)}
-                className="relative hover:bg-gray-100 p-2 rounded-full transition-all duration-200"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-            >
-                <Bell className="w-6 h-6" />
-                {hasUnread && (
-                    <motion.span
-                        className="top-1 right-1 absolute bg-red-500 rounded-full w-2 h-2"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: [1, 1.2, 1] }}
-                        transition={{
-                            repeat: Infinity,
-                            duration: 2,
-                            times: [0, 0.5, 1]
-                        }}
-                    />
-                )}
-            </motion.button>
+        <><style jsx global>{`
+            @keyframes wiggle {
+                0%, 100% { transform: rotate(-3deg); }
+                50% { transform: rotate(3deg); }
+            }
+            
+            @keyframes ring {
+                0% { transform: scale(1); }
+                20% { transform: scale(1.3); }
+                30% { transform: scale(1.15); }
+                40% { transform: scale(1.3); }
+                100% { transform: scale(1); }
+            }
+            
+            @keyframes popIn {
+                0% { transform: scale(0); }
+                80% { transform: scale(1.2); }
+                100% { transform: scale(1); }
+            }
+            
+            @keyframes slideDown {
+                0% { transform: translateY(-10px); opacity: 0; }
+                100% { transform: translateY(0); opacity: 1; }
+            }
+            
+            @keyframes fadeIn {
+                0% { opacity: 0; transform: translateY(5px); }
+                100% { opacity: 1; transform: translateY(0); }
+            }
 
-            <AnimatePresence>
+            .animate-wiggle {
+                animation: wiggle 0.3s ease-in-out infinite;
+            }
+            
+            .animate-ring {
+                animation: ring 1s ease-out;
+            }
+            
+            .animate-pop-in {
+                animation: popIn 0.3s ease-out;
+            }
+            
+            .animate-slide-down {
+                animation: slideDown 0.2s ease-out;
+            }
+            
+            .animate-fade-in {
+                animation: fadeIn 0.2s ease-out forwards;
+            }
+        `}</style><div className="relative">
+                <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className={`relative hover:bg-gray-100 p-2 rounded-full transition-transform duration-200 ${isNewNotification ? 'animate-wiggle' : ''}`}
+                >
+                    <Bell className={`w-6 h-6 text-gray-600 ${isNewNotification ? 'animate-ring' : ''}`} />
+                    {notifications.filter(n => !n.isRead).length > 0 && (
+                        <span
+                            className="top-0 right-0 absolute flex justify-center items-center bg-red-500 rounded-full w-4 h-4 font-bold text-white text-xs animate-pop-in"
+                        >
+                            {notifications.filter(n => !n.isRead).length}
+                        </span>
+                    )}
+                </button>
+
                 {isOpen && (
-                    <motion.div
-                        className="right-0 absolute border-gray-200 bg-white shadow-2xl mt-2 border rounded-lg w-80 max-h-96 overflow-hidden"
-                        initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
+                    <div
+                        className="right-0 z-50 absolute bg-white shadow-lg mt-2 rounded-lg w-96 origin-top animate-slide-down"
                     >
-                        <motion.div
-                            className="top-0 sticky flex justify-between items-center border-gray-200 bg-white shadow-sm p-4 border-b"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.1 }}
-                        >
-                            <h3 className="font-semibold text-lg">Notifications</h3>
-                            <div className="space-x-2">
-                                <motion.button
+                        <div className="flex justify-between items-center p-4 border-b">
+                            <h3 className="font-semibold text-gray-800 text-lg">Thông báo</h3>
+                            <div className="flex gap-2">
+                                <button
                                     onClick={handleMarkAllAsRead}
-                                    className="font-medium text-blue-500 text-sm hover:text-blue-600 transition-colors"
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
+                                    className="text-blue-600 text-sm hover:text-blue-800 transition-colors duration-200"
                                 >
-                                    Mark all as read
-                                </motion.button>
-                                <motion.button
+                                    <Check className="w-4 h-4" />
+                                </button>
+                                <button
                                     onClick={handleClearAll}
-                                    className="font-medium text-gray-500 text-sm hover:text-gray-600 transition-colors"
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
+                                    className="text-red-600 text-sm hover:text-red-800 transition-colors duration-200"
                                 >
-                                    Clear all
-                                </motion.button>
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
                             </div>
-                        </motion.div>
-
-                        <motion.div
-                            className="max-h-[calc(24rem-4rem)] overflow-y-auto"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.2 }}
-                        >
-                            {notifications.length === 0 ? (
-                                <motion.div
-                                    className="p-8 text-center text-gray-500"
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.3 }}
-                                >
-                                    No notifications
-                                </motion.div>
-                            ) : (
-                                <div className="divide-y divide-gray-100">
-                                    <AnimatePresence>
-                                        {notifications.map((notif, index) => (
-                                            <motion.div
-                                                key={notif.id}
-                                                onClick={() => handleNotificationClick(notif)}
-                                                className={`p-4 transition-colors duration-150
-                                                    ${!notif.isRead ? 'bg-blue-50 hover:bg-blue-100' : 'hover:bg-gray-50'}
-                                                    ${notif.link ? 'cursor-pointer' : 'cursor-default'}
-                                                `}
-                                                initial={{ opacity: 0, x: -20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                exit={{ opacity: 0, x: 20 }}
-                                                transition={{ delay: index * 0.1 }}
-                                                whileHover={{ scale: 1.02 }}
+                        </div>
+                        <div className="max-h-96 overflow-y-auto">
+                            {notifications.length > 0 ? (
+                                notifications.map((notif, index) => (
+                                    <div
+                                        key={notif.id}
+                                        onClick={() => handleNotificationClick(notif)}
+                                        className={`border-b border-gray-200 hover:bg-gray-50 px-4 py-3 cursor-pointer relative transition-all duration-200 animate-fade-in ${!notif.isRead ? 'bg-blue-50' : ''}`}
+                                        style={{
+                                            animationDelay: `${index * 50}ms`
+                                        }}
+                                    >
+                                        <div className="flex justify-between items-start">
+                                            <div className="flex-1">
+                                                <p className={`text-sm ${!notif.isRead ? 'font-semibold' : 'text-gray-700'}`}>
+                                                    {notif.message}
+                                                </p>
+                                                <p className="mt-1 text-gray-500 text-xs">
+                                                    {new Date(notif.created_at || 0).toLocaleString()}
+                                                </p>
+                                            </div>
+                                            <button
+                                                onClick={(e) => handleDeleteNotification(e, notif)}
+                                                className="opacity-0 group-hover:opacity-100 ml-2 text-gray-400 hover:text-red-600 transition-colors duration-200"
                                             >
-                                                <div className="font-medium text-gray-900 text-sm">{notif.message}</div>
-                                                <div className="mt-1 text-gray-500 text-xs">
-                                                    {new Date(notif.created_at || '').toLocaleTimeString()}
-                                                </div>
-                                            </motion.div>
-                                        ))}
-                                    </AnimatePresence>
-                                </div>
+                                                <X className="w-4 h-4" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="py-4 text-center text-gray-500 text-sm animate-fade-in">
+                                    Không có thông báo nào
+                                </p>
                             )}
-                        </motion.div>
-                    </motion.div>
+                        </div>
+                    </div>
                 )}
-            </AnimatePresence>
-        </div>
+            </div></>
     );
 };
 
