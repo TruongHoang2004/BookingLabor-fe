@@ -15,13 +15,11 @@ import Image from "next/image";
 import { FaList } from "react-icons/fa";
 import { TbChecklist } from "react-icons/tb";
 import { BiSolidCheckCircle } from "react-icons/bi";
-import { locationService } from "@/service/location/location1";
+import { locationService as locations } from "@/service/location/location1";
 import { taskService } from "@/service/task/task";
 import toast from "react-hot-toast";
 //import { start } from "repl";
 
-
-const locations = new locationService()
 
 export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Task; isAccepted: boolean; setIsAccepted: React.Dispatch<React.SetStateAction<boolean>>; }) {
     const [isMounted, setIsMounted] = useState(false);
@@ -80,19 +78,18 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
         return date.toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
     };
 
-
-
-
-    // const handleAccept = async () => {
-    //     try {
-    //         await taskService.acceptTask(task.id); // Gọi hàm service với task.id
-    //         toast.success("Xác nhận thành công!"); // Thông báo thành công
-    //         setIsAccepted(!isAccepted)
-    //     } catch (error) {
-    //         toast.error("Xác nhận thất bại!"); // Thông báo lỗi
-    //         console.error("Lỗi khi xác nhận:", error);
-    //     }
-    // };
+    const [districtName, setDistrictName] = useState('');
+    const [wardName, setWardName] = useState('');
+    useEffect(() => {
+        setIsMounted(true); // Ensure this runs only on the client
+        const fetchDistrictAndWard = async () => {
+            const response1 = await locations.getDistrictByCode(parseInt(task.district, 10))
+            const response2 = await locations.getWardByCode(parseInt(task.ward, 10))
+            setDistrictName(response1.name)
+            setWardName(response2.name)
+        }
+        fetchDistrictAndWard()
+    }, []);
 
     const handleTaskerRejectTask = async () => {
         try {
@@ -231,11 +228,11 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
                                 </div>
                                 <p className="font-bold text-sm mb-[-10px]">YOUR CLIENT'S DETAILED ADDRESS</p>
 
-                                <div className={task.task_status === 'IN_PROGRESS' ? 'bg-gray-200 rounded-lg p-3 flex flex-col gap-y-2' : 'hidden'}>
+                                <div className={task.task_status === 'IN_PROGRESS' || task.task_status === 'COMPLETED'  ? 'bg-gray-200 rounded-lg p-3 flex flex-col gap-y-2' : 'hidden'}>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">User's ID:</span>{task.user?.id}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">User's Email:</span>{task.user?.email}</p>
-                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">District:</span>{locations.getDistrictByCode(parseInt(task.district, 10))?.name}</p>
-                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Ward:</span>{locations.getWardByCode(parseInt(task.ward, 10))?.name}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">District:</span>{districtName}</p>
+                                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Ward:</span>{wardName}</p>
                                     <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Detail Address:</span>{task.detail_address}</p>
                                 </div>
                             </ModalBody>

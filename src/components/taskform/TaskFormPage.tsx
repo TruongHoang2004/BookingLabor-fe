@@ -20,10 +20,9 @@ import { Skill } from "@/interface/skill";
 import { SkillService } from "@/service/skill/skill";
 import { taskService } from "@/service/task/task";
 import toast from "react-hot-toast";
-import { locationService } from "@/service/location/location1";
+import { locationService as locations } from "@/service/location/location1";
 import { District, Ward } from "@/interface/location1";
 
-const locations = new locationService()
 
 export default function TaskFormPage() {
     const router = useRouter();
@@ -58,8 +57,8 @@ export default function TaskFormPage() {
         fetchDistricts();
     }, [])
 
-    const fetchDistricts = () => {
-        const D: District[] = locations.getAllDistricts();
+    const fetchDistricts = async () => {
+        const D: District[] = await locations.getAllDistricts();
         setDistricts(D);
     };
 
@@ -67,11 +66,11 @@ export default function TaskFormPage() {
         setChosenSkillID(parseInt(skillID, 10))
     }
 
-    const handleDistrictChange =  (districtCode: string) => {
+    const handleDistrictChange =  async (districtCode: string) => {
         setSelectedDistrict(parseInt(districtCode,10));
         setIsLoading(true);
         try {
-            const w: Ward[] = locations.getWardsInDistrict(parseInt(districtCode, 10));
+            const w: Ward[] = await locations.getWardsInDistrict(parseInt(districtCode, 10));
             setWards(w);
         } catch (err) {
             setError("Failed to fetch wards");
