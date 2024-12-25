@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { Input, Textarea } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
-import { locationService as locations } from "@/service/location/location1";
+import { locationService as locations } from "@/service/location/location";
 import { taskService } from '@/service/task/task';
 import { useAppSelector } from '@/redux/store';
 
@@ -18,7 +18,7 @@ export default function TaskInformation() {
         const date = new Date(dateString);
         return date.toISOString().split('T')[0]; // Chỉ lấy phần yyyy-mm-dd
     };
-      const { user } = useAppSelector((state) => state.auth);
+    const { user } = useAppSelector((state) => state.auth);
     useEffect(() => {
         const getLocationNames = async () => {
             try {
@@ -56,9 +56,9 @@ export default function TaskInformation() {
     const estimated_duration = searchParams.get('estimated_duration') || '';
     const description = searchParams.get('description') || '';
     let total_fee;
-    if(fee_per_hour && estimated_duration) {
-        total_fee = parseInt(fee_per_hour,10) * parseInt(estimated_duration)
-        total_fee = (total_fee * 0.05).toFixed(2); 
+    if (fee_per_hour && estimated_duration) {
+        total_fee = parseInt(fee_per_hour, 10) * parseInt(estimated_duration)
+        total_fee = (total_fee * 0.05).toFixed(2);
     }
 
 
@@ -68,11 +68,11 @@ export default function TaskInformation() {
         try {
             //console.log("Task ID: ", taskID);
             await taskService.acceptTask(taskID); // Gọi hàm service với task.id
-            
+
             router.push('/taskmanage/tasker'); // Chuyển hướng về trang danh sách tasker
             //setIsAccepted(!isAccepted)
         } catch (error) {
-           
+
             console.error("Lỗi khi xác nhận:", error);
         }
     };
@@ -115,7 +115,7 @@ export default function TaskInformation() {
                             labelPlacement='outside'
                             value={title}
                             fullWidth
-                            className='text-black label-text-color-100'
+                            className='label-text-color-100 text-black'
                         />
                         <Input
                             isReadOnly
@@ -254,7 +254,7 @@ export default function TaskInformation() {
                                 marginBottom: '10px',
                             }}
                         />
-                       
+
                         <p style={{ margin: '5px 0', fontWeight: 'bold', color: '#333' }}>Total fee: {total_fee} VND</p>
                         <p style={{ margin: '5px 0', fontWeight: 'bold', color: '#333' }}>Transfer details: A{taskID}-T{user?.tasker?.id}</p>
                     </div>
@@ -265,7 +265,7 @@ export default function TaskInformation() {
 
 
 
-                <div className="flex flex-wrap gap-4 items-center">
+                <div className="flex flex-wrap items-center gap-4">
                     <Button onClick={handleConfirmPayment} color="primary" variant="ghost">
                         Confirm Payment
                     </Button>

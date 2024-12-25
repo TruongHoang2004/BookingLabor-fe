@@ -8,7 +8,7 @@ import { becomtaskerService } from '@/service/becometasker/becometasker';
 import { SkillService } from '@/service/skill/skill';
 import { useAppSelector } from '@/redux/store';
 import { Skill } from '@/interface/skill';
-import { locationService as locations} from '@/service/location/location1';
+import { locationService as locations } from '@/service/location/location';
 import { District } from '@/interface/location1';
 
 
@@ -20,7 +20,7 @@ const BecomeTaskerForm: React.FC = () => {
         work_area: [],
         experience: ''
     });
-    
+
     const [districts, setDistricts] = useState<District[]>([]);
     const [chosenDistricts, setChosenDistricts] = useState<number[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -31,7 +31,7 @@ const BecomeTaskerForm: React.FC = () => {
     const router = useRouter();
     const handleSkillChange = (skillID: string) => {
         const selectedIds = skillID.split(',').map(Number);
-        
+
         if (selectedIds.includes(ALL_SKILLS_ID)) {
             // If "all" is selected, include all skill IDs except the "all" option
             const allSkillIds = skills
@@ -47,17 +47,17 @@ const BecomeTaskerForm: React.FC = () => {
 
     const handleWorkAreaChange = (work_area: string) => {
         const selectedIds = work_area.split(',').map(Number);
-        
+
         if (selectedIds.includes(ALL_DISTRICTS_ID)) {
             // If "all" is selected, include all skill IDs except the "all" option
             const allDistrictIds = districts
-            .filter(district => district.code !== ALL_DISTRICTS_ID)
-            .map(district => district.code);
-        setChosenDistricts(allDistrictIds);
-    } else {
-        setChosenDistricts(selectedIds);
-    }
-};
+                .filter(district => district.code !== ALL_DISTRICTS_ID)
+                .map(district => district.code);
+            setChosenDistricts(allDistrictIds);
+        } else {
+            setChosenDistricts(selectedIds);
+        }
+    };
     //     const arr: number[] = work_area.split(',').map(Number)
     //     setChosenDistricts(arr)
     // };
@@ -98,12 +98,12 @@ const BecomeTaskerForm: React.FC = () => {
     };
 
 
-        const fetchSkills = async () => {
-            const response = await SkillService.getAllSkills();
-            const allOption = { id: ALL_SKILLS_ID, name: "Select All", description: "" };
-            setSkills([allOption, ...response]);
-        };
-        console.log(chosenDistricts)
+    const fetchSkills = async () => {
+        const response = await SkillService.getAllSkills();
+        const allOption = { id: ALL_SKILLS_ID, name: "Select All", description: "" };
+        setSkills([allOption, ...response]);
+    };
+    console.log(chosenDistricts)
     return (
         <div className="relative flex justify-center items-center min-h-screen">
             <Background imageUrl='./img/becometasker.jpg' />
