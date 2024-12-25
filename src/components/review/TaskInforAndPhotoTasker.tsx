@@ -2,7 +2,7 @@
 import React, { CSSProperties, useState, useEffect } from 'react';
 import { Input, Textarea, Button } from "@nextui-org/react";
 import { useRouter, useSearchParams } from 'next/navigation';
-import { locationService } from "@/service/location/location1";
+import { locationService } from "@/service/location/location";
 import { ReviewService } from '@/service/review/review';
 import { ReviewRequest } from '@/interface/review';
 
@@ -157,7 +157,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                             labelPlacement='outside'
                             value={title}
                             fullWidth
-                            className='text-black label-text-color-100'
+                            className='label-text-color-100 text-black'
 
                         />
                         <Input
@@ -298,10 +298,10 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                 </div>
 
                 <h2 style={MidStyles}>Photos</h2>
-                <div className="upload-section p-4">
+                <div className="p-4 upload-section">
                     {/* Upload Area */}
                     <div
-                        className="border-2 border-dashed border-gray-300 rounded-lg p-4 mb-4"
+                        className="border-2 border-gray-300 mb-4 p-4 border-dashed rounded-lg"
                         onDragOver={handleDragOver}
                         onDrop={handleDrop}
                     >
@@ -315,24 +315,24 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                         />
                         <label
                             htmlFor="image-upload"
-                            className="cursor-pointer flex flex-col items-center"
+                            className="flex flex-col items-center cursor-pointer"
                         >
                             <span>Drag & drop images or click to upload</span>
                         </label>
                     </div>
 
                     {/* Preview Area */}
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="gap-4 grid grid-cols-3">
                         {uploadedImages.map((image, index) => (
                             <div key={index} className="relative">
                                 <img
                                     src={URL.createObjectURL(image)}
                                     alt={`Upload ${index + 1}`}
-                                    className="w-full h-32 object-cover rounded-lg"
+                                    className="rounded-lg w-full h-32 object-cover"
                                 />
                                 <button
                                     onClick={() => handleRemoveImage(index)}
-                                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6"
+                                    className="top-2 right-2 absolute bg-red-500 rounded-full w-6 h-6 text-white"
                                 >
                                     ×
                                 </button>
@@ -361,7 +361,7 @@ const TaskInforAndPhotoTasker: React.FC = () => {
                         onChange={(e) => setComment(e.target.value)}
                     />
                 </div>
-                <div className="flex flex-wrap gap-4 items-center">
+                <div className="flex flex-wrap items-center gap-4">
 
                     <Button onClick={handleReviewSubmit} color="primary" variant="solid" className='max-w-xl' size='lg'>
                         Confirm

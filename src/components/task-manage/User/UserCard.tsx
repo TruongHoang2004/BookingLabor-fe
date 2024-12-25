@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { TbChecklist } from "react-icons/tb";
 import { BiSolidCheckCircle } from "react-icons/bi";
 import { taskService } from "@/service/task/task";
-import { locationService } from "@/service/location/location1";
+import { locationService } from "@/service/location/location";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 //import TaskCard from "../Tasker/TaskCard";
@@ -42,7 +42,7 @@ export default function UserCard({
 }) {
     const getImageSrc = () => {
         const Index = userCard.skill?.id;
-        return Index?  `/img/taskmanage/task-manage-${Index}.jpg` : '/img/taskmanage/default-task.jpg';
+        return Index ? `/img/taskmanage/task-manage-${Index}.jpg` : '/img/taskmanage/default-task.jpg';
     }
 
     const [isMounted, setIsMounted] = useState(false);
@@ -66,11 +66,11 @@ export default function UserCard({
 
     const fetchAllReviews = async () => {
         const tmp_arr: TaskerWithReview[] = [];
-        if(userCard.taskers){
-            for(let i = 0; i< userCard.taskers.length; i++){
+        if (userCard.taskers) {
+            for (let i = 0; i < userCard.taskers.length; i++) {
                 const tasker = userCard.taskers[i];
                 const reviews = await ReviewService.getReviewbyTaskerID(tasker.id);
-                tmp_arr.push({tasker: tasker, reviews: reviews});
+                tmp_arr.push({ tasker: tasker, reviews: reviews });
             }
         }
         setAllTaskerReviews(tmp_arr);
@@ -113,7 +113,7 @@ export default function UserCard({
         // nếu chọn tasker mà không phải hiện thông tin task
         if (!taskDetailVisible && choseTaskerVisible) {
             return (
-                <div className="font-bold text-emerald-800 text-2xl">
+                <div className="font-bold text-2xl text-emerald-800">
                     Choose your tasker
                 </div>
             )
@@ -217,51 +217,51 @@ export default function UserCard({
         if (taskDetailVisible && !choseTaskerVisible) {
             return (
                 <div className="flex flex-col gap-y-3">
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500 flex-shrink-0" /><span className="text-emerald-700 font-semibold mr-2">Description:</span>{userCard.description}</p>
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500 flex-shrink-0" /><span className="text-emerald-700 font-semibold mr-2">Skill:</span>{userCard.skill?.name}</p>
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">District:</span>{location.getDistrictByCode(parseInt(userCard.district, 10))?.name}</p>
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">Ward:</span>{location.getWardByCode(parseInt(userCard.ward, 10))?.name}</p>
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">Estimated Duration:</span>{userCard.estimated_duration} hours</p>
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{userCard.fee_per_hour}VND /h</p>
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">Start Date:</span>{userCard.start_date.replaceAll("T00:00:00.000Z", "")}</p>
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">End Date:</span>{userCard.end_date.replaceAll("T00:00:00.000Z", "")}</p>
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">Status:</span>{userCard.task_status}</p>
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">Created At:</span>{userCard.created_at && formatDate(userCard.created_at)}</p>
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">Number of Taskers applying:</span>{userCard.taskers && userCard.taskers.length}</p>
-                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="text-emerald-700 font-semibold mr-1">Chosen Tasker's ID:</span>{userCard?.tasker?.id}</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="flex-shrink-0 text-emerald-500" /><span className="mr-2 font-semibold text-emerald-700">Description:</span>{userCard.description}</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="flex-shrink-0 text-emerald-500" /><span className="mr-2 font-semibold text-emerald-700">Skill:</span>{userCard.skill?.name}</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">District:</span>{location.getDistrictByCode(parseInt(userCard.district, 10))?.name}</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Ward:</span>{location.getWardByCode(parseInt(userCard.ward, 10))?.name}</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Estimated Duration:</span>{userCard.estimated_duration} hours</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Fee per hour:</span>{userCard.fee_per_hour}VND /h</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Start Date:</span>{userCard.start_date.replaceAll("T00:00:00.000Z", "")}</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">End Date:</span>{userCard.end_date.replaceAll("T00:00:00.000Z", "")}</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Status:</span>{userCard.task_status}</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Created At:</span>{userCard.created_at && formatDate(userCard.created_at)}</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Number of Taskers applying:</span>{userCard.taskers && userCard.taskers.length}</p>
+                    <p className="flex items-center"><BiSolidCheckCircle className="text-emerald-500" /><span className="mr-1 font-semibold text-emerald-700">Chosen Tasker's ID:</span>{userCard?.tasker?.id}</p>
                 </div>
             )
         }
         // nếu chọn tasker mà không phải hiện thông tin task
         if (!taskDetailVisible && choseTaskerVisible) {
             return (
-                <ScrollShadow className="flex flex-col gap-y-5 max-h-[400px] p-4">
+                <ScrollShadow className="flex flex-col gap-y-5 p-4 max-h-[400px]">
                     {allTaskerReviews.map((taskerwithReviews) => (
                         <div key={taskerwithReviews.tasker.id}>
                             <div className="flex items-center gap-x-3">
                                 <Avatar isBordered name={`T${taskerwithReviews.tasker.id}`} size='sm' />
                                 <p className="font-semibold">Tasker's ID: {taskerwithReviews.tasker.id}</p>
                             </div>
-                            <div className="flex flex-col gap-y-2 mt-3 bg-gray-200 rounded-xl p-3">
-                                <div className="flex jsutify-start gap-x-2">
-                                    <span className="text-emerald-700 font-semibold mr-1">Skill:</span>
+                            <div className="flex flex-col gap-y-2 bg-gray-200 mt-3 p-3 rounded-xl">
+                                <div className="flex gap-x-2 jsutify-start">
+                                    <span className="mr-1 font-semibold text-emerald-700">Skill:</span>
                                     <div>
                                         {taskerwithReviews.tasker.skills.map((s) => (
-                                            <p key={s.id} className="mb-1 flex items-center"><BiSolidCheckCircle className="text-emerald-500 flex-shrink-0 mr-1" />{s.name}</p>
+                                            <p key={s.id} className="flex items-center mb-1"><BiSolidCheckCircle className="flex-shrink-0 mr-1 text-emerald-500" />{s.name}</p>
                                         ))}
                                     </div>
                                 </div>
-                                <p><span className="text-emerald-700 font-semibold mr-1">Experience:</span>{taskerwithReviews.tasker.experience}</p>
-                                <p><span className="text-emerald-700 font-semibold mr-1">Completed Task:</span>{taskerwithReviews.tasker.completed_tasks}</p>
-                                <p><span className="text-emerald-700 font-semibold mr-1">Average Rating:</span>{(taskerwithReviews.tasker.rating_sum / taskerwithReviews.tasker.rating_count).toFixed(2)}</p>
-                                <span className="text-emerald-700 font-semibold mr-1">All Reviews: </span>
-                                <div className="overflow-y-auto flex items-center  w-full gap-x-3 py-3">
+                                <p><span className="mr-1 font-semibold text-emerald-700">Experience:</span>{taskerwithReviews.tasker.experience}</p>
+                                <p><span className="mr-1 font-semibold text-emerald-700">Completed Task:</span>{taskerwithReviews.tasker.completed_tasks}</p>
+                                <p><span className="mr-1 font-semibold text-emerald-700">Average Rating:</span>{(taskerwithReviews.tasker.rating_sum / taskerwithReviews.tasker.rating_count).toFixed(2)}</p>
+                                <span className="mr-1 font-semibold text-emerald-700">All Reviews: </span>
+                                <div className="flex items-center gap-x-3 py-3 w-full overflow-y-auto">
                                     {taskerwithReviews.reviews.map((review: Review) => (
-                                        <div key={review.id} className="flex flex-col gap-x-2 rounded-lg bg-slate-300 p-3 h-24">
-                                            <p className="flex items-center"><span className="text-emerald-700 font-semibold mr-1">Rating:</span>{review.rating}<FaStar className="text-yellow-500"/></p>
-                                            <p><span className="text-emerald-700 font-semibold mr-1">Comment:</span>{review.comment}</p>
+                                        <div key={review.id} className="flex flex-col gap-x-2 bg-slate-300 p-3 rounded-lg h-24">
+                                            <p className="flex items-center"><span className="mr-1 font-semibold text-emerald-700">Rating:</span>{review.rating}<FaStar className="text-yellow-500" /></p>
+                                            <p><span className="mr-1 font-semibold text-emerald-700">Comment:</span>{review.comment}</p>
                                         </div>
-                                    ))} 
+                                    ))}
                                 </div>
                             </div>
                             <Button onPress={onClose} className="bg-emerald-700 mt-3 font-semibold text-white" onClick={() => { chooseTasker(userCard.id, taskerwithReviews.tasker.id) }}>Choose this Tasker</Button>
@@ -284,17 +284,17 @@ export default function UserCard({
                         ? 'bg-red-500'
                         : 'bg-emerald-400'
                         } rounded-xl p-2 font-bold`}>
-                        <span className="text-emerald-900 font-semibold mr-1">Status:</span>
+                        <span className="mr-1 font-semibold text-emerald-900">Status:</span>
                         {userCard.task_status}
                     </p>
                 </CardHeader>
                 <CardBody className="p-0">
-                    <div className="w-full h-full relative">
-                        <div className="absolute transform -translate-x-1/2 -translate-y-1/2 top-2/3 left-1/2 bg-gray-200 rounded-lg py-4 pl-2 w-11/12 flex items-center justify-between">
+                    <div className="relative w-full h-full">
+                        <div className="top-2/3 left-1/2 absolute flex justify-between items-center bg-gray-200 py-4 pl-2 rounded-lg w-11/12 transform -translate-x-1/2 -translate-y-1/2">
                             <div className="">
-                                <p className="truncate mb-2  flex items-center max-w-[290px] "><TbChecklist className="text-emerald-700 mr-1 text-xl" /> <span className="text-emerald-700 font-semibold mr-1">Duration:</span>{userCard.estimated_duration} hours</p>
-                                <p className="truncate mb-2  flex items-center max-w-[290px]"><TbChecklist className="text-emerald-700 mr-1 text-xl" /> <span className="text-emerald-700 font-semibold mr-1">Fee per hour:</span>{userCard.fee_per_hour} VND/h</p>
-                                <p className="truncate  flex items-center max-w-[290px]"><TbChecklist className="text-emerald-700 mr-1 text-xl" /> <span className="text-emerald-700 font-semibold mr-1">End date:</span>{userCard.end_date.replaceAll("T00:00:00.000Z", "")}</p>
+                                <p className="flex items-center mb-2 max-w-[290px] truncate"><TbChecklist className="mr-1 text-emerald-700 text-xl" /> <span className="mr-1 font-semibold text-emerald-700">Duration:</span>{userCard.estimated_duration} hours</p>
+                                <p className="flex items-center mb-2 max-w-[290px] truncate"><TbChecklist className="mr-1 text-emerald-700 text-xl" /> <span className="mr-1 font-semibold text-emerald-700">Fee per hour:</span>{userCard.fee_per_hour} VND/h</p>
+                                <p className="flex items-center max-w-[290px] truncate"><TbChecklist className="mr-1 text-emerald-700 text-xl" /> <span className="mr-1 font-semibold text-emerald-700">End date:</span>{userCard.end_date.replaceAll("T00:00:00.000Z", "")}</p>
                             </div>
                             <div>
                                 <Tooltip content="View more details">
@@ -304,7 +304,7 @@ export default function UserCard({
                         </div>
                     </div>
                 </CardBody>
-                <CardFooter className="mt-3 flex flex-col h-[150px]">
+                <CardFooter className="flex flex-col mt-3 h-[150px]">
                     <div className="mr-5 font-bold text-emerald-800 text-sm">
                         {/* Nếu trạng thái không phải là in progress thì hiển thị ra Các tasker đang apply nếu có */}
                         {userCard.task_status !== 'IN_PROGRESS' && userCard.task_status !== 'WAITING' && userCard.task_status !== 'COMPLETED' ? (
@@ -317,41 +317,41 @@ export default function UserCard({
                                 ))}
                             </div>
                         ) : (
-                            <p className="text-md font-bold">Chosen Tasker's ID: {userCard.tasker?.id}</p>
+                            <p className="font-bold text-md">Chosen Tasker's ID: {userCard.tasker?.id}</p>
                         )}
                     </div>
 
                     <div>
                         {/* Hiển thị nút nút tương ứng với các trạng thái  */}
                         {userCard.task_status === 'IN_PROGRESS' ? (
-                            <div className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">Waiting for Tasker's Completion Confirmation</div>
+                            <div className="bg-emerald-800 mt-6 p-3 rounded-xl font-bold text-center text-sm text-white">Waiting for Tasker's Completion Confirmation</div>
                         ) : (
                             <div></div>
                         )}
                         {userCard.task_status === 'PENDING' ? (
-                            <div className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">Waiting for Tasker's Consent</div>
+                            <div className="bg-emerald-800 mt-6 p-3 rounded-xl font-bold text-center text-sm text-white">Waiting for Tasker's Consent</div>
                         ) : (
                             <div></div>
                         )}
                         {/* Hiển thị nút Choose Tasker nếu có tasker và chưa có tasker nào được chọn */}
                         {userCard.task_status === 'POSTED' && userCard.taskers && userCard.taskers.length > 0 && (
-                            <Button onPress={onOpen} onClick={handleChoseTasker} className="mt-3 px-4 py-2 bg-emerald-700 text-white font-semibold rounded-lg shadow-md">
+                            <Button onPress={onOpen} onClick={handleChoseTasker} className="bg-emerald-700 shadow-md mt-3 px-4 py-2 rounded-lg font-semibold text-white">
                                 Choose Tasker
                             </Button>
                         )}
                         {userCard.task_status === 'POSTED' ? (
-                            <div><Button onClick={handleUserCancelTask} color="danger" className="mt-2 px-3 py-2 text-white font-semibold rounded-lg shadow-md">Cancel this Task</Button></div>
+                            <div><Button onClick={handleUserCancelTask} color="danger" className="shadow-md mt-2 px-3 py-2 rounded-lg font-semibold text-white">Cancel this Task</Button></div>
                         ) : (
                             <div></div>
                         )}
                         {userCard.task_status === 'WAITING' && (
-                            <Button onClick={handleTaskerComfirmCompletion} color="success" className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">
+                            <Button onClick={handleTaskerComfirmCompletion} color="success" className="bg-emerald-800 mt-6 p-3 rounded-xl font-bold text-center text-sm text-white">
                                 Confirm Completion
                             </Button>
 
                         )}
                         {userCard.task_status === 'COMPLETED' && !userCard.review ? (
-                            <Button onClick={handleRouteToReview} color="success" className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">
+                            <Button onClick={handleRouteToReview} color="success" className="bg-emerald-800 mt-6 p-3 rounded-xl font-bold text-center text-sm text-white">
                                 Review Tasker
                             </Button>
                         ) : (
@@ -359,7 +359,7 @@ export default function UserCard({
                             </div>
                         )}
                         {userCard.task_status === 'COMPLETED' && userCard.review ? (
-                            <Button onClick={handleRouteToReviewDetails} color="success" className="text-sm bg-emerald-800 rounded-xl p-3 font-bold text-center mt-6 text-white">
+                            <Button onClick={handleRouteToReviewDetails} color="success" className="bg-emerald-800 mt-6 p-3 rounded-xl font-bold text-center text-sm text-white">
                                 See Review Details
                             </Button>
                         ) : (

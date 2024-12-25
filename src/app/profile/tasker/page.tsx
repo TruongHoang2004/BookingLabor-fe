@@ -8,7 +8,7 @@ import { Skill } from '@/interface/skill';
 import { District } from '@/interface/location';
 import { TaskerForm } from '@/interface/becometasker';
 import { userService } from '@/service/user/user';
-import { locationService } from "@/service/location/location1";
+import { locationService } from "@/service/location/location";
 import { SkillService } from "@/service/skill/skill";
 import { useRouter } from 'next/navigation';
 import { Kanit } from 'next/font/google'
@@ -112,8 +112,8 @@ const TaskerProfilePage = () => {
       <div className="flex flex-col items-center bg-gray-100 p-4 min-h-screen">
         <div className="bg-white shadow-sm mt-2 p-10 rounded-md w-full">
           {/* Profile Header */}
-          <div className="w-full bg-white rounded-lg shadow-sm p-4">
-            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
+          <div className="bg-white shadow-sm p-4 rounded-lg w-full">
+            <div className="flex lg:flex-row flex-col justify-between items-start lg:items-center gap-4 mb-8">
               <h1 className={`${kanit.className} text-4xl text-green-500 font-semibold`}>
                 TASKER PROFILE
               </h1>
@@ -271,9 +271,9 @@ const TaskerProfilePage = () => {
           <div className="space-y-6">
             {reviews ? (
               reviews.map((review) => (
-                <div key={review.id} className="p-4 border rounded-md shadow-sm">
+                <div key={review.id} className="shadow-sm p-4 border rounded-md">
                   <p className="mt-4">{review.comment}</p>
-                  <div className="mt-2 flex items-center">
+                  <div className="flex items-center mt-2">
                     <span className="text-yellow-500">{Array(review.rating).fill('★').join('')}</span>
                     <span className="ml-2 text-gray-500">{review.rating}/5</span>
                     {/* <span className="ml-4 text-gray-500">{review.image}</span> */}

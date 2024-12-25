@@ -1,18 +1,18 @@
 'use client'
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { 
-  Card, 
-  CardHeader, 
-  CardBody, 
-  CardFooter, 
-  Input, 
-  Select, 
-  SelectItem, 
-  DateInput, 
-  Textarea, 
-  Button, 
-  DateValue 
+import {
+    Card,
+    CardHeader,
+    CardBody,
+    CardFooter,
+    Input,
+    Select,
+    SelectItem,
+    DateInput,
+    Textarea,
+    Button,
+    DateValue
 } from "@nextui-org/react";
 import FormTaskTitle from "./FormTaskTitle";
 import { TaskFormDetails } from "@/interface/task";
@@ -20,7 +20,7 @@ import { Skill } from "@/interface/skill";
 import { SkillService } from "@/service/skill/skill";
 import { taskService } from "@/service/task/task";
 import toast from "react-hot-toast";
-import { locationService } from "@/service/location/location1";
+import { locationService } from "@/service/location/location";
 import { District, Ward } from "@/interface/location1";
 
 const locations = new locationService()
@@ -67,8 +67,8 @@ export default function TaskFormPage() {
         setChosenSkillID(parseInt(skillID, 10))
     }
 
-    const handleDistrictChange =  (districtCode: string) => {
-        setSelectedDistrict(parseInt(districtCode,10));
+    const handleDistrictChange = (districtCode: string) => {
+        setSelectedDistrict(parseInt(districtCode, 10));
         setIsLoading(true);
         try {
             const w: Ward[] = locations.getWardsInDistrict(parseInt(districtCode, 10));
@@ -173,13 +173,13 @@ export default function TaskFormPage() {
             start_day = `0${startDate?.day}`
         }
         else {
-           start_day = `${startDate?.day}`
+            start_day = `${startDate?.day}`
         }
         if (endDate?.day && endDate?.day < 10) {
             end_day = `0${endDate?.day}`
         }
         else {
-           end_day = `${endDate?.day}`
+            end_day = `${endDate?.day}`
         }
         if (startDate?.month && startDate?.month < 10) {
             start_month = `0${startDate?.month}`
@@ -207,7 +207,7 @@ export default function TaskFormPage() {
             start_date: formattedStartDate,
             end_date: formattedEndDate,
         }
-         //console.log(taskForm)
+        //console.log(taskForm)
         const response = await taskService.create(taskForm);
         console.log(response)
         router.push('/taskmanage')

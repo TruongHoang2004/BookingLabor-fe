@@ -2,8 +2,8 @@
 import React from "react";
 import { Task } from "@/interface/task";
 import { useState, useEffect } from "react";
-import { locationService } from "@/service/location/location1";
-import { 
+import { locationService } from "@/service/location/location";
+import {
     Card,
     CardBody,
     Button,
@@ -16,14 +16,14 @@ import {
     useDisclosure
 } from "@nextui-org/react";
 import { Badge, MapPin, Clock } from "lucide-react";
-import { taskService } from "@/service/task/task";     
+import { taskService } from "@/service/task/task";
 
 const locations = new locationService();
 
 interface TaskCardProps {
     task: Task;
     onView: (id: number) => void;
-    isReloaded: boolean; 
+    isReloaded: boolean;
     setIsReloaded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -35,27 +35,27 @@ const TaskCard: React.FC<TaskCardProps> = ({
 }) => {
     const [districtNames, setDistrictNames] = useState<string>('');
     const [isLoading, setIsLoading] = useState(true);
-  
+
     useEffect(() => {
-      const fetchDistrictNames = async () => {
-        try {
-          if (task.district) {
-            const d = locations.getDistrictByCode(parseInt(task.district,10));
-            if(d) {
-                setDistrictNames(d.name)
-            } else {
-                setDistrictNames("Unvalid District Code")
+        const fetchDistrictNames = async () => {
+            try {
+                if (task.district) {
+                    const d = locations.getDistrictByCode(parseInt(task.district, 10));
+                    if (d) {
+                        setDistrictNames(d.name)
+                    } else {
+                        setDistrictNames("Unvalid District Code")
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching district names:', error);
+                setDistrictNames('Error loading districts');
+            } finally {
+                setIsLoading(false);
             }
-          }
-        } catch (error) {
-          console.error('Error fetching district names:', error);
-          setDistrictNames('Error loading districts');
-        } finally {
-          setIsLoading(false);
-        }
-      };
-  
-      fetchDistrictNames();
+        };
+
+        fetchDistrictNames();
     }, [task.district]);
     const getStatusColor = (status: string) => {
         switch (status.toLowerCase()) {
@@ -67,7 +67,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
             default: return "default";
         }
     };
-    const {isOpen, onOpen, onClose} = useDisclosure();
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const hanldeTaskerAcceptForTaskerByAdmin = async () => {
         await taskService.confirmPaymentForAdmin(task.id);
@@ -75,13 +75,13 @@ const TaskCard: React.FC<TaskCardProps> = ({
     }
 
     return (
-        
+
         <Card className="w-full">
             <CardBody>
                 <div className="flex justify-between items-start">
                     <div className="space-y-3">
                         <div className="flex items-center gap-2">
-                            <h3 className="text-lg font-semibold">{task.title}</h3>
+                            <h3 className="font-semibold text-lg">{task.title}</h3>
                             <Chip color={getStatusColor(task.task_status)} size="sm">
                                 {task.task_status}
                             </Chip>
@@ -108,11 +108,11 @@ const TaskCard: React.FC<TaskCardProps> = ({
                             onClick={() => onView(task.id)}
                             className="flex"
 
-                        >   
+                        >
                             View Details
                         </Button>
-                        <Modal 
-                            isOpen={isOpen} 
+                        <Modal
+                            isOpen={isOpen}
                             onClose={onClose}
                             size="2xl"
                         >
@@ -123,47 +123,47 @@ const TaskCard: React.FC<TaskCardProps> = ({
                                 <ModalBody>
                                     <div className="space-y-4">
                                         <div>
-                                            <h3 className="text-sm text-gray-500">Task Title</h3>
-                                            <p className="text-lg font-semibold">{task.title}</p>
+                                            <h3 className="text-gray-500 text-sm">Task Title</h3>
+                                            <p className="font-semibold text-lg">{task.title}</p>
                                         </div>
                                         <div>
-                                            <h3 className="text-sm text-gray-500">Status</h3>
+                                            <h3 className="text-gray-500 text-sm">Status</h3>
                                             <Chip color={getStatusColor(task.task_status)} size="sm">
                                                 {task.task_status}
                                             </Chip>
                                         </div>
                                         <div>
-                                            <h3 className="text-sm text-gray-500">Area</h3>
+                                            <h3 className="text-gray-500 text-sm">Area</h3>
                                             <p className="flex items-center gap-2">
                                                 <MapPin size={16} />
                                                 {isLoading ? 'Loading...' : districtNames || task.district}
                                             </p>
                                         </div>
                                         <div>
-                                            <h3 className="text-sm text-gray-500">Skill</h3>
+                                            <h3 className="text-gray-500 text-sm">Skill</h3>
                                             <p className="flex items-center gap-2">
                                                 <Badge size={16} />
                                                 {task.skill?.name || "No skill"}
-                                              
+
                                             </p>
                                         </div>
                                         <div>
-                                            <h3 className="text-sm text-gray-500">Time</h3>
+                                            <h3 className="text-gray-500 text-sm">Time</h3>
                                             <p className="flex items-center gap-2">
                                                 <Clock size={16} />
                                                 {new Date(task.start_date).toLocaleDateString()}
                                             </p>
                                         </div>
                                         <div>
-                                            <h3 className="text-sm text-gray-500">Duration</h3>
+                                            <h3 className="text-gray-500 text-sm">Duration</h3>
                                             <p>{task.estimated_duration} h</p>
                                         </div>
                                         <div>
-                                            <h3 className="text-sm text-gray-500">Price</h3>
+                                            <h3 className="text-gray-500 text-sm">Price</h3>
                                             <p>{task.fee_per_hour} VNĐ</p>
                                         </div>
                                         <div>
-                                            <h3 className="text-sm text-gray-500">Description</h3>
+                                            <h3 className="text-gray-500 text-sm">Description</h3>
                                             <p className="text-gray-700">{task.description}</p>
                                         </div>
                                     </div>
@@ -172,7 +172,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
                                             Cofirm Taskes's Payment
                                         </Button>
                                     )}
-                                   
+
                                 </ModalBody>
                                 <ModalFooter>
                                     <Button color="primary" variant="solid" onPress={onClose}>
@@ -185,7 +185,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
                 </div>
             </CardBody>
         </Card>
-        
+
     );
 };
 
