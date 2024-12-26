@@ -15,9 +15,9 @@ import Image from "next/image";
 import { FaList } from "react-icons/fa";
 import { TbChecklist } from "react-icons/tb";
 import { BiSolidCheckCircle } from "react-icons/bi";
-import { locationService as locations } from "@/service/location/location";
 import { taskService } from "@/service/task/task";
 import toast from "react-hot-toast";
+import { getDistrictByCode, getWardByCode } from "@/service/location/location";
 //import { start } from "repl";
 
 
@@ -82,11 +82,15 @@ export default function TaskCard({ task, isAccepted, setIsAccepted }: { task: Ta
     const [wardName, setWardName] = useState('');
     useEffect(() => {
         setIsMounted(true); // Ensure this runs only on the client
-        const fetchDistrictAndWard = async () => {
-            const response1 = await locations.getDistrictByCode(parseInt(task.district, 10))
-            const response2 = await locations.getWardByCode(parseInt(task.ward, 10))
-            setDistrictName(response1.name)
-            setWardName(response2.name)
+        const fetchDistrictAndWard = () => {
+            const response1 = getDistrictByCode(parseInt(task.district, 10))
+            const response2 = getWardByCode(parseInt(task.ward, 10))
+            if (response1) {
+                setDistrictName(response1.name);
+            }
+            if (response2) {
+                setWardName(response2.name);
+            }
         }
         fetchDistrictAndWard()
     }, []);

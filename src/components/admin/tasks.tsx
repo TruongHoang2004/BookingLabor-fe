@@ -2,7 +2,6 @@
 import React from "react";
 import { Task } from "@/interface/task";
 import { useState, useEffect } from "react";
-import { locationService as locations } from "@/service/location/location";
 import {
     Card,
     CardBody,
@@ -17,6 +16,7 @@ import {
 } from "@nextui-org/react";
 import { Badge, MapPin, Clock } from "lucide-react";
 import { taskService } from "@/service/task/task";
+import { getDistrictByCode } from "@/service/location/location";
 
 interface TaskCardProps {
     task: Task;
@@ -35,10 +35,10 @@ const TaskCard: React.FC<TaskCardProps> = ({
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchDistrictNames = async () => {
+        const fetchDistrictNames = () => {
             try {
                 if (task.district) {
-                    const d = await locations.getDistrictByCode(parseInt(task.district, 10));
+                    const d = getDistrictByCode(parseInt(task.district, 10));
                     if (d) {
                         setDistrictNames((d).name)
                     } else {

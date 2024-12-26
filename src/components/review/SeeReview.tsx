@@ -2,7 +2,7 @@
 import React, { CSSProperties, useState, useEffect } from 'react';
 import { Input, Textarea, Button } from "@nextui-org/react";
 import { useRouter, useSearchParams } from 'next/navigation';
-import { locationService as locations } from "@/service/location/location";
+import { getDistrictByCode, getWardByCode } from '@/service/location/location';
 
 
 const ReviewDetails: React.FC = () => {
@@ -47,13 +47,13 @@ const ReviewDetails: React.FC = () => {
 
 
     useEffect(() => {
-        const getLocationNames = async () => {
+        const getLocationNames = () => {
             try {
                 const districtCode = parseInt(searchParams.get('district') || '0');
                 const wardCode = parseInt(searchParams.get('ward') || '0');
 
-                const districtData = await locations.getDistrictByCode(districtCode);
-                const wardData = await locations.getWardByCode(wardCode);
+                const districtData = getDistrictByCode(districtCode);
+                const wardData = getWardByCode(wardCode);
 
                 if (districtData) {
                     setDistrictName(districtData.name);

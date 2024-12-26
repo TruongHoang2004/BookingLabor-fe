@@ -17,7 +17,7 @@ import {
     useDisclosure
 } from "@nextui-org/react";
 import { Phone, Mail, MapPin, CalendarDaysIcon } from "lucide-react";
-import { locationService as locations } from "@/service/location/location";
+import { getDistrictByCode } from "@/service/location/location";
 
 interface UserCardProps {
     user: UserType;
@@ -37,8 +37,8 @@ const UserCard: React.FC<UserCardProps> = ({
                 const works_area_arr = works_area?.split(",")
                 const district_name_arr: string[] = [];
                 if (works_area_arr) {
-                    works_area_arr.forEach(async area => {
-                        const d = await locations.getDistrictByCode(parseInt(area, 10));
+                    works_area_arr.forEach(area => {
+                        const d = getDistrictByCode(parseInt(area, 10));
                         if (d) {
                             district_name_arr.push((d).name);
                         }

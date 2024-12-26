@@ -14,7 +14,6 @@ import { useEffect, useState } from "react";
 import { TbChecklist } from "react-icons/tb";
 import { BiSolidCheckCircle } from "react-icons/bi";
 import { taskService } from "@/service/task/task";
-import { locationService as location } from "@/service/location/location";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 //import TaskCard from "../Tasker/TaskCard";
@@ -22,6 +21,7 @@ import { ReviewService } from "@/service/review/review";
 import { Review } from "@/interface/review";
 import { Tasker } from "@/interface/user";
 import { FaStar } from "react-icons/fa";
+import { getDistrictByCode, getWardByCode } from "@/service/location/location";
 
 interface TaskerWithReview {
     tasker: Tasker,
@@ -50,11 +50,15 @@ export default function UserCard({
     const [wardName, setWardName] = useState('');
     useEffect(() => {
         setIsMounted(true); // Ensure this runs only on the client
-        const fetchDistrictAndWard = async () => {
-            const response1 = await location.getDistrictByCode(parseInt(userCard.district, 10))
-            const response2 = await location.getWardByCode(parseInt(userCard.ward, 10))
-            setDistrictName(response1.name)
-            setWardName(response2.name)
+        const fetchDistrictAndWard = () => {
+            const response1 = getDistrictByCode(parseInt(userCard.district, 10))
+            const response2 = getWardByCode(parseInt(userCard.ward, 10))
+            if (response1) {
+                setDistrictName(response1.name)
+            }
+            if (response2) {
+                setWardName(response2.name)
+            }
         }
         fetchDistrictAndWard()
     }, []);

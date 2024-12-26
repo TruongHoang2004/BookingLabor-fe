@@ -8,8 +8,8 @@ import { becomtaskerService } from '@/service/becometasker/becometasker';
 import { SkillService } from '@/service/skill/skill';
 import { useAppSelector } from '@/redux/store';
 import { Skill } from '@/interface/skill';
-import { locationService as locations } from '@/service/location/location';
 import { District } from '@/interface/location1';
+import { getAllDistricts } from '@/service/location/location';
 
 
 const ALL_SKILLS_ID = -1;
@@ -87,9 +87,9 @@ const BecomeTaskerForm: React.FC = () => {
             setIsLoading(false);
         };
     }, [isTasker, router]);
-    const fetchDistricts = async () => {
+    const fetchDistricts = () => {
         try {
-            const data = await locations.getAllDistricts();
+            const data = getAllDistricts();
             const allOption = { code: ALL_DISTRICTS_ID, name: "Select All", division_type: "", codename: "", province_code: 0, wards: [] };
             setDistricts([allOption, ...data]);
         } catch (err) {

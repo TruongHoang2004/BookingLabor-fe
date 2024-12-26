@@ -5,9 +5,9 @@ import { useSearchParams } from 'next/navigation';
 import { Input, Textarea } from "@nextui-org/react";
 import { Image } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
-import { locationService as locations } from "@/service/location/location";
 import { taskService } from '@/service/task/task';
 import { useAppSelector } from '@/redux/store';
+import { getDistrictByCode, getWardByCode } from '@/service/location/location';
 
 export default function TaskInformation() {
 
@@ -25,8 +25,8 @@ export default function TaskInformation() {
                 const districtCode = parseInt(searchParams.get('district') || '0');
                 const wardCode = parseInt(searchParams.get('ward') || '0');
 
-                const districtData = await locations.getDistrictByCode(districtCode);
-                const wardData = await locations.getWardByCode(wardCode);
+                const districtData = getDistrictByCode(districtCode);
+                const wardData = getWardByCode(wardCode);
 
                 if (districtData) {
                     setDistrictName(districtData.name);
